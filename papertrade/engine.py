@@ -40,6 +40,30 @@ def load_picks() -> tuple[list[dict], dict[str, float], str]:
     return picks, ranks, d.get("asof", "unknown")
 
 
+def intraday_model_picks(t: dt.datetime) -> list[dict] | None:
+    """None when no intraday model is trained; [] before 10:20; else today's picks,
+    scored once and cached in state/intraday_picks.json."""
+    model = STATE / "intraday_model.txt"
+    if not model.exists():
+        return None
+    if t.time() < dt.time(10, 20):
+        return []
+    cache = STATE / "intraday_picks.json"
+    if cache.exists():
+        c = json.loads(cache.read_text())
+        if c.get("date") == t.date().isoformat():
+            return c["top"]
+    from .intraday_model import live_picks
+    universe = json.loads((STATE / "intraday_universe.json").read_text())
+    try:
+        top = live_picks(model, universe)
+    except Exception as exc:
+        log.warning("intraday model scoring failed: %s", exc)
+        return []
+    cache.write_text(json.dumps({"date": t.date().isoformat(), "time": t.isoformat(), "top": top}, indent=1))
+    return top
+
+
 def allocator(accounts: dict, names: list[str], lookback: int = 20, switch_cost: float = 0.002) -> pd.DataFrame:
     """Virtual combined account: Rs 50,000 spread across the strategies, re-weighted each
     day toward those with the best recent risk-adjusted returns (equal weight until
@@ -117,8 +141,10 @@ def tick(force: bool = False) -> int:
     STATE.mkdir(exist_ok=True)
     accounts = load_accounts(STATE / "accounts.json", list(STRATEGIES), START_CASH)
     picks, ranks, asof = load_picks()
+    intraday_picks = intraday_model_picks(t)
     held = {s for a in accounts.values() for s, p in a.positions.items() if p.product != "option"}
     want = set(ALWAYS_QUOTE) | held | {p["symbol"] for p in picks[: TOP_N * 3]}
+    want |= {p["symbol"] for p in (intraday_picks or [])}
     prices = latest_prices(sorted(want), asof=t)
     if not prices:
         log.warning("no prices returned (holiday, outage or rate limit); skipping this tick")
@@ -127,6 +153,8 @@ def tick(force: bool = False) -> int:
     for name, fn in STRATEGIES.items():
         a = accounts[name]
         ctx = Ctx(t, prices, picks, ranks, first)
+        if intraday_picks is not None:
+            ctx.intraday_picks = intraday_picks
         try:
             fn(a, ctx)
         except Exception as exc:                   # one strategy failing must not stop the others

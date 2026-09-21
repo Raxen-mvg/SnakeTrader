@@ -67,16 +67,31 @@ def _buy_top(acc: Account, ctx: Ctx, n: int, product: str, exit_on=None, reason=
                 slippage_bps=SLIP_STOCK, exit_on=e, reason=reason or f"model rank {p.get('rank_pct', 0):.3f}")
 
 
+INTRADAY_MODEL_AFTER = dt.time(10, 20)
+
+
 def intraday(acc: Account, ctx: Ctx) -> None:
+    """With a trained intraday model: enter at 10:20 on its picks (it needs the first
+    hour). Without one: enter at 09:30 on the daily model's picks."""
     today = ctx.t.date().isoformat()
     if ctx.t.time() >= EXIT_INTRADAY:
         for s in list(acc.positions):
             if s in ctx.prices:
                 acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason="intraday close")
         return
-    if ctx.t.time() >= ENTRY_AFTER and acc.memo.get("last_entry") != today and not acc.positions:
-        _buy_top(acc, ctx, TOP_N, "intraday", reason="intraday entry")
-        acc.memo["last_entry"] = today
+    if acc.memo.get("last_entry") == today or acc.positions:
+        return
+    ipicks = getattr(ctx, "intraday_picks", None)
+    if ipicks is not None:
+        if ctx.t.time() < INTRADAY_MODEL_AFTER or not ipicks:
+            return
+        sub = Ctx(ctx.t, ctx.prices, ipicks, ctx.ranks, ctx.first)
+        _buy_top(acc, sub, TOP_N, "intraday", reason="intraday model pick at 10:20")
+    elif ctx.t.time() >= ENTRY_AFTER:
+        _buy_top(acc, ctx, TOP_N, "intraday", reason="daily model pick (no intraday model yet)")
+    else:
+        return
+    acc.memo["last_entry"] = today
 
 
 def _exit_due(acc: Account, ctx: Ctx, reason: str) -> None:
