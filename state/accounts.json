@@ -1,0 +1,644 @@
+{
+ "intraday": {
+  "name": "intraday",
+  "cash": 2915.745454919337,
+  "start_cash": 50000.0,
+  "positions": {
+   "LIQUIDADD.NS": {
+    "symbol": "LIQUIDADD.NS",
+    "qty": 8,
+    "avg_price": 1147.5087241210938,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "intraday",
+    "exit_on": null,
+    "meta": {
+     "last_price": 1145.7900390625
+    }
+   },
+   "LIQUID1.NS": {
+    "symbol": "LIQUID1.NS",
+    "qty": 8,
+    "avg_price": 1125.3555490112306,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "intraday",
+    "exit_on": null,
+    "meta": {
+     "last_price": 1123.6700439453125
+    }
+   },
+   "LIQUIDBEES.NS": {
+    "symbol": "LIQUIDBEES.NS",
+    "qty": 9,
+    "avg_price": 1001.5100247802735,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "intraday",
+    "exit_on": null,
+    "meta": {
+     "last_price": 1000.010009765625
+    }
+   },
+   "HDFCSML250.NS": {
+    "symbol": "HDFCSML250.NS",
+    "qty": 54,
+    "avg_price": 184.276,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "intraday",
+    "exit_on": null,
+    "meta": {
+     "last_price": 184.0
+    }
+   },
+   "BANKBEES.NS": {
+    "symbol": "BANKBEES.NS",
+    "qty": 17,
+    "avg_price": 583.3537004394532,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "intraday",
+    "exit_on": null,
+    "meta": {
+     "last_price": 582.47998046875
+    }
+   }
+  },
+  "ledger": [
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "LIQUIDADD.NS",
+    "qty": 8,
+    "price": 1147.5087,
+    "value": 9180.07,
+    "costs": 3.87,
+    "product": "intraday",
+    "reason": "intraday model pick at 10:20"
+   },
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "LIQUID1.NS",
+    "qty": 8,
+    "price": 1125.3555,
+    "value": 9002.84,
+    "costs": 3.79,
+    "product": "intraday",
+    "reason": "intraday model pick at 10:20"
+   },
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "LIQUIDBEES.NS",
+    "qty": 9,
+    "price": 1001.51,
+    "value": 9013.59,
+    "costs": 3.8,
+    "product": "intraday",
+    "reason": "intraday model pick at 10:20"
+   },
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "HDFCSML250.NS",
+    "qty": 54,
+    "price": 184.276,
+    "value": 9950.9,
+    "costs": 4.19,
+    "product": "intraday",
+    "reason": "intraday model pick at 10:20"
+   },
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "BANKBEES.NS",
+    "qty": 17,
+    "price": 583.3537,
+    "value": 9917.01,
+    "costs": 4.18,
+    "product": "intraday",
+    "reason": "intraday model pick at 10:20"
+   }
+  ],
+  "equity_curve": [
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "equity": 49909.68
+   }
+  ],
+  "memo": {
+   "last_entry": "2026-09-22"
+  }
+ },
+ "intraweek": {
+  "name": "intraweek",
+  "cash": 421.03016351174483,
+  "start_cash": 50000.0,
+  "positions": {
+   "GROWWLIQID.NS": {
+    "symbol": "GROWWLIQID.NS",
+    "qty": 90,
+    "avg_price": 111.00625633239747,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "delivery",
+    "exit_on": "2026-09-29",
+    "meta": {
+     "last_price": 110.83999633789062
+    }
+   },
+   "NEXT50.NS": {
+    "symbol": "NEXT50.NS",
+    "qty": 13,
+    "avg_price": 744.1946371154786,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "delivery",
+    "exit_on": "2026-09-29",
+    "meta": {
+     "last_price": 743.0800170898438
+    }
+   },
+   "NEXT50BETA.NS": {
+    "symbol": "NEXT50BETA.NS",
+    "qty": 128,
+    "avg_price": 77.78650316619874,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "delivery",
+    "exit_on": "2026-09-29",
+    "meta": {
+     "last_price": 77.66999816894531
+    }
+   },
+   "BANKBETA.NS": {
+    "symbol": "BANKBETA.NS",
+    "qty": 171,
+    "avg_price": 58.30733122253418,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "delivery",
+    "exit_on": "2026-09-29",
+    "meta": {
+     "last_price": 58.220001220703125
+    }
+   },
+   "HDFCGOLD.NS": {
+    "symbol": "HDFCGOLD.NS",
+    "qty": 77,
+    "avg_price": 128.93311550140382,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "delivery",
+    "exit_on": "2026-09-29",
+    "meta": {
+     "last_price": 128.74000549316406
+    }
+   }
+  },
+  "ledger": [
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "GROWWLIQID.NS",
+    "qty": 90,
+    "price": 111.0063,
+    "value": 9990.56,
+    "costs": 11.86,
+    "product": "delivery",
+    "reason": "model rank 1.000"
+   },
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "NEXT50.NS",
+    "qty": 13,
+    "price": 744.1946,
+    "value": 9674.53,
+    "costs": 11.49,
+    "product": "delivery",
+    "reason": "model rank 0.933"
+   },
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "NEXT50BETA.NS",
+    "qty": 128,
+    "price": 77.7865,
+    "value": 9956.67,
+    "costs": 11.82,
+    "product": "delivery",
+    "reason": "model rank 0.867"
+   },
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "BANKBETA.NS",
+    "qty": 171,
+    "price": 58.3073,
+    "value": 9970.55,
+    "costs": 11.84,
+    "product": "delivery",
+    "reason": "model rank 0.800"
+   },
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "HDFCGOLD.NS",
+    "qty": 77,
+    "price": 128.9331,
+    "value": 9927.85,
+    "costs": 11.79,
+    "product": "delivery",
+    "reason": "model rank 0.733"
+   }
+  ],
+  "equity_curve": [
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "equity": 49867.03
+   }
+  ],
+  "memo": {
+   "last_entry": "2026-09-22"
+  }
+ },
+ "intramonth": {
+  "name": "intramonth",
+  "cash": 421.03016351174483,
+  "start_cash": 50000.0,
+  "positions": {
+   "GROWWLIQID.NS": {
+    "symbol": "GROWWLIQID.NS",
+    "qty": 90,
+    "avg_price": 111.00625633239747,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "delivery",
+    "exit_on": null,
+    "meta": {
+     "last_price": 110.83999633789062
+    }
+   },
+   "NEXT50.NS": {
+    "symbol": "NEXT50.NS",
+    "qty": 13,
+    "avg_price": 744.1946371154786,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "delivery",
+    "exit_on": null,
+    "meta": {
+     "last_price": 743.0800170898438
+    }
+   },
+   "NEXT50BETA.NS": {
+    "symbol": "NEXT50BETA.NS",
+    "qty": 128,
+    "avg_price": 77.78650316619874,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "delivery",
+    "exit_on": null,
+    "meta": {
+     "last_price": 77.66999816894531
+    }
+   },
+   "BANKBETA.NS": {
+    "symbol": "BANKBETA.NS",
+    "qty": 171,
+    "avg_price": 58.30733122253418,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "delivery",
+    "exit_on": null,
+    "meta": {
+     "last_price": 58.220001220703125
+    }
+   },
+   "HDFCGOLD.NS": {
+    "symbol": "HDFCGOLD.NS",
+    "qty": 77,
+    "avg_price": 128.93311550140382,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "delivery",
+    "exit_on": null,
+    "meta": {
+     "last_price": 128.74000549316406
+    }
+   }
+  },
+  "ledger": [
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "GROWWLIQID.NS",
+    "qty": 90,
+    "price": 111.0063,
+    "value": 9990.56,
+    "costs": 11.86,
+    "product": "delivery",
+    "reason": "model rank 1.000"
+   },
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "NEXT50.NS",
+    "qty": 13,
+    "price": 744.1946,
+    "value": 9674.53,
+    "costs": 11.49,
+    "product": "delivery",
+    "reason": "model rank 0.933"
+   },
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "NEXT50BETA.NS",
+    "qty": 128,
+    "price": 77.7865,
+    "value": 9956.67,
+    "costs": 11.82,
+    "product": "delivery",
+    "reason": "model rank 0.867"
+   },
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "BANKBETA.NS",
+    "qty": 171,
+    "price": 58.3073,
+    "value": 9970.55,
+    "costs": 11.84,
+    "product": "delivery",
+    "reason": "model rank 0.800"
+   },
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "HDFCGOLD.NS",
+    "qty": 77,
+    "price": 128.9331,
+    "value": 9927.85,
+    "costs": 11.79,
+    "product": "delivery",
+    "reason": "model rank 0.733"
+   }
+  ],
+  "equity_curve": [
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "equity": 49867.03
+   }
+  ],
+  "memo": {
+   "last_entry": "2026-09-22"
+  }
+ },
+ "random_hold": {
+  "name": "random_hold",
+  "cash": 421.03016351174483,
+  "start_cash": 50000.0,
+  "positions": {
+   "GROWWLIQID.NS": {
+    "symbol": "GROWWLIQID.NS",
+    "qty": 90,
+    "avg_price": 111.00625633239747,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "delivery",
+    "exit_on": "2026-10-13",
+    "meta": {
+     "last_price": 110.83999633789062
+    }
+   },
+   "NEXT50.NS": {
+    "symbol": "NEXT50.NS",
+    "qty": 13,
+    "avg_price": 744.1946371154786,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "delivery",
+    "exit_on": "2026-11-04",
+    "meta": {
+     "last_price": 743.0800170898438
+    }
+   },
+   "NEXT50BETA.NS": {
+    "symbol": "NEXT50BETA.NS",
+    "qty": 128,
+    "avg_price": 77.78650316619874,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "delivery",
+    "exit_on": "2026-09-25",
+    "meta": {
+     "last_price": 77.66999816894531
+    }
+   },
+   "BANKBETA.NS": {
+    "symbol": "BANKBETA.NS",
+    "qty": 171,
+    "avg_price": 58.30733122253418,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "delivery",
+    "exit_on": "2026-10-12",
+    "meta": {
+     "last_price": 58.220001220703125
+    }
+   },
+   "HDFCGOLD.NS": {
+    "symbol": "HDFCGOLD.NS",
+    "qty": 77,
+    "avg_price": 128.93311550140382,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "delivery",
+    "exit_on": "2026-10-16",
+    "meta": {
+     "last_price": 128.74000549316406
+    }
+   }
+  },
+  "ledger": [
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "GROWWLIQID.NS",
+    "qty": 90,
+    "price": 111.0063,
+    "value": 9990.56,
+    "costs": 11.86,
+    "product": "delivery",
+    "reason": "model rank 1.000"
+   },
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "NEXT50.NS",
+    "qty": 13,
+    "price": 744.1946,
+    "value": 9674.53,
+    "costs": 11.49,
+    "product": "delivery",
+    "reason": "model rank 0.933"
+   },
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "NEXT50BETA.NS",
+    "qty": 128,
+    "price": 77.7865,
+    "value": 9956.67,
+    "costs": 11.82,
+    "product": "delivery",
+    "reason": "model rank 0.867"
+   },
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "BANKBETA.NS",
+    "qty": 171,
+    "price": 58.3073,
+    "value": 9970.55,
+    "costs": 11.84,
+    "product": "delivery",
+    "reason": "model rank 0.800"
+   },
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "HDFCGOLD.NS",
+    "qty": 77,
+    "price": 128.9331,
+    "value": 9927.85,
+    "costs": 11.79,
+    "product": "delivery",
+    "reason": "model rank 0.733"
+   }
+  ],
+  "equity_curve": [
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "equity": 49867.03
+   }
+  ],
+  "memo": {
+   "last_entry": "2026-09-22"
+  }
+ },
+ "gold": {
+  "name": "gold",
+  "cash": 107.92545583302126,
+  "start_cash": 50000.0,
+  "positions": {
+   "GOLDBEES.NS": {
+    "symbol": "GOLDBEES.NS",
+    "qty": 400,
+    "avg_price": 124.58225664138793,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "delivery",
+    "exit_on": null,
+    "meta": {
+     "last_price": 124.5199966430664
+    }
+   }
+  },
+  "ledger": [
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "GOLDBEES.NS",
+    "qty": 400,
+    "price": 124.5823,
+    "value": 49832.9,
+    "costs": 59.17,
+    "product": "delivery",
+    "reason": "gold held"
+   }
+  ],
+  "equity_curve": [
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "equity": 49915.92
+   }
+  ],
+  "memo": {}
+ },
+ "gold_trend": {
+  "name": "gold_trend",
+  "cash": 107.92545583302126,
+  "start_cash": 50000.0,
+  "positions": {
+   "GOLDBEES.NS": {
+    "symbol": "GOLDBEES.NS",
+    "qty": 400,
+    "avg_price": 124.58225664138793,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "delivery",
+    "exit_on": null,
+    "meta": {
+     "last_price": 124.5199966430664
+    }
+   }
+  },
+  "ledger": [
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "GOLDBEES.NS",
+    "qty": 400,
+    "price": 124.5823,
+    "value": 49832.9,
+    "costs": 59.17,
+    "product": "delivery",
+    "reason": "above 200-day average"
+   }
+  ],
+  "equity_curve": [
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "equity": 49915.92
+   }
+  ],
+  "memo": {
+   "last_entry": "2026-09-22"
+  }
+ },
+ "nifty_calls": {
+  "name": "nifty_calls",
+  "cash": 50000.0,
+  "start_cash": 50000.0,
+  "positions": {},
+  "ledger": [],
+  "equity_curve": [
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "equity": 50000.0
+   }
+  ],
+  "memo": {}
+ },
+ "benchmark": {
+  "name": "benchmark",
+  "cash": 106.60462651505077,
+  "start_cash": 50000.0,
+  "positions": {
+   "NIFTYBEES.NS": {
+    "symbol": "NIFTYBEES.NS",
+    "qty": 187,
+    "avg_price": 266.49316534423826,
+    "opened": "2026-09-22T13:51:36.558998+05:30",
+    "product": "delivery",
+    "exit_on": null,
+    "meta": {
+     "last_price": 266.3599853515625
+    }
+   }
+  },
+  "ledger": [
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "side": "BUY",
+    "symbol": "NIFTYBEES.NS",
+    "qty": 187,
+    "price": 266.4932,
+    "value": 49834.22,
+    "costs": 59.17,
+    "product": "delivery",
+    "reason": "benchmark held"
+   }
+  ],
+  "equity_curve": [
+   {
+    "time": "2026-09-22T13:51:36.558998+05:30",
+    "equity": 49915.92
+   }
+  ],
+  "memo": {}
+ }
+}
