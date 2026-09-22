@@ -139,6 +139,14 @@ def tick(force: bool = False) -> int:
         log.info("market closed at %s; nothing to do", t)
         return 0
     STATE.mkdir(exist_ok=True)
+    # Two clocks drive this (the research laptop and GitHub Actions, whose schedule is
+    # unreliable). Whichever arrives second within 10 minutes stands down.
+    summ = STATE / "summary.json"
+    if not force and summ.exists():
+        last = dt.datetime.fromisoformat(json.loads(summ.read_text())["updated"])
+        if (t - last).total_seconds() < 600:
+            log.info("ticked %s ago by the other runner; skipping", t - last)
+            return 0
     accounts = load_accounts(STATE / "accounts.json", list(STRATEGIES), START_CASH)
     picks, ranks, asof = load_picks()
     intraday_picks = intraday_model_picks(t)
