@@ -74,6 +74,9 @@ def intraday(acc: Account, ctx: Ctx) -> None:
     """With a trained intraday model: enter at 10:20 on its picks (it needs the first
     hour). Without one: enter at 09:30 on the daily model's picks."""
     today = ctx.t.date().isoformat()
+    for s, p in list(acc.positions.items()):
+        if p.opened[:10] < today and s in ctx.prices:     # a run was missed before yesterday's close
+            acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason="missed close; sold next session")
     if ctx.t.time() >= EXIT_INTRADAY:
         for s in list(acc.positions):
             if s in ctx.prices:
