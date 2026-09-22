@@ -1,0 +1,274 @@
+{
+ "updated": "2026-09-22T13:51:36.558998+05:30",
+ "picks_asof": "2026-09-21",
+ "start_cash": 50000.0,
+ "strategies": [
+  {
+   "strategy": "nifty_calls",
+   "equity": 50000.0,
+   "return_pct": 0.0,
+   "cash": 50000.0,
+   "open_positions": 0,
+   "closed_trades": 0,
+   "win_rate_pct": null,
+   "costs_paid": 0,
+   "positions": []
+  },
+  {
+   "strategy": "gold",
+   "equity": 49915.92,
+   "return_pct": -0.168,
+   "cash": 107.93,
+   "open_positions": 1,
+   "closed_trades": 0,
+   "win_rate_pct": null,
+   "costs_paid": 59.17,
+   "positions": [
+    {
+     "symbol": "GOLDBEES.NS",
+     "qty": 400,
+     "avg_price": 124.58,
+     "last": 124.52,
+     "exit_on": null
+    }
+   ]
+  },
+  {
+   "strategy": "gold_trend",
+   "equity": 49915.92,
+   "return_pct": -0.168,
+   "cash": 107.93,
+   "open_positions": 1,
+   "closed_trades": 0,
+   "win_rate_pct": null,
+   "costs_paid": 59.17,
+   "positions": [
+    {
+     "symbol": "GOLDBEES.NS",
+     "qty": 400,
+     "avg_price": 124.58,
+     "last": 124.52,
+     "exit_on": null
+    }
+   ]
+  },
+  {
+   "strategy": "benchmark",
+   "equity": 49915.92,
+   "return_pct": -0.168,
+   "cash": 106.6,
+   "open_positions": 1,
+   "closed_trades": 0,
+   "win_rate_pct": null,
+   "costs_paid": 59.17,
+   "positions": [
+    {
+     "symbol": "NIFTYBEES.NS",
+     "qty": 187,
+     "avg_price": 266.49,
+     "last": 266.36,
+     "exit_on": null
+    }
+   ]
+  },
+  {
+   "strategy": "intraday",
+   "equity": 49909.68,
+   "return_pct": -0.181,
+   "cash": 2915.75,
+   "open_positions": 5,
+   "closed_trades": 0,
+   "win_rate_pct": null,
+   "costs_paid": 19.83,
+   "positions": [
+    {
+     "symbol": "LIQUIDADD.NS",
+     "qty": 8,
+     "avg_price": 1147.51,
+     "last": 1145.79,
+     "exit_on": null
+    },
+    {
+     "symbol": "LIQUID1.NS",
+     "qty": 8,
+     "avg_price": 1125.36,
+     "last": 1123.67,
+     "exit_on": null
+    },
+    {
+     "symbol": "LIQUIDBEES.NS",
+     "qty": 9,
+     "avg_price": 1001.51,
+     "last": 1000.01,
+     "exit_on": null
+    },
+    {
+     "symbol": "HDFCSML250.NS",
+     "qty": 54,
+     "avg_price": 184.28,
+     "last": 184.0,
+     "exit_on": null
+    },
+    {
+     "symbol": "BANKBEES.NS",
+     "qty": 17,
+     "avg_price": 583.35,
+     "last": 582.48,
+     "exit_on": null
+    }
+   ]
+  },
+  {
+   "strategy": "intraweek",
+   "equity": 49867.03,
+   "return_pct": -0.266,
+   "cash": 421.03,
+   "open_positions": 5,
+   "closed_trades": 0,
+   "win_rate_pct": null,
+   "costs_paid": 58.8,
+   "positions": [
+    {
+     "symbol": "GROWWLIQID.NS",
+     "qty": 90,
+     "avg_price": 111.01,
+     "last": 110.84,
+     "exit_on": "2026-09-29"
+    },
+    {
+     "symbol": "NEXT50.NS",
+     "qty": 13,
+     "avg_price": 744.19,
+     "last": 743.08,
+     "exit_on": "2026-09-29"
+    },
+    {
+     "symbol": "NEXT50BETA.NS",
+     "qty": 128,
+     "avg_price": 77.79,
+     "last": 77.67,
+     "exit_on": "2026-09-29"
+    },
+    {
+     "symbol": "BANKBETA.NS",
+     "qty": 171,
+     "avg_price": 58.31,
+     "last": 58.22,
+     "exit_on": "2026-09-29"
+    },
+    {
+     "symbol": "HDFCGOLD.NS",
+     "qty": 77,
+     "avg_price": 128.93,
+     "last": 128.74,
+     "exit_on": "2026-09-29"
+    }
+   ]
+  },
+  {
+   "strategy": "intramonth",
+   "equity": 49867.03,
+   "return_pct": -0.266,
+   "cash": 421.03,
+   "open_positions": 5,
+   "closed_trades": 0,
+   "win_rate_pct": null,
+   "costs_paid": 58.8,
+   "positions": [
+    {
+     "symbol": "GROWWLIQID.NS",
+     "qty": 90,
+     "avg_price": 111.01,
+     "last": 110.84,
+     "exit_on": null
+    },
+    {
+     "symbol": "NEXT50.NS",
+     "qty": 13,
+     "avg_price": 744.19,
+     "last": 743.08,
+     "exit_on": null
+    },
+    {
+     "symbol": "NEXT50BETA.NS",
+     "qty": 128,
+     "avg_price": 77.79,
+     "last": 77.67,
+     "exit_on": null
+    },
+    {
+     "symbol": "BANKBETA.NS",
+     "qty": 171,
+     "avg_price": 58.31,
+     "last": 58.22,
+     "exit_on": null
+    },
+    {
+     "symbol": "HDFCGOLD.NS",
+     "qty": 77,
+     "avg_price": 128.93,
+     "last": 128.74,
+     "exit_on": null
+    }
+   ]
+  },
+  {
+   "strategy": "random_hold",
+   "equity": 49867.03,
+   "return_pct": -0.266,
+   "cash": 421.03,
+   "open_positions": 5,
+   "closed_trades": 0,
+   "win_rate_pct": null,
+   "costs_paid": 58.8,
+   "positions": [
+    {
+     "symbol": "GROWWLIQID.NS",
+     "qty": 90,
+     "avg_price": 111.01,
+     "last": 110.84,
+     "exit_on": "2026-10-13"
+    },
+    {
+     "symbol": "NEXT50.NS",
+     "qty": 13,
+     "avg_price": 744.19,
+     "last": 743.08,
+     "exit_on": "2026-11-04"
+    },
+    {
+     "symbol": "NEXT50BETA.NS",
+     "qty": 128,
+     "avg_price": 77.79,
+     "last": 77.67,
+     "exit_on": "2026-09-25"
+    },
+    {
+     "symbol": "BANKBETA.NS",
+     "qty": 171,
+     "avg_price": 58.31,
+     "last": 58.22,
+     "exit_on": "2026-10-12"
+    },
+    {
+     "symbol": "HDFCGOLD.NS",
+     "qty": 77,
+     "avg_price": 128.93,
+     "last": 128.74,
+     "exit_on": "2026-10-16"
+    }
+   ]
+  }
+ ],
+ "combined": {
+  "date": "2026-09-22",
+  "equity": 50000.0,
+  "w_intraday": 0.143,
+  "w_intraweek": 0.143,
+  "w_intramonth": 0.143,
+  "w_random_hold": 0.143,
+  "w_gold": 0.143,
+  "w_gold_trend": 0.143,
+  "w_nifty_calls": 0.143
+ }
+}
