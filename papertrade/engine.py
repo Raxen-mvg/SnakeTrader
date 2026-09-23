@@ -180,6 +180,23 @@ def write_reports(accounts: dict, prices: dict, t: dt.datetime, picks_asof: str)
                                     "exit_on": p.exit_on} for p in a.positions.values()]})
         trades += [{"strategy": n, **x} for x in a.ledger]
         curves += [{"strategy": n, **x} for x in a.equity_curve]
+    # Per-day profit for every account: what Rs 50,000 made each day, in rupees and percent.
+    daily = []
+    for n, a in accounts.items():
+        ec = pd.DataFrame(a.equity_curve)
+        if ec.empty:
+            continue
+        ec["day"] = pd.to_datetime(ec["time"]).dt.date
+        g = ec.groupby("day")["equity"]
+        d = pd.DataFrame({"strategy": n, "open": g.first(), "close": g.last()}).reset_index()
+        prev = d["close"].shift(1).fillna(a.start_cash)
+        d["profit_rs"] = (d["close"] - prev).round(2)
+        d["profit_pct"] = (100 * (d["close"] / prev - 1)).round(3)
+        daily.append(d)
+    if daily:
+        dd = pd.concat(daily, ignore_index=True)
+        dd.to_csv(STATE / "daily_profit.csv", index=False)
+
     alloc = allocator(accounts, [n for n in accounts if n != "benchmark"])
     summary = {"updated": t.isoformat(), "picks_asof": picks_asof, "start_cash": START_CASH,
                "strategies": sorted(rows, key=lambda r: -r["return_pct"]),
@@ -198,6 +215,12 @@ def write_reports(accounts: dict, prices: dict, t: dt.datetime, picks_asof: str)
     if summary["combined"]:
         c = summary["combined"]
         lines += ["", f"Combined allocator (virtual): Rs {c['equity']:,.0f} ({100 * (c['equity'] / START_CASH - 1):+.2f}%)."]
+    if daily:
+        last = dd[dd["day"] == dd["day"].max()].sort_values("profit_rs", ascending=False)
+        lines += ["", f"Profit on {dd['day'].max()}:", "", "| Strategy | Rs | % |", "|:---|---:|---:|"]
+        lines += [f"| {r.strategy} | {r.profit_rs:+,.0f} | {r.profit_pct:+.2f}% |" for r in last.itertuples()]
+        avg = dd.groupby("strategy")["profit_rs"].mean().sort_values(ascending=False)
+        lines += ["", "Average per day so far: " + ", ".join(f"{k} Rs {v:+,.0f}" for k, v in avg.items())]
     lines += ["", "Option results are SIMULATED (Black-Scholes on the real Nifty level), not real option prices."]
     (STATE / "REPORT.md").write_text("\n".join(lines), encoding="utf-8")
 
