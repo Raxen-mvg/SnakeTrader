@@ -1,12 +1,12 @@
 {
- "updated": "2026-09-23T15:24:07.552766+05:30",
+ "updated": "2026-09-23T15:29:07.519122+05:30",
  "picks_asof": "2026-09-22",
  "start_cash": 50000.0,
  "strategies": [
   {
    "strategy": "benchmark",
-   "equity": 50175.85,
-   "return_pct": 0.352,
+   "equity": 50166.51,
+   "return_pct": 0.333,
    "cash": 106.6,
    "open_positions": 1,
    "closed_trades": 0,
@@ -17,7 +17,45 @@
      "symbol": "NIFTYBEES.NS",
      "qty": 187,
      "avg_price": 266.49,
-     "last": 267.75,
+     "last": 267.7,
+     "exit_on": null
+    }
+   ]
+  },
+  {
+   "strategy": "gold",
+   "equity": 50003.92,
+   "return_pct": 0.008,
+   "cash": 107.93,
+   "open_positions": 1,
+   "closed_trades": 0,
+   "win_rate_pct": null,
+   "costs_paid": 59.17,
+   "positions": [
+    {
+     "symbol": "GOLDBEES.NS",
+     "qty": 400,
+     "avg_price": 124.58,
+     "last": 124.74,
+     "exit_on": null
+    }
+   ]
+  },
+  {
+   "strategy": "gold_trend",
+   "equity": 50003.92,
+   "return_pct": 0.008,
+   "cash": 107.93,
+   "open_positions": 1,
+   "closed_trades": 0,
+   "win_rate_pct": null,
+   "costs_paid": 59.17,
+   "positions": [
+    {
+     "symbol": "GOLDBEES.NS",
+     "qty": 400,
+     "avg_price": 124.58,
+     "last": 124.74,
      "exit_on": null
     }
    ]
@@ -34,47 +72,9 @@
    "positions": []
   },
   {
-   "strategy": "gold",
-   "equity": 49987.92,
-   "return_pct": -0.024,
-   "cash": 107.93,
-   "open_positions": 1,
-   "closed_trades": 0,
-   "win_rate_pct": null,
-   "costs_paid": 59.17,
-   "positions": [
-    {
-     "symbol": "GOLDBEES.NS",
-     "qty": 400,
-     "avg_price": 124.58,
-     "last": 124.7,
-     "exit_on": null
-    }
-   ]
-  },
-  {
-   "strategy": "gold_trend",
-   "equity": 49987.92,
-   "return_pct": -0.024,
-   "cash": 107.93,
-   "open_positions": 1,
-   "closed_trades": 0,
-   "win_rate_pct": null,
-   "costs_paid": 59.17,
-   "positions": [
-    {
-     "symbol": "GOLDBEES.NS",
-     "qty": 400,
-     "avg_price": 124.58,
-     "last": 124.7,
-     "exit_on": null
-    }
-   ]
-  },
-  {
    "strategy": "intramonth",
-   "equity": 49893.21,
-   "return_pct": -0.214,
+   "equity": 49925.01,
+   "return_pct": -0.15,
    "cash": 32981.66,
    "open_positions": 5,
    "closed_trades": 5,
@@ -92,7 +92,7 @@
      "symbol": "KTKBANK.NS",
      "qty": 11,
      "avg_price": 341.21,
-     "last": 343.25,
+     "last": 343.15,
      "exit_on": null
     },
     {
@@ -106,22 +106,22 @@
      "symbol": "CORONA.NS",
      "qty": 1,
      "avg_price": 2196.29,
-     "last": 2160.0,
+     "last": 2167.9,
      "exit_on": null
     },
     {
      "symbol": "SWANDEF.NS",
      "qty": 1,
      "avg_price": 2778.76,
-     "last": 2750.0,
+     "last": 2775.0,
      "exit_on": null
     }
    ]
   },
   {
    "strategy": "unified",
-   "equity": 49872.48,
-   "return_pct": -0.255,
+   "equity": 49916.58,
+   "return_pct": -0.167,
    "cash": 5491.23,
    "open_positions": 8,
    "closed_trades": 0,
@@ -139,7 +139,7 @@
      "symbol": "KTKBANK.NS",
      "qty": 18,
      "avg_price": 341.21,
-     "last": 343.25,
+     "last": 343.15,
      "exit_on": null
     },
     {
@@ -153,43 +153,43 @@
      "symbol": "CORONA.NS",
      "qty": 2,
      "avg_price": 2181.07,
-     "last": 2160.0,
+     "last": 2167.9,
      "exit_on": null
     },
     {
      "symbol": "SWANDEF.NS",
      "qty": 2,
      "avg_price": 2789.08,
-     "last": 2750.0,
+     "last": 2775.0,
      "exit_on": null
     },
     {
      "symbol": "LENSKART.NS",
      "qty": 9,
      "avg_price": 686.28,
-     "last": 686.85,
+     "last": 686.35,
      "exit_on": null
     },
     {
      "symbol": "AKUMS.NS",
      "qty": 7,
      "avg_price": 836.35,
-     "last": 826.0,
+     "last": 824.0,
      "exit_on": null
     },
     {
      "symbol": "SHRIPISTON.NS",
      "qty": 1,
      "avg_price": 4511.46,
-     "last": 4496.4,
+     "last": 4495.0,
      "exit_on": null
     }
    ]
   },
   {
    "strategy": "intraweek",
-   "equity": 49792.97,
-   "return_pct": -0.414,
+   "equity": 49896.67,
+   "return_pct": -0.207,
    "cash": 4833.12,
    "open_positions": 5,
    "closed_trades": 5,
@@ -207,7 +207,7 @@
      "symbol": "KTKBANK.NS",
      "qty": 29,
      "avg_price": 343.61,
-     "last": 343.25,
+     "last": 343.15,
      "exit_on": "2026-09-30"
     },
     {
@@ -221,22 +221,22 @@
      "symbol": "CORONA.NS",
      "qty": 4,
      "avg_price": 2196.69,
-     "last": 2160.0,
+     "last": 2167.9,
      "exit_on": "2026-09-30"
     },
     {
      "symbol": "SWANDEF.NS",
      "qty": 3,
      "avg_price": 2784.07,
-     "last": 2750.0,
+     "last": 2775.0,
      "exit_on": "2026-09-30"
     }
    ]
   },
   {
    "strategy": "random_hold",
-   "equity": 49792.97,
-   "return_pct": -0.414,
+   "equity": 49896.67,
+   "return_pct": -0.207,
    "cash": 4833.12,
    "open_positions": 5,
    "closed_trades": 5,
@@ -254,7 +254,7 @@
      "symbol": "KTKBANK.NS",
      "qty": 29,
      "avg_price": 343.61,
-     "last": 343.25,
+     "last": 343.15,
      "exit_on": "2026-11-18"
     },
     {
@@ -268,14 +268,14 @@
      "symbol": "CORONA.NS",
      "qty": 4,
      "avg_price": 2196.69,
-     "last": 2160.0,
+     "last": 2167.9,
      "exit_on": "2026-10-05"
     },
     {
      "symbol": "SWANDEF.NS",
      "qty": 3,
      "avg_price": 2784.07,
-     "last": 2750.0,
+     "last": 2775.0,
      "exit_on": "2026-10-28"
     }
    ]
@@ -294,7 +294,7 @@
  ],
  "combined": {
   "date": "2026-09-23",
-  "equity": 49922.13,
+  "equity": 49961.63,
   "w_unified": 0.125,
   "w_intraday": 0.125,
   "w_intraweek": 0.125,
