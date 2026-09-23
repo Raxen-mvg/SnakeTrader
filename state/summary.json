@@ -1,12 +1,12 @@
 {
- "updated": "2026-09-23T13:09:09.152459+05:30",
+ "updated": "2026-09-23T13:14:08.195845+05:30",
  "picks_asof": "2026-09-22",
  "start_cash": 50000.0,
  "strategies": [
   {
    "strategy": "benchmark",
-   "equity": 50181.46,
-   "return_pct": 0.363,
+   "equity": 50168.37,
+   "return_pct": 0.337,
    "cash": 106.6,
    "open_positions": 1,
    "closed_trades": 0,
@@ -17,15 +17,15 @@
      "symbol": "NIFTYBEES.NS",
      "qty": 187,
      "avg_price": 266.49,
-     "last": 267.78,
+     "last": 267.71,
      "exit_on": null
     }
    ]
   },
   {
    "strategy": "gold",
-   "equity": 50043.92,
-   "return_pct": 0.088,
+   "equity": 50075.92,
+   "return_pct": 0.152,
    "cash": 107.93,
    "open_positions": 1,
    "closed_trades": 0,
@@ -36,15 +36,15 @@
      "symbol": "GOLDBEES.NS",
      "qty": 400,
      "avg_price": 124.58,
-     "last": 124.84,
+     "last": 124.92,
      "exit_on": null
     }
    ]
   },
   {
    "strategy": "gold_trend",
-   "equity": 50043.92,
-   "return_pct": 0.088,
+   "equity": 50075.92,
+   "return_pct": 0.152,
    "cash": 107.93,
    "open_positions": 1,
    "closed_trades": 0,
@@ -55,7 +55,7 @@
      "symbol": "GOLDBEES.NS",
      "qty": 400,
      "avg_price": 124.58,
-     "last": 124.84,
+     "last": 124.92,
      "exit_on": null
     }
    ]
@@ -73,8 +73,8 @@
   },
   {
    "strategy": "intramonth",
-   "equity": 49839.51,
-   "return_pct": -0.321,
+   "equity": 49840.47,
+   "return_pct": -0.319,
    "cash": 32981.66,
    "open_positions": 5,
    "closed_trades": 5,
@@ -85,28 +85,28 @@
      "symbol": "SONACOMS.NS",
      "qty": 5,
      "avg_price": 809.86,
-     "last": 825.5,
+     "last": 825.4,
      "exit_on": null
     },
     {
      "symbol": "KTKBANK.NS",
      "qty": 11,
      "avg_price": 341.21,
-     "last": 342.55,
+     "last": 342.7,
      "exit_on": null
     },
     {
      "symbol": "LAURUSLABS.NS",
      "qty": 2,
      "avg_price": 2025.03,
-     "last": 2023.4,
+     "last": 2025.5,
      "exit_on": null
     },
     {
      "symbol": "CORONA.NS",
      "qty": 1,
      "avg_price": 2196.29,
-     "last": 2169.5,
+     "last": 2165.1,
      "exit_on": null
     },
     {
@@ -120,8 +120,8 @@
   },
   {
    "strategy": "unified",
-   "equity": 49795.53,
-   "return_pct": -0.409,
+   "equity": 49797.93,
+   "return_pct": -0.404,
    "cash": 5491.23,
    "open_positions": 8,
    "closed_trades": 0,
@@ -132,28 +132,28 @@
      "symbol": "SONACOMS.NS",
      "qty": 7,
      "avg_price": 821.78,
-     "last": 825.5,
+     "last": 825.4,
      "exit_on": null
     },
     {
      "symbol": "KTKBANK.NS",
      "qty": 18,
      "avg_price": 341.21,
-     "last": 342.55,
+     "last": 342.7,
      "exit_on": null
     },
     {
      "symbol": "LAURUSLABS.NS",
      "qty": 3,
      "avg_price": 2026.33,
-     "last": 2023.4,
+     "last": 2025.5,
      "exit_on": null
     },
     {
      "symbol": "CORONA.NS",
      "qty": 2,
      "avg_price": 2181.07,
-     "last": 2169.5,
+     "last": 2165.1,
      "exit_on": null
     },
     {
@@ -167,29 +167,29 @@
      "symbol": "LENSKART.NS",
      "qty": 9,
      "avg_price": 686.28,
-     "last": 687.55,
+     "last": 686.85,
      "exit_on": null
     },
     {
      "symbol": "AKUMS.NS",
      "qty": 7,
      "avg_price": 836.35,
-     "last": 824.25,
+     "last": 824.85,
      "exit_on": null
     },
     {
      "symbol": "SHRIPISTON.NS",
      "qty": 1,
      "avg_price": 4511.46,
-     "last": 4501.0,
+     "last": 4506.0,
      "exit_on": null
     }
    ]
   },
   {
    "strategy": "intraday",
-   "equity": 49743.43,
-   "return_pct": -0.513,
+   "equity": 49727.39,
+   "return_pct": -0.545,
    "cash": 4689.45,
    "open_positions": 5,
    "closed_trades": 5,
@@ -200,14 +200,14 @@
      "symbol": "SBC.NS",
      "qty": 201,
      "avg_price": 49.42,
-     "last": 49.28,
+     "last": 49.24,
      "exit_on": null
     },
     {
      "symbol": "MARICO.NS",
      "qty": 11,
      "avg_price": 833.6,
-     "last": 831.1,
+     "last": 831.0,
      "exit_on": null
     },
     {
@@ -228,15 +228,15 @@
      "symbol": "SRF.NS",
      "qty": 3,
      "avg_price": 2557.93,
-     "last": 2557.0,
+     "last": 2554.7,
      "exit_on": null
     }
    ]
   },
   {
    "strategy": "intraweek",
-   "equity": 49682.67,
-   "return_pct": -0.635,
+   "equity": 49676.62,
+   "return_pct": -0.647,
    "cash": 4833.12,
    "open_positions": 5,
    "closed_trades": 5,
@@ -247,28 +247,28 @@
      "symbol": "SONACOMS.NS",
      "qty": 12,
      "avg_price": 811.72,
-     "last": 825.5,
+     "last": 825.4,
      "exit_on": "2026-09-30"
     },
     {
      "symbol": "KTKBANK.NS",
      "qty": 29,
      "avg_price": 343.61,
-     "last": 342.55,
+     "last": 342.7,
      "exit_on": "2026-09-30"
     },
     {
      "symbol": "LAURUSLABS.NS",
      "qty": 4,
      "avg_price": 2027.54,
-     "last": 2023.4,
+     "last": 2025.5,
      "exit_on": "2026-09-30"
     },
     {
      "symbol": "CORONA.NS",
      "qty": 4,
      "avg_price": 2196.69,
-     "last": 2169.5,
+     "last": 2165.1,
      "exit_on": "2026-09-30"
     },
     {
@@ -282,8 +282,8 @@
   },
   {
    "strategy": "random_hold",
-   "equity": 49682.67,
-   "return_pct": -0.635,
+   "equity": 49676.62,
+   "return_pct": -0.647,
    "cash": 4833.12,
    "open_positions": 5,
    "closed_trades": 5,
@@ -294,28 +294,28 @@
      "symbol": "SONACOMS.NS",
      "qty": 12,
      "avg_price": 811.72,
-     "last": 825.5,
+     "last": 825.4,
      "exit_on": "2026-10-12"
     },
     {
      "symbol": "KTKBANK.NS",
      "qty": 29,
      "avg_price": 343.61,
-     "last": 342.55,
+     "last": 342.7,
      "exit_on": "2026-11-18"
     },
     {
      "symbol": "LAURUSLABS.NS",
      "qty": 4,
      "avg_price": 2027.54,
-     "last": 2023.4,
+     "last": 2025.5,
      "exit_on": "2026-11-06"
     },
     {
      "symbol": "CORONA.NS",
      "qty": 4,
      "avg_price": 2196.69,
-     "last": 2169.5,
+     "last": 2165.1,
      "exit_on": "2026-10-05"
     },
     {
@@ -330,7 +330,7 @@
  ],
  "combined": {
   "date": "2026-09-23",
-  "equity": 49936.01,
+  "equity": 49940.92,
   "w_unified": 0.125,
   "w_intraday": 0.125,
   "w_intraweek": 0.125,
