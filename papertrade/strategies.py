@@ -55,6 +55,50 @@ def _entered_today(acc: Account, t: dt.datetime) -> bool:
     return acc.memo.get("last_entry") == t.date().isoformat()
 
 
+MAX_WEIGHT = 0.35            # never more than this share of the account in one name
+MIN_WEIGHT = 0.05
+
+
+def _weights(picks: list[dict]) -> dict[str, float]:
+    """Bet size by confidence: a pick's weight grows with how far above the pack the
+    model ranks it. Equal weight is the special case where all ranks are the same.
+    Capped so one name cannot dominate, floored so a tiny slice is not worth its fees."""
+    edge = {p["symbol"]: max(p.get("rank_pct", p.get("score", 0.5)) - 0.5, 1e-6) for p in picks}
+    total = sum(edge.values())
+    w = {s: v / total for s, v in edge.items()}
+    # Cap, then hand the excess to the uncapped names, until every weight fits.
+    for _ in range(len(w)):
+        over = {s: v for s, v in w.items() if v > MAX_WEIGHT}
+        if not over:
+            break
+        spare = sum(v - MAX_WEIGHT for v in over.values())
+        rest = {s: v for s, v in w.items() if s not in over}
+        rest_total = sum(rest.values()) or 1.0
+        w = {**{s: MAX_WEIGHT for s in over},
+             **{s: v + spare * v / rest_total for s, v in rest.items()}}
+    w = {s: v for s, v in w.items() if v >= MIN_WEIGHT} or w
+    total = sum(w.values())
+    return {s: min(v / total, MAX_WEIGHT) for s, v in w.items()}
+
+
+def _buy_weighted(acc: Account, ctx: Ctx, picks: list[dict], product: str,
+                  exit_on=None, reason="") -> None:
+    """Deploy the account's cash across picks in proportion to model confidence."""
+    live = [p for p in picks if p["symbol"] in ctx.prices and p["symbol"] not in acc.positions]
+    if not live:
+        return
+    w = _weights(live)
+    cash = acc.cash
+    for p in live:
+        share = w.get(p["symbol"])
+        if not share:
+            continue
+        e = exit_on(p) if callable(exit_on) else exit_on
+        acc.buy(p["symbol"], cash * share, ctx.prices[p["symbol"]], ctx.t, product,
+                slippage_bps=SLIP_STOCK, exit_on=e,
+                reason=reason or f"rank {p.get('rank_pct', 0):.3f}, size {100 * share:.0f}% of cash")
+
+
 def _buy_top(acc: Account, ctx: Ctx, n: int, product: str, exit_on=None, reason="") -> None:
     picks = [p for p in ctx.picks if p["symbol"] in ctx.prices][:n]
     free = [p for p in picks if p["symbol"] not in acc.positions]
@@ -219,6 +263,34 @@ def nifty_calls(acc: Account, ctx: Ctx) -> None:
         acc.memo["last_entry"] = ctx.t.date().isoformat()
 
 
+UNIFIED_NAMES = 8
+UNIFIED_EXIT_RANK = 0.75
+
+
+def unified(acc: Account, ctx: Ctx) -> None:
+    """One Rs 50,000 account running the model's best ideas together.
+
+    Holds up to eight names, sized by confidence, keeps each while the model still
+    ranks it in the top 25%, and refills from the current top list whenever a slot
+    and enough cash are free. This is the account that answers "what does the whole
+    system make on Rs 50,000".
+    """
+    if ctx.t.time() < ENTRY_AFTER:
+        return
+    for s in list(acc.positions):
+        if ctx.ranks and ctx.ranks.get(s, 0.0) < UNIFIED_EXIT_RANK and s in ctx.prices:
+            acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason="fell out of the top 25%")
+    room = UNIFIED_NAMES - len(acc.positions)
+    if room <= 0 or acc.cash < MIN_TICKET:
+        return
+    # Only names the model still ranks highly, so a name sold for falling out of
+    # the top 25% cannot be bought straight back on the same tick.
+    fresh = [p for p in ctx.picks
+             if p["symbol"] not in acc.positions
+             and ctx.ranks.get(p["symbol"], p.get("rank_pct", 1.0)) >= UNIFIED_EXIT_RANK][:room]
+    _buy_weighted(acc, ctx, fresh, "delivery")
+
+
 def benchmark(acc: Account, ctx: Ctx) -> None:
     s = "NIFTYBEES.NS"
     if not acc.positions and s in ctx.prices and ctx.t.time() >= ENTRY_AFTER:
@@ -226,6 +298,7 @@ def benchmark(acc: Account, ctx: Ctx) -> None:
 
 
 STRATEGIES = {
+    "unified": unified,
     "intraday": intraday, "intraweek": intraweek, "intramonth": intramonth,
     "random_hold": random_hold, "gold": gold, "gold_trend": gold_trend,
     "nifty_calls": nifty_calls, "benchmark": benchmark,
