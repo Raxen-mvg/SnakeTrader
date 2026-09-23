@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-23T10:29:08.405120+05:30",
+ "updated": "2026-09-23T10:34:08.968991+05:30",
  "picks_asof": "2026-09-22",
  "start_cash": 50000.0,
  "strategies": [
@@ -43,8 +43,8 @@
   },
   {
    "strategy": "benchmark",
-   "equity": 50059.92,
-   "return_pct": 0.12,
+   "equity": 50095.45,
+   "return_pct": 0.191,
    "cash": 106.6,
    "open_positions": 1,
    "closed_trades": 0,
@@ -55,7 +55,7 @@
      "symbol": "NIFTYBEES.NS",
      "qty": 187,
      "avg_price": 266.49,
-     "last": 267.13,
+     "last": 267.32,
      "exit_on": null
     }
    ]
@@ -73,8 +73,8 @@
   },
   {
    "strategy": "intramonth",
-   "equity": 49837.01,
-   "return_pct": -0.326,
+   "equity": 49860.21,
+   "return_pct": -0.28,
    "cash": 32981.66,
    "open_positions": 5,
    "closed_trades": 5,
@@ -85,43 +85,43 @@
      "symbol": "SONACOMS.NS",
      "qty": 5,
      "avg_price": 809.86,
-     "last": 817.5,
+     "last": 821.25,
      "exit_on": null
     },
     {
      "symbol": "KTKBANK.NS",
      "qty": 11,
      "avg_price": 341.21,
-     "last": 340.35,
+     "last": 341.0,
      "exit_on": null
     },
     {
      "symbol": "LAURUSLABS.NS",
      "qty": 2,
      "avg_price": 2025.03,
-     "last": 2028.5,
+     "last": 2026.5,
      "exit_on": null
     },
     {
      "symbol": "CORONA.NS",
      "qty": 1,
      "avg_price": 2196.29,
-     "last": 2192.0,
+     "last": 2190.3,
      "exit_on": null
     },
     {
      "symbol": "SWANDEF.NS",
      "qty": 1,
      "avg_price": 2778.76,
-     "last": 2775.0,
+     "last": 2778.0,
      "exit_on": null
     }
    ]
   },
   {
    "strategy": "intraday",
-   "equity": 49803.93,
-   "return_pct": -0.392,
+   "equity": 49805.15,
+   "return_pct": -0.39,
    "cash": 4689.45,
    "open_positions": 5,
    "closed_trades": 5,
@@ -132,43 +132,43 @@
      "symbol": "SBC.NS",
      "qty": 201,
      "avg_price": 49.42,
-     "last": 49.35,
+     "last": 49.34,
      "exit_on": null
     },
     {
      "symbol": "MARICO.NS",
      "qty": 11,
      "avg_price": 833.6,
-     "last": 832.15,
+     "last": 831.95,
      "exit_on": null
     },
     {
      "symbol": "CASTROLIND.NS",
      "qty": 51,
      "avg_price": 195.45,
-     "last": 195.08,
+     "last": 195.21,
      "exit_on": null
     },
     {
      "symbol": "LUPIN.NS",
      "qty": 4,
      "avg_price": 2113.67,
-     "last": 2107.6,
+     "last": 2107.0,
      "exit_on": null
     },
     {
      "symbol": "SRF.NS",
      "qty": 3,
      "avg_price": 2557.93,
-     "last": 2554.0,
+     "last": 2554.4,
      "exit_on": null
     }
    ]
   },
   {
    "strategy": "intraweek",
-   "equity": 49720.27,
-   "return_pct": -0.559,
+   "equity": 49778.32,
+   "return_pct": -0.443,
    "cash": 4833.12,
    "open_positions": 5,
    "closed_trades": 5,
@@ -179,43 +179,43 @@
      "symbol": "SONACOMS.NS",
      "qty": 12,
      "avg_price": 811.72,
-     "last": 817.5,
+     "last": 821.25,
      "exit_on": "2026-09-30"
     },
     {
      "symbol": "KTKBANK.NS",
      "qty": 29,
      "avg_price": 343.61,
-     "last": 340.35,
+     "last": 341.0,
      "exit_on": "2026-09-30"
     },
     {
      "symbol": "LAURUSLABS.NS",
      "qty": 4,
      "avg_price": 2027.54,
-     "last": 2028.5,
+     "last": 2026.5,
      "exit_on": "2026-09-30"
     },
     {
      "symbol": "CORONA.NS",
      "qty": 4,
      "avg_price": 2196.69,
-     "last": 2192.0,
+     "last": 2190.3,
      "exit_on": "2026-09-30"
     },
     {
      "symbol": "SWANDEF.NS",
      "qty": 3,
      "avg_price": 2784.07,
-     "last": 2775.0,
+     "last": 2778.0,
      "exit_on": "2026-09-30"
     }
    ]
   },
   {
    "strategy": "random_hold",
-   "equity": 49720.27,
-   "return_pct": -0.559,
+   "equity": 49778.32,
+   "return_pct": -0.443,
    "cash": 4833.12,
    "open_positions": 5,
    "closed_trades": 5,
@@ -226,35 +226,35 @@
      "symbol": "SONACOMS.NS",
      "qty": 12,
      "avg_price": 811.72,
-     "last": 817.5,
+     "last": 821.25,
      "exit_on": "2026-10-12"
     },
     {
      "symbol": "KTKBANK.NS",
      "qty": 29,
      "avg_price": 343.61,
-     "last": 340.35,
+     "last": 341.0,
      "exit_on": "2026-11-18"
     },
     {
      "symbol": "LAURUSLABS.NS",
      "qty": 4,
      "avg_price": 2027.54,
-     "last": 2028.5,
+     "last": 2026.5,
      "exit_on": "2026-11-06"
     },
     {
      "symbol": "CORONA.NS",
      "qty": 4,
      "avg_price": 2196.69,
-     "last": 2192.0,
+     "last": 2190.3,
      "exit_on": "2026-10-05"
     },
     {
      "symbol": "SWANDEF.NS",
      "qty": 3,
      "avg_price": 2784.07,
-     "last": 2775.0,
+     "last": 2778.0,
      "exit_on": "2026-10-28"
     }
    ]
@@ -262,7 +262,7 @@
  ],
  "combined": {
   "date": "2026-09-23",
-  "equity": 50031.25,
+  "equity": 50051.38,
   "w_intraday": 0.143,
   "w_intraweek": 0.143,
   "w_intramonth": 0.143,
