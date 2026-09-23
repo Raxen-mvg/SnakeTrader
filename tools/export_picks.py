@@ -41,6 +41,18 @@ def main() -> int:
            "top": top, "ranks": {r.symbol: round(float(r.rank_pct), 4) for r in s.itertuples()}}
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     Path(a.out).write_text(json.dumps(out, indent=1))
+    # Refresh the list of listings that are not companies, so the trader can never buy one.
+    try:
+        import duckdb
+        sys.path.insert(0, r"C:\Projects\StockTradesModel")
+        from quantlab.db import OPERATING_COMPANY_SQL as S
+        con = duckdb.connect(r"C:\quantlab_data\quantlab.duckdb", read_only=True)
+        bad = con.execute(f"SELECT symbol FROM universe WHERE NOT ({S})").df()["symbol"].tolist()
+        con.close()
+        (Path(a.out).parent / "not_companies.json").write_text(json.dumps(sorted(bad)))
+        print(f"blocklist refreshed: {len(bad)} non-company listings")
+    except Exception as exc:                       # database busy: keep the existing list
+        print(f"blocklist not refreshed ({exc})")
     print(f"exported {len(top)} picks as of {out['asof']} from {out['source']} -> {a.out}")
     return 0
 

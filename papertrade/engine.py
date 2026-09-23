@@ -14,6 +14,7 @@ import argparse
 import datetime as dt
 import json
 import logging
+import re
 import sys
 from pathlib import Path
 
@@ -30,13 +31,29 @@ ROOT = Path(__file__).resolve().parent.parent
 STATE = ROOT / "state"
 
 
+def not_companies() -> set[str]:
+    """ETFs, index and liquid funds: they are not stocks and must never be traded.
+    Written from the database by tools/export_picks.py; a name-based guard as backstop."""
+    f = STATE / "not_companies.json"
+    listed = set(json.loads(f.read_text())) if f.exists() else set()
+    return listed
+
+
+FUND_WORDS = re.compile(r"(ETF|BEES|LIQUID|LIQID|BETA|NEXT50|NIFTY|SENSEX|GOLD|SILVER|GILT|GSEC|IETF)", re.I)
+
+
+def is_company(symbol: str, blocked: set[str]) -> bool:
+    return symbol not in blocked and not FUND_WORDS.search(symbol.split(".")[0])
+
+
 def load_picks() -> tuple[list[dict], dict[str, float], str]:
     f = STATE / "picks_IN.json"
     if not f.exists():
         return [], {}, "none"
     d = json.loads(f.read_text())
-    picks = d.get("top", [])
-    ranks = d.get("ranks", {})
+    blocked = not_companies()
+    picks = [p for p in d.get("top", []) if is_company(p["symbol"], blocked)]
+    ranks = {k: v for k, v in d.get("ranks", {}).items() if is_company(k, blocked)}
     return picks, ranks, d.get("asof", "unknown")
 
 
@@ -54,9 +71,11 @@ def intraday_model_picks(t: dt.datetime) -> list[dict] | None:
         if c.get("date") == t.date().isoformat():
             return c["top"]
     from .intraday_model import live_picks
-    universe = json.loads((STATE / "intraday_universe.json").read_text())
+    blocked = not_companies()
+    universe = [s for s in json.loads((STATE / "intraday_universe.json").read_text())
+                if is_company(s, blocked)]
     try:
-        top = live_picks(model, universe)
+        top = [p for p in live_picks(model, universe) if is_company(p["symbol"], blocked)]
     except Exception as exc:
         log.warning("intraday model scoring failed: %s", exc)
         return []
@@ -207,6 +226,13 @@ def tick(force: bool = False) -> int:
     if not prices:
         log.warning("no prices returned (holiday, outage or rate limit); skipping this tick")
         return 0
+    blocked = not_companies()
+    for name, a in accounts.items():
+        if name in ("gold", "gold_trend", "benchmark"):     # these hold ETFs on purpose
+            continue
+        for s in [x for x in a.positions if not is_company(x, blocked)]:
+            if s in prices:
+                a.sell(s, prices[s], t, reason="not a company (fund or ETF); exited")
     first = {}
     for name, fn in STRATEGIES.items():
         a = accounts[name]
