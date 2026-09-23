@@ -70,9 +70,19 @@ def _buy_top(acc: Account, ctx: Ctx, n: int, product: str, exit_on=None, reason=
 INTRADAY_MODEL_AFTER = dt.time(10, 20)
 
 
+INTRADAY_MIN_PROB = 0.45          # only trades the model is confident about
+INTRADAY_MIN_TICKET = 5_000.0     # no dust trades: costs would swamp them
+TAKE_PROFIT = 0.02
+STOP_LOSS = -0.015
+
+
 def intraday(acc: Account, ctx: Ctx) -> None:
-    """With a trained intraday model: enter at 10:20 on its picks (it needs the first
-    hour). Without one: enter at 09:30 on the daily model's picks."""
+    """Free-running: re-scores on every tick and may enter or exit whenever it likes.
+
+    A position is closed on a profit target, a stop-loss, when the model stops
+    liking it, or at the hard exit before the close. With no trained intraday
+    model it falls back to one entry a day on the daily model's picks.
+    """
     today = ctx.t.date().isoformat()
     for s, p in list(acc.positions.items()):
         if p.opened[:10] < today and s in ctx.prices:     # a run was missed before yesterday's close
@@ -80,21 +90,41 @@ def intraday(acc: Account, ctx: Ctx) -> None:
     if ctx.t.time() >= EXIT_INTRADAY:
         for s in list(acc.positions):
             if s in ctx.prices:
-                acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason="intraday close")
+                acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason="intraday hard exit")
         return
-    if acc.memo.get("last_entry") == today or acc.positions:
-        return
+
     ipicks = getattr(ctx, "intraday_picks", None)
-    if ipicks is not None:
-        if ctx.t.time() < INTRADAY_MODEL_AFTER or not ipicks:
+    if ipicks is None:                                    # no intraday model yet
+        if acc.memo.get("last_entry") == today or acc.positions or ctx.t.time() < ENTRY_AFTER:
             return
-        sub = Ctx(ctx.t, ctx.prices, ipicks, ctx.ranks, ctx.first)
-        _buy_top(acc, sub, TOP_N, "intraday", reason="intraday model pick at 10:20")
-    elif ctx.t.time() >= ENTRY_AFTER:
         _buy_top(acc, ctx, TOP_N, "intraday", reason="daily model pick (no intraday model yet)")
-    else:
+        acc.memo["last_entry"] = today
         return
-    acc.memo["last_entry"] = today
+
+    wanted = {p["symbol"]: p for p in ipicks if p.get("score", 0) >= INTRADAY_MIN_PROB}
+    for s, p in list(acc.positions.items()):
+        if s not in ctx.prices:
+            continue
+        move = ctx.prices[s] / p.avg_price - 1
+        if move >= TAKE_PROFIT:
+            acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason=f"target hit {100 * move:+.2f}%")
+        elif move <= STOP_LOSS:
+            acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason=f"stop loss {100 * move:+.2f}%")
+        elif s not in wanted:
+            acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason=f"model dropped it {100 * move:+.2f}%")
+
+    if ctx.t.time() < INTRADAY_MODEL_AFTER:
+        return
+    fresh = [p for s, p in wanted.items() if s not in acc.positions and s in ctx.prices]
+    # As many positions as the model likes; cash is the only limit, and each
+    # ticket must be big enough that charges do not swamp it.
+    fresh = fresh[:max(1, int(acc.cash // INTRADAY_MIN_TICKET))]
+    if not fresh or acc.cash < INTRADAY_MIN_TICKET:
+        return
+    budget = acc.cash / len(fresh)
+    for p in fresh:
+        acc.buy(p["symbol"], budget, ctx.prices[p["symbol"]], ctx.t, "intraday", slippage_bps=SLIP_STOCK,
+                reason=f"intraday model, confidence {100 * p.get('score', 0):.0f}%")
 
 
 def _exit_due(acc: Account, ctx: Ctx, reason: str) -> None:
@@ -103,36 +133,43 @@ def _exit_due(acc: Account, ctx: Ctx, reason: str) -> None:
             acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason=reason)
 
 
+MIN_TICKET = 5_000.0
+
+
+def _has_room(acc: Account) -> bool:
+    """Free-running strategies may act on any tick, but only with a real ticket."""
+    return acc.cash >= MIN_TICKET
+
+
 def intraweek(acc: Account, ctx: Ctx) -> None:
+    """Exits when its five days are up, refills whenever cash frees up."""
     if ctx.t.time() < ENTRY_AFTER:
         return
     _exit_due(acc, ctx, "5 trading days elapsed")
-    if not _entered_today(acc, ctx.t) and not acc.positions:
+    if _has_room(acc) and len(acc.positions) < TOP_N:
         _buy_top(acc, ctx, TOP_N, "delivery", exit_on=trading_days_ahead(ctx.t.date(), 5).isoformat())
-        acc.memo["last_entry"] = ctx.t.date().isoformat()
 
 
 def intramonth(acc: Account, ctx: Ctx) -> None:
-    """Hold winners: keep a name while the model ranks it in its top 25%."""
-    if ctx.t.time() < ENTRY_AFTER or _entered_today(acc, ctx.t):
+    """Hold winners: keep a name while the model ranks it in its top 25%. Checked every tick."""
+    if ctx.t.time() < ENTRY_AFTER:
         return
     for s in list(acc.positions):
         if ctx.ranks and ctx.ranks.get(s, 0.0) < 0.75 and s in ctx.prices:
             acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason="fell out of the top 25%")
-    if len(acc.positions) < TOP_N:
+    if _has_room(acc) and len(acc.positions) < TOP_N:
         _buy_top(acc, ctx, TOP_N, "delivery")
-    acc.memo["last_entry"] = ctx.t.date().isoformat()
 
 
 def random_hold(acc: Account, ctx: Ctx) -> None:
-    if ctx.t.time() < ENTRY_AFTER or _entered_today(acc, ctx.t):
+    """Control strategy: same picks, a random holding period per trade."""
+    if ctx.t.time() < ENTRY_AFTER:
         return
     _exit_due(acc, ctx, "random holding period elapsed")
     rng = random.Random(ctx.t.date().toordinal())
-    if len(acc.positions) < TOP_N:
+    if _has_room(acc) and len(acc.positions) < TOP_N:
         _buy_top(acc, ctx, TOP_N, "delivery",
                  exit_on=lambda p: trading_days_ahead(ctx.t.date(), rng.randint(2, 40)).isoformat())
-    acc.memo["last_entry"] = ctx.t.date().isoformat()
 
 
 def gold(acc: Account, ctx: Ctx) -> None:
@@ -142,6 +179,7 @@ def gold(acc: Account, ctx: Ctx) -> None:
 
 
 def gold_trend(acc: Account, ctx: Ctx) -> None:
+    """Checked once a day: the 200-day average does not move within a session."""
     s = "GOLDBEES.NS"
     if ctx.t.time() < ENTRY_AFTER or _entered_today(acc, ctx.t) or s not in ctx.prices:
         return

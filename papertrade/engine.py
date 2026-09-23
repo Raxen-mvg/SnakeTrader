@@ -96,6 +96,56 @@ def allocator(accounts: dict, names: list[str], lookback: int = 20, switch_cost:
     return pd.DataFrame(rows)
 
 
+BIG_MOVE = 0.02          # a position or an account moving this much in a day is worth flagging
+
+
+def write_alerts(accounts: dict, prices: dict, t: dt.datetime) -> list[str]:
+    """Append anything worth a human's attention to state/alerts.jsonl: trades since the
+    last tick, positions moving more than 2%, and accounts up or down more than 2% today."""
+    f = STATE / "alerts.jsonl"
+    seen = set()
+    if f.exists():
+        for line in f.read_text(encoding="utf-8").splitlines():
+            try:
+                seen.add(json.loads(line)["id"])
+            except Exception:
+                pass
+    out = []
+    for name, a in accounts.items():
+        for x in a.ledger:
+            key = f"{x['time']}|{name}|{x['side']}|{x['symbol']}"
+            if key in seen:
+                continue
+            pnl = f", P&L Rs {x['pnl']:+,.0f}" if "pnl" in x else ""
+            out.append({"id": key, "time": x["time"], "kind": "trade", "strategy": name,
+                        "text": f"{name}: {x['side']} {x['qty']} {x['symbol']} at {x['price']:,.2f}"
+                                f" ({x['reason']}){pnl}"})
+        for s, p in a.positions.items():
+            if s not in prices:
+                continue
+            move = prices[s] / p.avg_price - 1
+            if abs(move) >= BIG_MOVE:
+                key = f"{t.date()}|{name}|{s}|{round(move, 2)}"
+                if key not in seen:
+                    out.append({"id": key, "time": t.isoformat(), "kind": "move", "strategy": name,
+                                "text": f"{name}: {s} is {100 * move:+.1f}% since entry"})
+        if a.equity_curve:
+            today = [e for e in a.equity_curve if e["time"][:10] == t.date().isoformat()]
+            if today:
+                day_move = a.equity_curve[-1]["equity"] / today[0]["equity"] - 1
+                if abs(day_move) >= BIG_MOVE:
+                    key = f"{t.date()}|{name}|day|{round(day_move, 2)}"
+                    if key not in seen:
+                        out.append({"id": key, "time": t.isoformat(), "kind": "account", "strategy": name,
+                                    "text": f"{name} account {100 * day_move:+.1f}% today "
+                                            f"(Rs {a.equity_curve[-1]['equity']:,.0f})"})
+    if out:
+        with f.open("a", encoding="utf-8") as fh:
+            for o in out:
+                fh.write(json.dumps(o) + "\n")
+    return [o["text"] for o in out]
+
+
 def write_reports(accounts: dict, prices: dict, t: dt.datetime, picks_asof: str) -> None:
     rows, trades, curves = [], [], []
     for n, a in accounts.items():
@@ -170,6 +220,8 @@ def tick(force: bool = False) -> int:
             a.memo["last_error"] = f"{t.isoformat()} {exc}"
         a.mark({**prices, **option_marks(a, ctx)}, t)
     save_accounts(STATE / "accounts.json", accounts)
+    for line in write_alerts(accounts, prices, t):
+        log.info("ALERT %s", line)
     write_reports(accounts, prices, t, asof)
     log.info("tick done at %s: %d prices, picks as of %s", t.strftime("%H:%M"), len(prices), asof)
     return 0
