@@ -1,65 +1,9 @@
 {
  "intraday": {
   "name": "intraday",
-  "cash": 2915.745454919337,
+  "cash": 49908.85364751532,
   "start_cash": 50000.0,
-  "positions": {
-   "LIQUIDADD.NS": {
-    "symbol": "LIQUIDADD.NS",
-    "qty": 8,
-    "avg_price": 1147.5087241210938,
-    "opened": "2026-09-22T13:51:36.558998+05:30",
-    "product": "intraday",
-    "exit_on": null,
-    "meta": {
-     "last_price": 1145.7900390625
-    }
-   },
-   "LIQUID1.NS": {
-    "symbol": "LIQUID1.NS",
-    "qty": 8,
-    "avg_price": 1125.3555490112306,
-    "opened": "2026-09-22T13:51:36.558998+05:30",
-    "product": "intraday",
-    "exit_on": null,
-    "meta": {
-     "last_price": 1123.6700439453125
-    }
-   },
-   "LIQUIDBEES.NS": {
-    "symbol": "LIQUIDBEES.NS",
-    "qty": 9,
-    "avg_price": 1001.5100247802735,
-    "opened": "2026-09-22T13:51:36.558998+05:30",
-    "product": "intraday",
-    "exit_on": null,
-    "meta": {
-     "last_price": 1000.010009765625
-    }
-   },
-   "HDFCSML250.NS": {
-    "symbol": "HDFCSML250.NS",
-    "qty": 54,
-    "avg_price": 184.276,
-    "opened": "2026-09-22T13:51:36.558998+05:30",
-    "product": "intraday",
-    "exit_on": null,
-    "meta": {
-     "last_price": 184.0
-    }
-   },
-   "BANKBEES.NS": {
-    "symbol": "BANKBEES.NS",
-    "qty": 17,
-    "avg_price": 583.3537004394532,
-    "opened": "2026-09-22T13:51:36.558998+05:30",
-    "product": "intraday",
-    "exit_on": null,
-    "meta": {
-     "last_price": 582.47998046875
-    }
-   }
-  },
+  "positions": {},
   "ledger": [
    {
     "time": "2026-09-22T13:51:36.558998+05:30",
@@ -115,12 +59,76 @@
     "costs": 4.18,
     "product": "intraday",
     "reason": "intraday model pick at 10:20"
+   },
+   {
+    "time": "2026-09-23T09:59:00.516111+05:30",
+    "side": "SELL",
+    "symbol": "LIQUIDADD.NS",
+    "qty": 8,
+    "price": 1144.221,
+    "value": 9153.77,
+    "costs": 5.87,
+    "product": "intraday",
+    "pnl": -32.17,
+    "reason": "missed close; sold next session"
+   },
+   {
+    "time": "2026-09-23T09:59:00.516111+05:30",
+    "side": "SELL",
+    "symbol": "LIQUID1.NS",
+    "qty": 8,
+    "price": 1122.1143,
+    "value": 8976.91,
+    "costs": 5.76,
+    "product": "intraday",
+    "pnl": -31.69,
+    "reason": "missed close; sold next session"
+   },
+   {
+    "time": "2026-09-23T09:59:00.516111+05:30",
+    "side": "SELL",
+    "symbol": "LIQUIDBEES.NS",
+    "qty": 9,
+    "price": 998.49,
+    "value": 8986.41,
+    "costs": 5.76,
+    "product": "intraday",
+    "pnl": -32.94,
+    "reason": "missed close; sold next session"
+   },
+   {
+    "time": "2026-09-23T09:59:00.516111+05:30",
+    "side": "SELL",
+    "symbol": "HDFCSML250.NS",
+    "qty": 54,
+    "price": 184.7425,
+    "value": 9976.09,
+    "costs": 6.4,
+    "product": "intraday",
+    "pnl": 18.79,
+    "reason": "missed close; sold next session"
+   },
+   {
+    "time": "2026-09-23T09:59:00.516111+05:30",
+    "side": "SELL",
+    "symbol": "BANKBEES.NS",
+    "qty": 17,
+    "price": 584.1225,
+    "value": 9930.08,
+    "costs": 6.37,
+    "product": "intraday",
+    "pnl": 6.7,
+    "reason": "missed close; sold next session"
    }
   ],
   "equity_curve": [
    {
     "time": "2026-09-22T13:51:36.558998+05:30",
     "equity": 49909.68
+   },
+   {
+    "time": "2026-09-23T09:59:00.516111+05:30",
+    "equity": 49908.85
    }
   ],
   "memo": {
@@ -140,7 +148,7 @@
     "product": "delivery",
     "exit_on": "2026-09-29",
     "meta": {
-     "last_price": 110.83999633789062
+     "last_price": 110.86000061035156
     }
    },
    "NEXT50.NS": {
@@ -151,7 +159,7 @@
     "product": "delivery",
     "exit_on": "2026-09-29",
     "meta": {
-     "last_price": 743.0800170898438
+     "last_price": 746.0
     }
    },
    "NEXT50BETA.NS": {
@@ -162,7 +170,7 @@
     "product": "delivery",
     "exit_on": "2026-09-29",
     "meta": {
-     "last_price": 77.66999816894531
+     "last_price": 77.87000274658203
     }
    },
    "BANKBETA.NS": {
@@ -173,7 +181,7 @@
     "product": "delivery",
     "exit_on": "2026-09-29",
     "meta": {
-     "last_price": 58.220001220703125
+     "last_price": 58.34000015258789
     }
    },
    "HDFCGOLD.NS": {
@@ -184,7 +192,7 @@
     "product": "delivery",
     "exit_on": "2026-09-29",
     "meta": {
-     "last_price": 128.74000549316406
+     "last_price": 129.52000427246094
     }
    }
   },
@@ -249,6 +257,10 @@
    {
     "time": "2026-09-22T13:51:36.558998+05:30",
     "equity": 49867.03
+   },
+   {
+    "time": "2026-09-23T09:59:00.516111+05:30",
+    "equity": 50012.97
    }
   ],
   "memo": {
@@ -257,20 +269,9 @@
  },
  "intramonth": {
   "name": "intramonth",
-  "cash": 421.03016351174483,
+  "cash": 3442.4636695357144,
   "start_cash": 50000.0,
   "positions": {
-   "GROWWLIQID.NS": {
-    "symbol": "GROWWLIQID.NS",
-    "qty": 90,
-    "avg_price": 111.00625633239747,
-    "opened": "2026-09-22T13:51:36.558998+05:30",
-    "product": "delivery",
-    "exit_on": null,
-    "meta": {
-     "last_price": 110.83999633789062
-    }
-   },
    "NEXT50.NS": {
     "symbol": "NEXT50.NS",
     "qty": 13,
@@ -279,7 +280,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 743.0800170898438
+     "last_price": 746.0
     }
    },
    "NEXT50BETA.NS": {
@@ -290,7 +291,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 77.66999816894531
+     "last_price": 77.87000274658203
     }
    },
    "BANKBETA.NS": {
@@ -301,18 +302,62 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 58.220001220703125
+     "last_price": 58.34000015258789
     }
    },
-   "HDFCGOLD.NS": {
-    "symbol": "HDFCGOLD.NS",
-    "qty": 77,
-    "avg_price": 128.93311550140382,
-    "opened": "2026-09-22T13:51:36.558998+05:30",
+   "SONACOMS.NS": {
+    "symbol": "SONACOMS.NS",
+    "qty": 5,
+    "avg_price": 809.8629994506837,
+    "opened": "2026-09-23T09:59:00.516111+05:30",
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 128.74000549316406
+     "last_price": 808.6500244140625
+    }
+   },
+   "KTKBANK.NS": {
+    "symbol": "KTKBANK.NS",
+    "qty": 11,
+    "avg_price": 341.21106222534183,
+    "opened": "2026-09-23T09:59:00.516111+05:30",
+    "product": "delivery",
+    "exit_on": null,
+    "meta": {
+     "last_price": 340.70001220703125
+    }
+   },
+   "LAURUSLABS.NS": {
+    "symbol": "LAURUSLABS.NS",
+    "qty": 2,
+    "avg_price": 2025.0330000000001,
+    "opened": "2026-09-23T09:59:00.516111+05:30",
+    "product": "delivery",
+    "exit_on": null,
+    "meta": {
+     "last_price": 2022.0
+    }
+   },
+   "CORONA.NS": {
+    "symbol": "CORONA.NS",
+    "qty": 1,
+    "avg_price": 2196.2895000000003,
+    "opened": "2026-09-23T09:59:00.516111+05:30",
+    "product": "delivery",
+    "exit_on": null,
+    "meta": {
+     "last_price": 2193.0
+    }
+   },
+   "SWANDEF.NS": {
+    "symbol": "SWANDEF.NS",
+    "qty": 1,
+    "avg_price": 2778.7619978027346,
+    "opened": "2026-09-23T09:59:00.516111+05:30",
+    "product": "delivery",
+    "exit_on": null,
+    "meta": {
+     "last_price": 2774.60009765625
     }
    }
   },
@@ -371,16 +416,99 @@
     "costs": 11.79,
     "product": "delivery",
     "reason": "model rank 0.733"
+   },
+   {
+    "time": "2026-09-23T09:59:00.516111+05:30",
+    "side": "SELL",
+    "symbol": "GROWWLIQID.NS",
+    "qty": 90,
+    "price": 110.6937,
+    "value": 9962.43,
+    "costs": 25.68,
+    "product": "delivery",
+    "pnl": -53.8,
+    "reason": "fell out of the top 25%"
+   },
+   {
+    "time": "2026-09-23T09:59:00.516111+05:30",
+    "side": "SELL",
+    "symbol": "HDFCGOLD.NS",
+    "qty": 77,
+    "price": 129.3257,
+    "value": 9958.08,
+    "costs": 25.67,
+    "product": "delivery",
+    "pnl": 4.56,
+    "reason": "fell out of the top 25%"
+   },
+   {
+    "time": "2026-09-23T09:59:00.516111+05:30",
+    "side": "BUY",
+    "symbol": "SONACOMS.NS",
+    "qty": 5,
+    "price": 809.863,
+    "value": 4049.31,
+    "costs": 4.81,
+    "product": "delivery",
+    "reason": "model rank 1.000"
+   },
+   {
+    "time": "2026-09-23T09:59:00.516111+05:30",
+    "side": "BUY",
+    "symbol": "KTKBANK.NS",
+    "qty": 11,
+    "price": 341.2111,
+    "value": 3753.32,
+    "costs": 4.46,
+    "product": "delivery",
+    "reason": "model rank 0.999"
+   },
+   {
+    "time": "2026-09-23T09:59:00.516111+05:30",
+    "side": "BUY",
+    "symbol": "LAURUSLABS.NS",
+    "qty": 2,
+    "price": 2025.033,
+    "value": 4050.07,
+    "costs": 4.81,
+    "product": "delivery",
+    "reason": "model rank 0.999"
+   },
+   {
+    "time": "2026-09-23T09:59:00.516111+05:30",
+    "side": "BUY",
+    "symbol": "CORONA.NS",
+    "qty": 1,
+    "price": 2196.2895,
+    "value": 2196.29,
+    "costs": 2.61,
+    "product": "delivery",
+    "reason": "model rank 0.998"
+   },
+   {
+    "time": "2026-09-23T09:59:00.516111+05:30",
+    "side": "BUY",
+    "symbol": "SWANDEF.NS",
+    "qty": 1,
+    "price": 2778.762,
+    "value": 2778.76,
+    "costs": 3.3,
+    "product": "delivery",
+    "reason": "model rank 0.997"
    }
   ],
   "equity_curve": [
    {
     "time": "2026-09-22T13:51:36.558998+05:30",
     "equity": 49867.03
+   },
+   {
+    "time": "2026-09-23T09:59:00.516111+05:30",
+    "equity": 49886.51
    }
   ],
   "memo": {
-   "last_entry": "2026-09-22"
+   "last_entry": "2026-09-23"
   }
  },
  "random_hold": {
@@ -396,7 +524,7 @@
     "product": "delivery",
     "exit_on": "2026-10-13",
     "meta": {
-     "last_price": 110.83999633789062
+     "last_price": 110.86000061035156
     }
    },
    "NEXT50.NS": {
@@ -407,7 +535,7 @@
     "product": "delivery",
     "exit_on": "2026-11-04",
     "meta": {
-     "last_price": 743.0800170898438
+     "last_price": 746.0
     }
    },
    "NEXT50BETA.NS": {
@@ -418,7 +546,7 @@
     "product": "delivery",
     "exit_on": "2026-09-25",
     "meta": {
-     "last_price": 77.66999816894531
+     "last_price": 77.87000274658203
     }
    },
    "BANKBETA.NS": {
@@ -429,7 +557,7 @@
     "product": "delivery",
     "exit_on": "2026-10-12",
     "meta": {
-     "last_price": 58.220001220703125
+     "last_price": 58.34000015258789
     }
    },
    "HDFCGOLD.NS": {
@@ -440,7 +568,7 @@
     "product": "delivery",
     "exit_on": "2026-10-16",
     "meta": {
-     "last_price": 128.74000549316406
+     "last_price": 129.52000427246094
     }
    }
   },
@@ -505,10 +633,14 @@
    {
     "time": "2026-09-22T13:51:36.558998+05:30",
     "equity": 49867.03
+   },
+   {
+    "time": "2026-09-23T09:59:00.516111+05:30",
+    "equity": 50012.97
    }
   ],
   "memo": {
-   "last_entry": "2026-09-22"
+   "last_entry": "2026-09-23"
   }
  },
  "gold": {
@@ -524,7 +656,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 124.5199966430664
+     "last_price": 125.31999969482422
     }
    }
   },
@@ -545,6 +677,10 @@
    {
     "time": "2026-09-22T13:51:36.558998+05:30",
     "equity": 49915.92
+   },
+   {
+    "time": "2026-09-23T09:59:00.516111+05:30",
+    "equity": 50235.93
    }
   ],
   "memo": {}
@@ -562,7 +698,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 124.5199966430664
+     "last_price": 125.31999969482422
     }
    }
   },
@@ -583,10 +719,14 @@
    {
     "time": "2026-09-22T13:51:36.558998+05:30",
     "equity": 49915.92
+   },
+   {
+    "time": "2026-09-23T09:59:00.516111+05:30",
+    "equity": 50235.93
    }
   ],
   "memo": {
-   "last_entry": "2026-09-22"
+   "last_entry": "2026-09-23"
   }
  },
  "nifty_calls": {
@@ -598,6 +738,10 @@
   "equity_curve": [
    {
     "time": "2026-09-22T13:51:36.558998+05:30",
+    "equity": 50000.0
+   },
+   {
+    "time": "2026-09-23T09:59:00.516111+05:30",
     "equity": 50000.0
    }
   ],
@@ -616,7 +760,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 266.3599853515625
+     "last_price": 266.8900146484375
     }
    }
   },
@@ -637,6 +781,10 @@
    {
     "time": "2026-09-22T13:51:36.558998+05:30",
     "equity": 49915.92
+   },
+   {
+    "time": "2026-09-23T09:59:00.516111+05:30",
+    "equity": 50015.04
    }
   ],
   "memo": {}
