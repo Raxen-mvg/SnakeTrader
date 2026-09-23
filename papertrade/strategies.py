@@ -19,6 +19,7 @@ intraday positions close on the first tick at or after EXIT_INTRADAY.
 from __future__ import annotations
 
 import datetime as dt
+import math
 import random
 
 import numpy as np
@@ -63,22 +64,34 @@ def _weights(picks: list[dict]) -> dict[str, float]:
     """Bet size by confidence: a pick's weight grows with how far above the pack the
     model ranks it. Equal weight is the special case where all ranks are the same.
     Capped so one name cannot dominate, floored so a tiny slice is not worth its fees."""
-    edge = {p["symbol"]: max(p.get("rank_pct", p.get("score", 0.5)) - 0.5, 1e-6) for p in picks}
+    # Rank percentiles bunch up at the top (0.996 vs 1.000 is meaningless as a size),
+    # so size on the raw model score standardised across the day's picks: a pick one
+    # standard deviation better than the pack gets e times the weight.
+    scores = [float(p.get("score", 0.0)) for p in picks]
+    mean = sum(scores) / len(scores)
+    var = sum((s - mean) ** 2 for s in scores) / max(len(scores) - 1, 1)
+    sd = var ** 0.5
+    if sd > 0:
+        edge = {p["symbol"]: math.exp((float(p.get("score", 0.0)) - mean) / sd) for p in picks}
+    else:   # no scores (or all identical): fall back to rank, then to equal weight
+        edge = {p["symbol"]: max(float(p.get("rank_pct", 0.5)) - 0.5, 1e-6) for p in picks}
     total = sum(edge.values())
     w = {s: v / total for s, v in edge.items()}
     # Cap, then hand the excess to the uncapped names, until every weight fits.
+    # With few picks an equal share can exceed the cap, so the cap never goes below it.
+    cap = max(MAX_WEIGHT, 1.0 / len(w))
     for _ in range(len(w)):
-        over = {s: v for s, v in w.items() if v > MAX_WEIGHT}
+        over = {s: v for s, v in w.items() if v > cap}
         if not over:
             break
-        spare = sum(v - MAX_WEIGHT for v in over.values())
+        spare = sum(v - cap for v in over.values())
         rest = {s: v for s, v in w.items() if s not in over}
         rest_total = sum(rest.values()) or 1.0
-        w = {**{s: MAX_WEIGHT for s in over},
+        w = {**{s: cap for s in over},
              **{s: v + spare * v / rest_total for s, v in rest.items()}}
     w = {s: v for s, v in w.items() if v >= MIN_WEIGHT} or w
     total = sum(w.values())
-    return {s: min(v / total, MAX_WEIGHT) for s, v in w.items()}
+    return {s: min(v / total, cap) for s, v in w.items()}
 
 
 def _buy_weighted(acc: Account, ctx: Ctx, picks: list[dict], product: str,
