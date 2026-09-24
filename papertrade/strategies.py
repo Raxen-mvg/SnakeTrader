@@ -334,48 +334,67 @@ def option_marks(acc: Account, ctx: Ctx) -> dict[str, float]:
 
 
 # --- the whole model on one account -----------------------------------------
-# Sleeve sizes come from what was measured, not from taste. The 21-day book is the
-# only part with a tested edge (top-decile hit 54-56%, positive net excess), so it
-# gets most of the money. Gold is there because it is the one holding uncorrelated
-# with the equity book. Intraday is capped hard and only fires above 55% confidence:
-# at the old 45% floor it lost money after charges, both in the backtest and live.
+# No fixed split between sleeves. Every possible action is priced the same way -
+# what do I expect to earn, and what will it cost me - and money goes wherever that
+# number is positive. A sleeve that cannot clear its own costs simply gets nothing,
+# for as long as that stays true.
+#
+# The expected-return figures below are measured, not chosen: they are the average
+# 21-day excess returns of the model's top names in the walk-forward backtest, and
+# the round-trip costs are Zerodha's published charges plus the slippage tier.
 GOLD_SYMBOL = "GOLDBEES.NS"
-ORACLE_CORE, ORACLE_HEDGE, ORACLE_TRADE = 0.75, 0.10, 0.15
-ORACLE_NAMES = 8
-ORACLE_EXIT_RANK = 0.75
-ORACLE_MIN_PROB = 0.55
+CORE_HORIZON = 21                 # trading days the ranking model forecasts
+CORE_TOP_EXCESS = 0.0116          # measured: 21-day excess of the top 5, India, before costs
+ROUND_TRIP_DELIVERY = 0.006       # 0.60% in and out, India delivery
+ROUND_TRIP_INTRADAY = 0.0036      # 0.36% in and out, India intraday
+EDGE_MULTIPLE = 2.0               # a trade must expect to earn at least this many times its cost
+MAX_NAME_WEIGHT = 0.30
 
 
-def _sleeve(acc: Account, ctx: Ctx, which: str) -> float:
-    """Rupees currently held in one sleeve of a multi-sleeve account."""
-    total = 0.0
-    for s, pos in acc.positions.items():
-        kind = "hedge" if s == GOLD_SYMBOL else ("trade" if pos.product == "intraday" else "core")
-        if kind == which:
-            total += pos.qty * ctx.prices.get(s, pos.avg_price)
-    return total
+def core_edge(rank_pct: float) -> float:
+    """Expected net return per trading day from holding a name at this model rank.
+
+    The model's top name earns about CORE_TOP_EXCESS over 21 days before costs and
+    the edge fades linearly towards the median, so a name must be ranked high enough
+    that its expected gain covers a round trip before it is worth owning at all.
+    """
+    gross = CORE_TOP_EXCESS * max(0.0, (rank_pct - 0.5) / 0.5)
+    return (gross - ROUND_TRIP_DELIVERY) / CORE_HORIZON
+
+
+def intraday_edge(prob: float, take: float = TAKE_PROFIT, stop: float = STOP_LOSS) -> float:
+    """Expected net return of one intraday trade at this model confidence.
+
+    Wins take the profit target, losses hit the stop. The trade is only worth taking
+    when what is left after charges is a real multiple of those charges, not a sliver
+    of one - which is why the sleeve sits out most days.
+    """
+    return prob * take + (1 - prob) * stop - ROUND_TRIP_INTRADAY
+
+
+def intraday_worth_it(prob: float) -> bool:
+    return intraday_edge(prob) >= EDGE_MULTIPLE * ROUND_TRIP_INTRADAY
 
 
 def oracle(acc: Account, ctx: Ctx) -> None:
-    """Rs 50,000, one pot of cash, the whole model deciding what to do with it.
+    """Rs 50,000, one pot of cash, and no human-chosen allocation.
 
-    Three sleeves: the medium-horizon picks (75%), a gold hedge (10%), and an
-    intraday sleeve (15%) that is always flat before the close. Each sleeve is
-    topped up only to its share of current equity, so a winning sleeve is not
-    allowed to quietly take over the account.
+    Each candidate is priced by what it is expected to earn per day net of what it
+    costs to get in and out. Anything with a positive number competes for the cash;
+    anything without one is not bought. The intraday sleeve therefore funds itself
+    only on the days it can show a real edge, and holds nothing overnight.
     """
     if ctx.t.time() < ENTRY_AFTER:
         return
-    equity = acc.equity(ctx.prices)
 
-    # Intraday sleeve.
+    # Intraday first: it must be flat by the close, and it borrows cash only for the day.
     if ctx.t.time() >= EXIT_INTRADAY:
         for s, pos in list(acc.positions.items()):
             if pos.product == "intraday" and s in ctx.prices:
                 acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason="intraday hard exit")
     else:
         ipicks = getattr(ctx, "intraday_picks", None) or []
-        wanted = {p["symbol"]: p for p in ipicks if p.get("score", 0) >= ORACLE_MIN_PROB}
+        wanted = {p["symbol"]: p for p in ipicks if intraday_worth_it(float(p.get("score", 0.0)))}
         for s, pos in list(acc.positions.items()):
             if pos.product != "intraday" or s not in ctx.prices:
                 continue
@@ -385,38 +404,138 @@ def oracle(acc: Account, ctx: Ctx) -> None:
             elif move <= STOP_LOSS:
                 acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason=f"stop loss {100 * move:+.2f}%")
             elif s not in wanted:
-                acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason=f"model dropped it {100 * move:+.2f}%")
-        room = min(acc.cash, ORACLE_TRADE * equity - _sleeve(acc, ctx, "trade"))
-        if ctx.t.time() >= INTRADAY_MODEL_AFTER and room >= MIN_TICKET:
-            fresh = [p for s, p in wanted.items() if s not in acc.positions and s in ctx.prices]
-            fresh = fresh[:max(1, int(room // MIN_TICKET))]
-            if fresh:
-                each = room / len(fresh)
-                for p in fresh:
-                    acc.buy(p["symbol"], each, ctx.prices[p["symbol"]], ctx.t, "intraday",
-                            slippage_bps=SLIP_STOCK,
-                            reason=f"intraday sleeve, confidence {100 * p.get('score', 0):.0f}%")
+                acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason=f"edge gone {100 * move:+.2f}%")
+        fresh = [p for s, p in wanted.items() if s not in acc.positions and s in ctx.prices]
+        if fresh and ctx.t.time() >= INTRADAY_MODEL_AFTER and acc.cash >= MIN_TICKET:
+            # An intraday trade earns its day's edge now, so it outbids the core book
+            # for cash whenever it qualifies at all - which is rare by construction.
+            fresh.sort(key=lambda p: -intraday_edge(float(p.get("score", 0.0))))
+            fresh = fresh[:max(1, int(acc.cash // MIN_TICKET))]
+            each = acc.cash / len(fresh)
+            for p in fresh:
+                acc.buy(p["symbol"], each, ctx.prices[p["symbol"]], ctx.t, "intraday", slippage_bps=SLIP_STOCK,
+                        reason=f"expected {100 * intraday_edge(float(p.get('score', 0.0))):+.2f}% net, "
+                               f"confidence {100 * float(p.get('score', 0.0)):.0f}%")
 
-    # Gold hedge.
-    need = ORACLE_HEDGE * equity - _sleeve(acc, ctx, "hedge")
-    if GOLD_SYMBOL in ctx.prices and need >= MIN_TICKET and acc.cash >= MIN_TICKET:
-        acc.buy(GOLD_SYMBOL, min(need, acc.cash), ctx.prices[GOLD_SYMBOL], ctx.t, "delivery",
-                slippage_bps=SLIP_ETF, reason="gold hedge, 10% of the account")
-
-    # Core book: hold while the model still ranks it in the top 25%.
+    # Core book: hold a name while it still expects to earn more than it costs to keep.
     for s, pos in list(acc.positions.items()):
-        if pos.product == "intraday" or s == GOLD_SYMBOL:
+        if pos.product == "intraday" or s not in ctx.prices:
             continue
-        if ctx.ranks and ctx.ranks.get(s, 0.0) < ORACLE_EXIT_RANK and s in ctx.prices:
-            acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason="fell out of the top 25%")
-    core = [s for s, pos in acc.positions.items() if pos.product != "intraday" and s != GOLD_SYMBOL]
-    budget = min(acc.cash, ORACLE_CORE * equity - _sleeve(acc, ctx, "core"))
-    if len(core) >= ORACLE_NAMES or budget < MIN_TICKET:
+        if core_edge(ctx.ranks.get(s, 0.0)) <= 0:
+            acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason="expected return no longer covers costs")
+    if acc.cash < MIN_TICKET:
         return
-    fresh = [p for p in ctx.picks
-             if p["symbol"] not in acc.positions
-             and ctx.ranks.get(p["symbol"], p.get("rank_pct", 1.0)) >= ORACLE_EXIT_RANK][:ORACLE_NAMES - len(core)]
-    _buy_weighted(acc, ctx, fresh, "delivery", budget=budget, reason="oracle core, sized by confidence")
+    cand = [p for p in ctx.picks
+            if p["symbol"] not in acc.positions and p["symbol"] in ctx.prices
+            and core_edge(ctx.ranks.get(p["symbol"], p.get("rank_pct", 0.0))) > 0]
+    if not cand:
+        return
+    # As many names as the cash supports at a sensible ticket, sized by expected edge.
+    cand = cand[:max(1, int(acc.cash // MIN_TICKET))]
+    edges = {p["symbol"]: core_edge(ctx.ranks.get(p["symbol"], p.get("rank_pct", 0.0))) for p in cand}
+    total = sum(edges.values())
+    budget = acc.cash                     # shares are of the cash we started the tick with,
+    for p in cand:                        # not of what is left after each purchase
+        share = min(edges[p["symbol"]] / total, MAX_NAME_WEIGHT) if total > 0 else 1.0 / len(cand)
+        amount = min(budget * share, acc.cash)
+        if amount >= MIN_TICKET:
+            acc.buy(p["symbol"], amount, ctx.prices[p["symbol"]], ctx.t, "delivery", slippage_bps=SLIP_STOCK,
+                    reason=f"expected {100 * edges[p['symbol']] * CORE_HORIZON:+.2f}% net over {CORE_HORIZON} days")
 
 
-STRATEGIES["oracle"] = oracle      # defined below the table, so registered here
+# --- a second account, run on different principles --------------------------
+# Not the ranking model. This is the market-making family of ideas as a retail
+# account can honestly run them: no rebates, no queue priority, no colocation, and
+# the spread is crossed in both directions. What is left is statistical arbitrage -
+# a stock that has fallen much further than its peers today, with no news to justify
+# it, tends to close part of that gap before the bell. Many small trades, each one
+# taken only when the expected snap-back is a real multiple of the charges.
+STATARB_UNIVERSE = [
+    "RELIANCE.NS", "HDFCBANK.NS", "ICICIBANK.NS", "INFY.NS", "TCS.NS", "ITC.NS",
+    "LT.NS", "AXISBANK.NS", "SBIN.NS", "BHARTIARTL.NS", "KOTAKBANK.NS", "HINDUNILVR.NS",
+    "MARUTI.NS", "SUNPHARMA.NS", "TATAMOTORS.NS", "TATASTEEL.NS", "WIPRO.NS", "HCLTECH.NS",
+    "ULTRACEMCO.NS", "TITAN.NS", "ASIANPAINT.NS", "BAJFINANCE.NS", "POWERGRID.NS", "NTPC.NS",
+    "ONGC.NS", "GRASIM.NS", "JSWSTEEL.NS", "COALINDIA.NS", "CIPLA.NS", "DRREDDY.NS",
+]
+STATARB_ENTRY_Z = 1.5             # how far below its peers a name must be to be worth buying
+STATARB_EXIT_Z = 0.25             # where the gap is considered closed
+STATARB_EXIT_GAP = 0.003          # or where it is simply too small to be worth holding
+STATARB_MIN_SD = 0.003            # a quiet cross-section makes z-scores meaningless
+STATARB_MIN_NAMES = 12            # below this the cross-section is too thin to mean anything
+STATARB_MAX_POSITIONS = 8
+STATARB_TICKET = 0.12             # of equity per name: many small trades, not a few big ones
+
+
+def _day_open(acc: Account, ctx: Ctx) -> dict:
+    """First price seen for each name today - the account's own record of the open."""
+    day = ctx.t.date().isoformat()
+    book = acc.memo.get("day_open") or {}
+    if book.get("day") != day:
+        book = {"day": day, "px": {}}
+    for s, px in ctx.prices.items():
+        book["px"].setdefault(s, px)
+    acc.memo["day_open"] = book
+    return book["px"]
+
+
+def statarb(acc: Account, ctx: Ctx) -> None:
+    """Rs 50,000 run as intraday statistical arbitrage instead of forecasting.
+
+    Every name in a liquid universe is measured against how the rest of that universe
+    has moved since the open. A name far below the crowd is bought and sold back when
+    the gap closes; nothing is held overnight. A trade is only opened when the gap it
+    expects to close is worth several times the cost of trading it.
+    """
+    opens = _day_open(acc, ctx)
+    if ctx.t.time() >= EXIT_INTRADAY:
+        for s, pos in list(acc.positions.items()):
+            if s in ctx.prices:
+                acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason="flat before the close")
+        return
+    if ctx.t.time() < ENTRY_AFTER:
+        return
+
+    moves = {s: ctx.prices[s] / opens[s] - 1
+             for s in STATARB_UNIVERSE if s in ctx.prices and opens.get(s)}
+    if len(moves) < STATARB_MIN_NAMES:
+        return
+    vals = list(moves.values())
+    mean = sum(vals) / len(vals)
+    sd = (sum((v - mean) ** 2 for v in vals) / max(len(vals) - 1, 1)) ** 0.5
+    if sd <= 0:
+        return
+    z = {s: (v - mean) / sd for s, v in moves.items()}
+
+    for s, pos in list(acc.positions.items()):
+        if s not in ctx.prices:
+            continue
+        move = ctx.prices[s] / pos.avg_price - 1
+        gap = mean - moves.get(s, mean)       # how far it still trails the crowd, in returns
+        if z.get(s, 0.0) >= -STATARB_EXIT_Z or gap <= STATARB_EXIT_GAP:
+            acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason=f"gap closed {100 * move:+.2f}%")
+        elif move <= STOP_LOSS:
+            acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason=f"stop loss {100 * move:+.2f}%")
+
+    room = STATARB_MAX_POSITIONS - len(acc.positions)
+    if room <= 0 or acc.cash < MIN_TICKET or sd < STATARB_MIN_SD:
+        return
+    # Expected gain is the part of the gap that is expected to close, in return terms.
+    cand = []
+    for s, zs in z.items():
+        if zs > -STATARB_ENTRY_Z or s in acc.positions:
+            continue
+        expected = (abs(zs) - STATARB_EXIT_Z) * sd
+        if expected >= EDGE_MULTIPLE * ROUND_TRIP_INTRADAY:
+            cand.append((expected, s))
+    cand.sort(reverse=True)
+    ticket = min(acc.equity(ctx.prices) * STATARB_TICKET, acc.cash)
+    for expected, s in cand[:room]:
+        if acc.cash < MIN_TICKET:
+            break
+        acc.buy(s, min(ticket, acc.cash), ctx.prices[s], ctx.t, "intraday", slippage_bps=SLIP_STOCK,
+                reason=f"{z[s]:.1f} sd below its peers, expecting {100 * expected:+.2f}% back")
+
+
+STRATEGIES["oracle"] = oracle
+STRATEGIES["statarb"] = statarb
+ALWAYS_QUOTE = ALWAYS_QUOTE + STATARB_UNIVERSE   # the stat-arb book needs its whole cross-section quoted      # defined below the table, so registered here
