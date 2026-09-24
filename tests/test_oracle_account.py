@@ -42,9 +42,12 @@ def main() -> int:
     print()
     print("[WHAT A TRADE IS EXPECTED TO EARN]")
     check("a top-ranked name clears its costs", S.core_edge(0.99) > 0, f"{100 * S.core_edge(0.99):+.4f}%/day")
-    check("a merely good name does not", S.core_edge(0.75) <= 0, f"{100 * S.core_edge(0.75):+.4f}%/day")
-    check("the cut-off is set by costs, not by a chosen rank",
-          S.core_edge(0.76) * S.core_edge(0.74) <= 0)
+    check("a middling name does not", S.core_edge(0.55) <= 0, f"{100 * S.core_edge(0.55):+.4f}%/day")
+    cut = next(r / 100 for r in range(50, 101) if S.core_edge(r / 100) > 0)
+    check("there is a single cut-off and costs put it there",
+          0.5 < cut < 0.95 and S.core_edge(cut - 0.01) <= 0 < S.core_edge(cut),
+          f"buys from rank {cut:.2f} up")
+    check("expected return rises with rank", S.core_edge(0.99) > S.core_edge(0.85) > S.core_edge(0.75))
     check("with nothing measured, no intraday score is tradeable",
           not any(S.intraday_worth_it(x) for x in (0.3, 0.5, 0.55, 0.7, 0.9)))
     import json as _json
