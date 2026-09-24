@@ -349,7 +349,10 @@ def option_marks(acc: Account, ctx: Ctx) -> dict[str, float]:
 # the round-trip costs are Zerodha's published charges plus the slippage tier.
 GOLD_SYMBOL = "GOLDBEES.NS"
 CORE_HORIZON = 21                 # trading days the ranking model forecasts
-CORE_TOP_EXCESS = 0.0116          # measured: 21-day excess of the top 5, India, before costs
+# Measured on the adopted model (research/ADOPTED_RESULT.md): India's top 5 return +1.56%
+# over 21 days AFTER a round trip, so +2.16% before it. The earlier figure here subtracted
+# costs twice and made the model too shy to own anything outside its top few names.
+CORE_TOP_EXCESS = 0.0216          # 21-day excess of the top 5, India, BEFORE costs
 ROUND_TRIP_DELIVERY = 0.006       # 0.60% in and out, India delivery
 ROUND_TRIP_INTRADAY = 0.0036      # 0.36% in and out, India intraday
 EDGE_MULTIPLE = 2.0               # a trade must expect to earn at least this many times its cost
