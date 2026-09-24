@@ -95,13 +95,16 @@ def _weights(picks: list[dict]) -> dict[str, float]:
 
 
 def _buy_weighted(acc: Account, ctx: Ctx, picks: list[dict], product: str,
-                  exit_on=None, reason="") -> None:
-    """Deploy the account's cash across picks in proportion to model confidence."""
+                  exit_on=None, reason="", budget: float | None = None) -> None:
+    """Deploy cash across picks in proportion to model confidence.
+
+    budget caps what may be spent, for an account that runs several sleeves out of
+    one pot of money; by default the whole free balance is used."""
     live = [p for p in picks if p["symbol"] in ctx.prices and p["symbol"] not in acc.positions]
     if not live:
         return
     w = _weights(live)
-    cash = acc.cash
+    cash = acc.cash if budget is None else min(acc.cash, budget)
     for p in live:
         share = w.get(p["symbol"])
         if not share:
@@ -328,3 +331,92 @@ def option_marks(acc: Account, ctx: Ctx) -> dict[str, float]:
             days = (pd.Timestamp(p.meta["expiry"]) - pd.Timestamp(ctx.t.date())).days
             out[s] = call_premium(spot, p.meta["strike"], days, p.meta["vol"])
     return out
+
+
+# --- the whole model on one account -----------------------------------------
+# Sleeve sizes come from what was measured, not from taste. The 21-day book is the
+# only part with a tested edge (top-decile hit 54-56%, positive net excess), so it
+# gets most of the money. Gold is there because it is the one holding uncorrelated
+# with the equity book. Intraday is capped hard and only fires above 55% confidence:
+# at the old 45% floor it lost money after charges, both in the backtest and live.
+GOLD_SYMBOL = "GOLDBEES.NS"
+ORACLE_CORE, ORACLE_HEDGE, ORACLE_TRADE = 0.75, 0.10, 0.15
+ORACLE_NAMES = 8
+ORACLE_EXIT_RANK = 0.75
+ORACLE_MIN_PROB = 0.55
+
+
+def _sleeve(acc: Account, ctx: Ctx, which: str) -> float:
+    """Rupees currently held in one sleeve of a multi-sleeve account."""
+    total = 0.0
+    for s, pos in acc.positions.items():
+        kind = "hedge" if s == GOLD_SYMBOL else ("trade" if pos.product == "intraday" else "core")
+        if kind == which:
+            total += pos.qty * ctx.prices.get(s, pos.avg_price)
+    return total
+
+
+def oracle(acc: Account, ctx: Ctx) -> None:
+    """Rs 50,000, one pot of cash, the whole model deciding what to do with it.
+
+    Three sleeves: the medium-horizon picks (75%), a gold hedge (10%), and an
+    intraday sleeve (15%) that is always flat before the close. Each sleeve is
+    topped up only to its share of current equity, so a winning sleeve is not
+    allowed to quietly take over the account.
+    """
+    if ctx.t.time() < ENTRY_AFTER:
+        return
+    equity = acc.equity(ctx.prices)
+
+    # Intraday sleeve.
+    if ctx.t.time() >= EXIT_INTRADAY:
+        for s, pos in list(acc.positions.items()):
+            if pos.product == "intraday" and s in ctx.prices:
+                acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason="intraday hard exit")
+    else:
+        ipicks = getattr(ctx, "intraday_picks", None) or []
+        wanted = {p["symbol"]: p for p in ipicks if p.get("score", 0) >= ORACLE_MIN_PROB}
+        for s, pos in list(acc.positions.items()):
+            if pos.product != "intraday" or s not in ctx.prices:
+                continue
+            move = ctx.prices[s] / pos.avg_price - 1
+            if move >= TAKE_PROFIT:
+                acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason=f"target hit {100 * move:+.2f}%")
+            elif move <= STOP_LOSS:
+                acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason=f"stop loss {100 * move:+.2f}%")
+            elif s not in wanted:
+                acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason=f"model dropped it {100 * move:+.2f}%")
+        room = min(acc.cash, ORACLE_TRADE * equity - _sleeve(acc, ctx, "trade"))
+        if ctx.t.time() >= INTRADAY_MODEL_AFTER and room >= MIN_TICKET:
+            fresh = [p for s, p in wanted.items() if s not in acc.positions and s in ctx.prices]
+            fresh = fresh[:max(1, int(room // MIN_TICKET))]
+            if fresh:
+                each = room / len(fresh)
+                for p in fresh:
+                    acc.buy(p["symbol"], each, ctx.prices[p["symbol"]], ctx.t, "intraday",
+                            slippage_bps=SLIP_STOCK,
+                            reason=f"intraday sleeve, confidence {100 * p.get('score', 0):.0f}%")
+
+    # Gold hedge.
+    need = ORACLE_HEDGE * equity - _sleeve(acc, ctx, "hedge")
+    if GOLD_SYMBOL in ctx.prices and need >= MIN_TICKET and acc.cash >= MIN_TICKET:
+        acc.buy(GOLD_SYMBOL, min(need, acc.cash), ctx.prices[GOLD_SYMBOL], ctx.t, "delivery",
+                slippage_bps=SLIP_ETF, reason="gold hedge, 10% of the account")
+
+    # Core book: hold while the model still ranks it in the top 25%.
+    for s, pos in list(acc.positions.items()):
+        if pos.product == "intraday" or s == GOLD_SYMBOL:
+            continue
+        if ctx.ranks and ctx.ranks.get(s, 0.0) < ORACLE_EXIT_RANK and s in ctx.prices:
+            acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason="fell out of the top 25%")
+    core = [s for s, pos in acc.positions.items() if pos.product != "intraday" and s != GOLD_SYMBOL]
+    budget = min(acc.cash, ORACLE_CORE * equity - _sleeve(acc, ctx, "core"))
+    if len(core) >= ORACLE_NAMES or budget < MIN_TICKET:
+        return
+    fresh = [p for p in ctx.picks
+             if p["symbol"] not in acc.positions
+             and ctx.ranks.get(p["symbol"], p.get("rank_pct", 1.0)) >= ORACLE_EXIT_RANK][:ORACLE_NAMES - len(core)]
+    _buy_weighted(acc, ctx, fresh, "delivery", budget=budget, reason="oracle core, sized by confidence")
+
+
+STRATEGIES["oracle"] = oracle      # defined below the table, so registered here
