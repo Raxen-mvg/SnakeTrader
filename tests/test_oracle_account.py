@@ -45,11 +45,21 @@ def main() -> int:
     check("a merely good name does not", S.core_edge(0.75) <= 0, f"{100 * S.core_edge(0.75):+.4f}%/day")
     check("the cut-off is set by costs, not by a chosen rank",
           S.core_edge(0.76) * S.core_edge(0.74) <= 0)
-    check("a coin-flip intraday call is refused", not S.intraday_worth_it(0.50))
-    check("today's best intraday confidence is still refused", not S.intraday_worth_it(0.55))
-    check("a genuinely confident call is taken", S.intraday_worth_it(0.80))
-    check("what it demands is several times the cost",
-          S.intraday_edge(0.80) >= S.EDGE_MULTIPLE * S.ROUND_TRIP_INTRADAY)
+    check("with nothing measured, no intraday score is tradeable",
+          not any(S.intraday_worth_it(x) for x in (0.3, 0.5, 0.55, 0.7, 0.9)))
+    import json as _json
+    S.CALIBRATION.write_text(_json.dumps({"score": [0.4, 0.6, 0.8],
+                                          "expected_net": [-0.01, 0.0, 0.02]}))
+    try:
+        check("a score measured to lose is refused", not S.intraday_worth_it(0.40))
+        check("a score measured to break even is refused", not S.intraday_worth_it(0.60))
+        check("a score measured to pay several times the cost is taken", S.intraday_worth_it(0.80))
+        check("what it demands is several times the cost",
+              S.intraday_edge(0.80) >= S.EDGE_MULTIPLE * S.ROUND_TRIP_INTRADAY)
+        check("between measured points it interpolates rather than guessing",
+              abs(S.intraday_expected_net(0.70) - 0.01) < 1e-9, str(S.intraday_expected_net(0.70)))
+    finally:
+        S.CALIBRATION.unlink(missing_ok=True)
 
     print()
     print("[ORACLE: NO FIXED ALLOCATION]")
@@ -61,10 +71,15 @@ def main() -> int:
     check("no name takes more than the cap",
           max(p.qty * 100.0 for p in acc.positions.values()) <= (S.MAX_NAME_WEIGHT + 0.02) * 50_000)
 
-    acc2 = Account("oracle", 50_000, 50_000)
-    S.oracle(acc2, ctx(t, prices, picks, ranks, [{"symbol": "A", "score": 0.85}]))
-    check("a confident intraday call IS funded, ahead of the core book",
-          any(p.product == "intraday" for p in acc2.positions.values()))
+    import json as _json
+    S.CALIBRATION.write_text(_json.dumps({"score": [0.4, 0.8], "expected_net": [-0.01, 0.02]}))
+    try:
+        acc2 = Account("oracle", 50_000, 50_000)
+        S.oracle(acc2, ctx(t, prices, picks, ranks, [{"symbol": "A", "score": 0.85}]))
+        check("a call measured to pay IS funded, ahead of the core book",
+              any(p.product == "intraday" for p in acc2.positions.values()))
+    finally:
+        S.CALIBRATION.unlink(missing_ok=True)
 
     late = dt.datetime(2026, 9, 25, 15, 10, tzinfo=IST)
     S.oracle(acc2, ctx(late, prices, picks, ranks, []))

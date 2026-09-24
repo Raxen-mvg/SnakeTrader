@@ -19,6 +19,8 @@ intraday positions close on the first tick at or after EXIT_INTRADAY.
 from __future__ import annotations
 
 import datetime as dt
+import json
+from pathlib import Path
 import math
 import random
 
@@ -362,18 +364,56 @@ def core_edge(rank_pct: float) -> float:
     return (gross - ROUND_TRIP_DELIVERY) / CORE_HORIZON
 
 
-def intraday_edge(prob: float, take: float = TAKE_PROFIT, stop: float = STOP_LOSS) -> float:
-    """Expected net return of one intraday trade at this model confidence.
+CALIBRATION = Path(__file__).resolve().parent.parent / "state" / "intraday_calibration.json"
 
-    Wins take the profit target, losses hit the stop. The trade is only worth taking
-    when what is left after charges is a real multiple of those charges, not a sliver
-    of one - which is why the sleeve sits out most days.
+
+def _calibration() -> list[tuple[float, float]] | None:
+    """Pairs of (model score, realised net return) measured on out-of-sample history.
+
+    The intraday model outputs a cross-sectional RANK, not a probability, so a score
+    of 0.55 means "a bit above average today" and not "55% likely to win". Nothing can
+    be inferred about money from a rank until the rank has been measured against what
+    it actually paid, which is what this file holds. No file, no trading.
     """
-    return prob * take + (1 - prob) * stop - ROUND_TRIP_INTRADAY
+    try:
+        d = json.loads(CALIBRATION.read_text())
+        pts = sorted((float(a), float(b)) for a, b in zip(d["score"], d["expected_net"]))
+        return pts or None
+    except Exception:
+        return None
 
 
-def intraday_worth_it(prob: float) -> bool:
-    return intraday_edge(prob) >= EDGE_MULTIPLE * ROUND_TRIP_INTRADAY
+def intraday_expected_net(score: float) -> float | None:
+    """What a trade at this score has historically paid, after charges. None if unmeasured."""
+    pts = _calibration()
+    if not pts:
+        return None
+    if score <= pts[0][0]:
+        return pts[0][1]
+    for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
+        if score <= x1:
+            return y0 + (y1 - y0) * (score - x0) / (x1 - x0) if x1 > x0 else y1
+    return pts[-1][1]
+
+
+def intraday_edge(score: float) -> float:
+    """Expected net return of one intraday trade at this score; zero when unmeasured."""
+    e = intraday_expected_net(score)
+    return 0.0 if e is None else e
+
+
+def intraday_worth_it(score: float) -> bool:
+    """Only when the measured payoff is several times what the round trip costs.
+
+    Measured to date: the live intraday model ranks well (IC 0.069, t 14.6) but its
+    top five move +0.129% from 10:15 to the close against a 0.36% round trip, which
+    is -0.231% a day after charges and profitable on 27% of days. There is therefore
+    no score at which it currently pays, and with no calibration file present this
+    returns False for everything. That is deliberate: not trading is the correct
+    action until something can be shown to beat its own costs.
+    """
+    e = intraday_expected_net(score)
+    return e is not None and e >= EDGE_MULTIPLE * ROUND_TRIP_INTRADAY
 
 
 def _capped_shares(edges: dict[str, float]) -> dict[str, float]:
