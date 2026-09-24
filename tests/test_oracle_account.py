@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The single Rs 50,000 account: sleeves stay in their lanes and it is flat intraday by the close.
+"""The two new Rs 50,000 accounts: money follows expected edge, and nothing trades below its cost.
 
 Run:  python tests/test_oracle_account.py
 """
@@ -34,47 +34,73 @@ def ctx(t, prices, picks, ranks, intraday=None):
 
 def main() -> int:
     names = list("ABCDEFGHIJ")
-    prices = {s: 100.0 for s in names} | {S.GOLD_SYMBOL: 60.0}
+    prices = {s: 100.0 for s in names}
     picks = [{"symbol": s, "rank_pct": 1 - i / 100, "score": 1 - i / 100} for i, s in enumerate(names)]
     ranks = {p["symbol"]: p["rank_pct"] for p in picks}
-
-    print("\n[SLEEVES]")
-    acc = Account("oracle", 50_000, 50_000)
     t = dt.datetime(2026, 9, 25, 10, 30, tzinfo=IST)
-    hot = [{"symbol": "H", "score": 0.61}, {"symbol": "I", "score": 0.58}]
-    S.oracle(acc, ctx(t, prices, picks, ranks, hot))
-    eq = acc.equity(prices)
-    core, hedge, trade = (S._sleeve(acc, ctx(t, prices, picks, ranks), k) for k in ("core", "hedge", "trade"))
-    print(f"  core Rs {core:,.0f}  hedge Rs {hedge:,.0f}  intraday Rs {trade:,.0f}  cash Rs {acc.cash:,.0f}")
-    check("core sleeve is near its 75% target", core <= 0.80 * eq, f"{100 * core / eq:.1f}%")
-    check("gold hedge is bought and stays near 10%", 0.05 * eq <= hedge <= 0.15 * eq, f"{100 * hedge / eq:.1f}%")
-    check("intraday sleeve never exceeds its 15% cap", trade <= 0.16 * eq, f"{100 * trade / eq:.1f}%")
-    check("at most eight core names", len([1 for s, p in acc.positions.items()
-                                           if p.product != "intraday" and s != S.GOLD_SYMBOL]) <= S.ORACLE_NAMES)
-    check("cash is put to work", acc.cash < 0.15 * eq, f"Rs {acc.cash:,.0f} idle")
 
-    print("\n[LOW CONFIDENCE IS IGNORED]")
+    print()
+    print("[WHAT A TRADE IS EXPECTED TO EARN]")
+    check("a top-ranked name clears its costs", S.core_edge(0.99) > 0, f"{100 * S.core_edge(0.99):+.4f}%/day")
+    check("a merely good name does not", S.core_edge(0.75) <= 0, f"{100 * S.core_edge(0.75):+.4f}%/day")
+    check("the cut-off is set by costs, not by a chosen rank",
+          S.core_edge(0.76) * S.core_edge(0.74) <= 0)
+    check("a coin-flip intraday call is refused", not S.intraday_worth_it(0.50))
+    check("today's best intraday confidence is still refused", not S.intraday_worth_it(0.55))
+    check("a genuinely confident call is taken", S.intraday_worth_it(0.80))
+    check("what it demands is several times the cost",
+          S.intraday_edge(0.80) >= S.EDGE_MULTIPLE * S.ROUND_TRIP_INTRADAY)
+
+    print()
+    print("[ORACLE: NO FIXED ALLOCATION]")
+    acc = Account("oracle", 50_000, 50_000)
+    S.oracle(acc, ctx(t, prices, picks, ranks, [{"symbol": "A", "score": 0.55}]))
+    check("the weak intraday call is not funded",
+          not any(p.product == "intraday" for p in acc.positions.values()))
+    check("cash went into the core book", len(acc.positions) > 0, f"{len(acc.positions)} names")
+    check("no name takes more than the cap",
+          max(p.qty * 100.0 for p in acc.positions.values()) <= (S.MAX_NAME_WEIGHT + 0.02) * 50_000)
+
     acc2 = Account("oracle", 50_000, 50_000)
-    S.oracle(acc2, ctx(t, prices, picks, ranks, [{"symbol": "H", "score": 0.50}]))
-    check("a 50% intraday call is below the 55% floor and is not taken",
+    S.oracle(acc2, ctx(t, prices, picks, ranks, [{"symbol": "A", "score": 0.85}]))
+    check("a confident intraday call IS funded, ahead of the core book",
+          any(p.product == "intraday" for p in acc2.positions.values()))
+
+    late = dt.datetime(2026, 9, 25, 15, 10, tzinfo=IST)
+    S.oracle(acc2, ctx(late, prices, picks, ranks, []))
+    check("nothing intraday is held overnight",
           not any(p.product == "intraday" for p in acc2.positions.values()))
 
-    print("\n[FLAT BY THE CLOSE]")
-    late = dt.datetime(2026, 9, 25, 15, 10, tzinfo=IST)
-    S.oracle(acc, ctx(late, prices, picks, ranks, hot))
-    check("no intraday position survives the close",
-          not any(p.product == "intraday" for p in acc.positions.values()))
-    check("the core book is still held", len(acc.positions) > 0, f"{len(acc.positions)} positions")
-
-    print("\n[EXIT ON RANK]")
     fallen = dict(ranks)
-    held_core = [s for s, p in acc.positions.items() if p.product != "intraday" and s != S.GOLD_SYMBOL]
-    fallen[held_core[0]] = 0.30
+    held = [s for s, p in acc.positions.items() if p.product != "intraday"][0]
+    fallen[held] = 0.60
     S.oracle(acc, ctx(late + dt.timedelta(days=1), prices, picks, fallen, []))
-    check("a name that falls out of the top 25% is sold", held_core[0] not in acc.positions)
-    check("gold is never sold for ranking", S.GOLD_SYMBOL in acc.positions)
+    check("a name whose expected return stops covering costs is sold", held not in acc.positions)
 
-    print("\nRESULT:", "ORACLE ACCOUNT TESTS PASSED" if ok else "FAILURES ABOVE")
+    print()
+    print("[STAT ARB]")
+    sa_prices = {s: 100.0 for s in S.STATARB_UNIVERSE}
+    sa_open = dict(sa_prices)
+    acc3 = Account("statarb", 50_000, 50_000)
+    S.statarb(acc3, ctx(t, sa_prices, [], {}))
+    check("a flat cross-section gives no trades", not acc3.positions)
+    for i, s in enumerate(S.STATARB_UNIVERSE):
+        sa_prices[s] = sa_open[s] * (1 + 0.01)
+    laggard = S.STATARB_UNIVERSE[0]
+    sa_prices[laggard] = sa_open[laggard] * (1 - 0.05)
+    S.statarb(acc3, ctx(t + dt.timedelta(minutes=5), sa_prices, [], {}))
+    check("the name far below its peers is bought", laggard in acc3.positions, str(list(acc3.positions)))
+    check("it does not buy the whole crowd", len(acc3.positions) <= S.STATARB_MAX_POSITIONS,
+          f"{len(acc3.positions)} positions")
+    sa_prices[laggard] = sa_open[laggard] * 1.009
+    S.statarb(acc3, ctx(t + dt.timedelta(minutes=10), sa_prices, [], {}))
+    check("it sells once the gap has closed", laggard not in acc3.positions)
+    sa_prices[laggard] = sa_open[laggard] * (1 - 0.05)
+    S.statarb(acc3, ctx(late, sa_prices, [], {}))
+    check("it is flat before the close", not acc3.positions)
+
+    print()
+    print("RESULT:", "ACCOUNT TESTS PASSED" if ok else "FAILURES ABOVE")
     return 0 if ok else 1
 
 
