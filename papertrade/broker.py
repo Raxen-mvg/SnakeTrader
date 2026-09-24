@@ -13,6 +13,7 @@ import math
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
+from .market import at_circuit_limit  # noqa: F401
 from .costs import ZERODHA, Broker, order_cost
 from .market import slippage
 
@@ -42,6 +43,13 @@ class Account:
     def buy(self, symbol: str, budget: float, price: float, t: dt.datetime, product: str,
             *, slippage_bps: float = 10.0, lot: int = 1, broker: Broker = ZERODHA,
             exit_on: str | None = None, meta: dict | None = None, reason: str = "") -> bool:
+        # A stock frozen at its upper circuit has buyers and no sellers: the order
+        # would sit in the queue unfilled. Pretending otherwise is exactly how an
+        # earlier backtest invented an edge out of prices nobody could trade at.
+        if at_circuit_limit(symbol) == "upper":
+            self.memo.setdefault("blocked_fills", []).append(
+                {"time": t.isoformat(), "symbol": symbol, "side": "BUY", "why": "upper circuit"})
+            return False
         fill = slippage(price, "buy", slippage_bps)
         units = math.floor(min(budget, self.cash) / (fill * lot)) * lot
         while units > 0:
@@ -69,6 +77,10 @@ class Account:
              broker: Broker = ZERODHA, reason: str = "") -> float | None:
         p = self.positions.get(symbol)
         if not p:
+            return None
+        if at_circuit_limit(symbol) == "lower":      # sellers only; no one to sell to
+            self.memo.setdefault("blocked_fills", []).append(
+                {"time": t.isoformat(), "symbol": symbol, "side": "SELL", "why": "lower circuit"})
             return None
         fill = slippage(price, "sell", slippage_bps)
         value = p.qty * fill
