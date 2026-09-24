@@ -236,7 +236,7 @@ def tick(force: bool = False) -> int:
     summ = STATE / "summary.json"
     if not force and summ.exists():
         last = dt.datetime.fromisoformat(json.loads(summ.read_text())["updated"])
-        if (t - last).total_seconds() < 240:          # ticks are 5 minutes apart
+        if (t - last).total_seconds() < 150:          # ticks are 3 minutes apart
             log.info("ticked %s ago by the other runner; skipping", t - last)
             return 0
     accounts = load_accounts(STATE / "accounts.json", list(STRATEGIES), START_CASH)
