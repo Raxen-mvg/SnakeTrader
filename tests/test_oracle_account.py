@@ -102,6 +102,8 @@ def main() -> int:
     acc3 = Account("statarb", 50_000, 50_000)
     S.statarb(acc3, ctx(t, sa_prices, [], {}))
     check("a flat cross-section gives no trades", not acc3.positions)
+    was = S.STATARB_ENABLED
+    S.STATARB_ENABLED = True                       # measured off; switch on to test the rule
     for i, s in enumerate(S.STATARB_UNIVERSE):
         sa_prices[s] = sa_open[s] * (1 + 0.01)
     laggard = S.STATARB_UNIVERSE[0]
@@ -116,6 +118,11 @@ def main() -> int:
     sa_prices[laggard] = sa_open[laggard] * (1 - 0.05)
     S.statarb(acc3, ctx(late, sa_prices, [], {}))
     check("it is flat before the close", not acc3.positions)
+    S.STATARB_ENABLED = was
+    acc4 = Account("statarb", 50_000, 50_000)
+    S.statarb(acc4, ctx(t + dt.timedelta(minutes=20), sa_prices, [], {}))
+    check("with the rule measured to lose, the account does not trade at all",
+          not acc4.positions and acc4.cash == 50_000)
 
     print()
     print("RESULT:", "ACCOUNT TESTS PASSED" if ok else "FAILURES ABOVE")

@@ -538,6 +538,16 @@ STATARB_MIN_SD = 0.003            # a quiet cross-section makes z-scores meaning
 STATARB_MIN_NAMES = 12            # below this the cross-section is too thin to mean anything
 STATARB_MAX_POSITIONS = 8
 STATARB_TICKET = 0.12             # of equity per name: many small trades, not a few big ones
+# Measured before it was trusted with money (research/STATARB_RESULT.md, STATARB_SWEEP.md,
+# STATARB_VARIANTS.md): on 62 days of five-minute bars the rule returns -0.385% net per
+# trade, and the whole grid of entry and exit settings - in BOTH directions, fading the
+# laggards and following the leaders - is negative BEFORE costs, best case -0.014%. The
+# idea has no gross edge at this resolution, so costs are not even the binding problem.
+# It wins 55% of the time with a positive median and loses the lot on the tail, which is
+# what a mean-reversion payoff looks like when there is nothing behind it.
+# The account stays at Rs 50,000 and stays flat until some version of this shows a
+# positive GROSS return out of sample.
+STATARB_ENABLED = False
 
 
 MARKET_OPEN = dt.time(9, 15)
@@ -571,6 +581,8 @@ def statarb(acc: Account, ctx: Ctx) -> None:
     expects to close is worth several times the cost of trading it.
     """
     opens = _day_open(acc, ctx)
+    if not STATARB_ENABLED and not acc.positions:
+        return
     if ctx.t.time() >= EXIT_INTRADAY:
         for s, pos in list(acc.positions.items()):
             if s in ctx.prices:
@@ -601,7 +613,7 @@ def statarb(acc: Account, ctx: Ctx) -> None:
             acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason=f"stop loss {100 * move:+.2f}%")
 
     room = STATARB_MAX_POSITIONS - len(acc.positions)
-    if room <= 0 or acc.cash < MIN_TICKET or sd < STATARB_MIN_SD:
+    if room <= 0 or acc.cash < MIN_TICKET or sd < STATARB_MIN_SD or not STATARB_ENABLED:
         return
     # Expected gain is the part of the gap that is expected to close, in return terms.
     cand = []
