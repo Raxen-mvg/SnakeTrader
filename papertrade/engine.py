@@ -92,7 +92,7 @@ def allocator(accounts: dict, names: list[str], lookback: int = 20, switch_cost:
         ec = pd.DataFrame(accounts[n].equity_curve)
         if ec.empty:
             continue
-        ec["time"] = pd.to_datetime(ec["time"])
+        ec["time"] = pd.to_datetime(ec["time"], format="ISO8601")
         series[n] = ec.set_index("time")["equity"].resample("D").last().dropna()
     if not series:
         return pd.DataFrame()
@@ -186,7 +186,8 @@ def write_reports(accounts: dict, prices: dict, t: dt.datetime, picks_asof: str)
         ec = pd.DataFrame(a.equity_curve)
         if ec.empty:
             continue
-        ec["day"] = pd.to_datetime(ec["time"]).dt.date
+        # Timestamps are ISO but not all carry microseconds, so the format must be inferred.
+        ec["day"] = pd.to_datetime(ec["time"], format="ISO8601").dt.date
         g = ec.groupby("day")["equity"]
         d = pd.DataFrame({"strategy": n, "open": g.first(), "close": g.last()}).reset_index()
         prev = d["close"].shift(1).fillna(a.start_cash)

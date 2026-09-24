@@ -376,6 +376,34 @@ def intraday_worth_it(prob: float) -> bool:
     return intraday_edge(prob) >= EDGE_MULTIPLE * ROUND_TRIP_INTRADAY
 
 
+def _capped_shares(edges: dict[str, float]) -> dict[str, float]:
+    """Split the cash in proportion to expected edge, with no name over the cap.
+
+    Whatever the cap takes off a large position is handed back to the others rather
+    than left sitting as idle cash, so the account stays invested in what it believes.
+    """
+    live = {k: v for k, v in edges.items() if v > 0}
+    if not live:
+        return {k: 0.0 for k in edges}
+    # With only two or three names worth owning, a 30% cap would force money to sit
+    # idle; the cap then loosens to an equal split rather than leaving cash unused.
+    cap = max(MAX_NAME_WEIGHT, 1.0 / len(live))
+    out = {k: 0.0 for k in edges}
+    free, remaining = dict(live), 1.0
+    while free and remaining > 1e-9:
+        total = sum(free.values())
+        capped = [k for k, v in free.items() if remaining * v / total > cap]
+        if not capped:
+            for k, v in free.items():
+                out[k] += remaining * v / total
+            break
+        for k in capped:
+            out[k] = cap
+            remaining -= cap
+            free.pop(k)
+    return out
+
+
 def oracle(acc: Account, ctx: Ctx) -> None:
     """Rs 50,000, one pot of cash, and no human-chosen allocation.
 
@@ -433,10 +461,10 @@ def oracle(acc: Account, ctx: Ctx) -> None:
     # As many names as the cash supports at a sensible ticket, sized by expected edge.
     cand = cand[:max(1, int(acc.cash // MIN_TICKET))]
     edges = {p["symbol"]: core_edge(ctx.ranks.get(p["symbol"], p.get("rank_pct", 0.0))) for p in cand}
-    total = sum(edges.values())
+    shares = _capped_shares(edges)
     budget = acc.cash                     # shares are of the cash we started the tick with,
     for p in cand:                        # not of what is left after each purchase
-        share = min(edges[p["symbol"]] / total, MAX_NAME_WEIGHT) if total > 0 else 1.0 / len(cand)
+        share = shares[p["symbol"]]
         amount = min(budget * share, acc.cash)
         if amount >= MIN_TICKET:
             acc.buy(p["symbol"], amount, ctx.prices[p["symbol"]], ctx.t, "delivery", slippage_bps=SLIP_STOCK,
@@ -453,7 +481,7 @@ def oracle(acc: Account, ctx: Ctx) -> None:
 STATARB_UNIVERSE = [
     "RELIANCE.NS", "HDFCBANK.NS", "ICICIBANK.NS", "INFY.NS", "TCS.NS", "ITC.NS",
     "LT.NS", "AXISBANK.NS", "SBIN.NS", "BHARTIARTL.NS", "KOTAKBANK.NS", "HINDUNILVR.NS",
-    "MARUTI.NS", "SUNPHARMA.NS", "TATAMOTORS.NS", "TATASTEEL.NS", "WIPRO.NS", "HCLTECH.NS",
+    "MARUTI.NS", "SUNPHARMA.NS", "TMPV.NS", "TATASTEEL.NS", "WIPRO.NS", "HCLTECH.NS",
     "ULTRACEMCO.NS", "TITAN.NS", "ASIANPAINT.NS", "BAJFINANCE.NS", "POWERGRID.NS", "NTPC.NS",
     "ONGC.NS", "GRASIM.NS", "JSWSTEEL.NS", "COALINDIA.NS", "CIPLA.NS", "DRREDDY.NS",
 ]
