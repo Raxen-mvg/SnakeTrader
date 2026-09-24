@@ -12,7 +12,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 819.2999877929688
+     "last_price": 820.75
     }
    },
    "KTKBANK.NS": {
@@ -23,7 +23,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 337.3999938964844
+     "last_price": 339.70001220703125
     }
    },
    "LAURUSLABS.NS": {
@@ -34,7 +34,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 2037.0
+     "last_price": 2037.0999755859375
     }
    },
    "CORONA.NS": {
@@ -45,7 +45,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 2101.0
+     "last_price": 2107.199951171875
     }
    },
    "SWANDEF.NS": {
@@ -56,7 +56,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 2671.0
+     "last_price": 2699.89990234375
     }
    },
    "LENSKART.NS": {
@@ -67,7 +67,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 680.25
+     "last_price": 679.7000122070312
     }
    },
    "AKUMS.NS": {
@@ -78,7 +78,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 814.0499877929688
+     "last_price": 817.3499755859375
     }
    },
    "SHRIPISTON.NS": {
@@ -89,7 +89,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 4568.2998046875
+     "last_price": 4557.2998046875
     }
    }
   },
@@ -409,59 +409,59 @@
     "equity": 49916.58
    },
    {
-    "time": "2026-09-24T13:46:05.987960+05:30",
-    "equity": 49343.43
+    "time": "2026-09-24T14:19:08.091285+05:30",
+    "equity": 49472.63
    }
   ],
   "memo": {}
  },
  "intraday": {
   "name": "intraday",
-  "cash": 12383.634178933054,
+  "cash": 12444.700850166544,
   "start_cash": 50000.0,
   "positions": {
    "GODREJCP.NS": {
     "symbol": "GODREJCP.NS",
     "qty": 11,
-    "avg_price": 877.3640627746582,
-    "opened": "2026-09-24T13:46:05.987960+05:30",
+    "avg_price": 874.3095000000001,
+    "opened": "2026-09-24T14:19:08.091285+05:30",
     "product": "intraday",
     "exit_on": null,
     "meta": {
-     "last_price": 876.0499877929688
+     "last_price": 873.0
     }
    },
    "MAZDOCK.NS": {
     "symbol": "MAZDOCK.NS",
     "qty": 4,
-    "avg_price": 2202.198252197266,
-    "opened": "2026-09-24T13:46:05.987960+05:30",
+    "avg_price": 2195.488251098633,
+    "opened": "2026-09-24T14:19:08.091285+05:30",
     "product": "intraday",
     "exit_on": null,
     "meta": {
-     "last_price": 2198.89990234375
+     "last_price": 2192.199951171875
     }
    },
    "APOLLOTYRE.NS": {
     "symbol": "APOLLOTYRE.NS",
     "qty": 24,
-    "avg_price": 398.69715611267094,
-    "opened": "2026-09-24T13:46:05.987960+05:30",
+    "avg_price": 398.79731222534184,
+    "opened": "2026-09-24T14:19:08.091285+05:30",
     "product": "intraday",
     "exit_on": null,
     "meta": {
-     "last_price": 398.1000061035156
+     "last_price": 398.20001220703125
     }
    },
    "APOLLOHOSP.NS": {
     "symbol": "APOLLOHOSP.NS",
     "qty": 1,
-    "avg_price": 8965.428,
-    "opened": "2026-09-24T13:46:05.987960+05:30",
+    "avg_price": 8962.4235,
+    "opened": "2026-09-24T14:19:08.091285+05:30",
     "product": "intraday",
     "exit_on": null,
     "meta": {
-     "last_price": 8952.0
+     "last_price": 8949.0
     }
    }
   },
@@ -720,45 +720,45 @@
     "reason": "intraday hard exit"
    },
    {
-    "time": "2026-09-24T13:46:05.987960+05:30",
+    "time": "2026-09-24T14:19:08.091285+05:30",
     "side": "BUY",
     "symbol": "GODREJCP.NS",
     "qty": 11,
-    "price": 877.3641,
-    "value": 9651.0,
-    "costs": 4.07,
+    "price": 874.3095,
+    "value": 9617.4,
+    "costs": 4.05,
     "product": "intraday",
     "reason": "intraday model, confidence 55%"
    },
    {
-    "time": "2026-09-24T13:46:05.987960+05:30",
+    "time": "2026-09-24T14:19:08.091285+05:30",
     "side": "BUY",
     "symbol": "MAZDOCK.NS",
     "qty": 4,
-    "price": 2202.1983,
-    "value": 8808.79,
-    "costs": 3.71,
+    "price": 2195.4883,
+    "value": 8781.95,
+    "costs": 3.7,
     "product": "intraday",
     "reason": "intraday model, confidence 55%"
    },
    {
-    "time": "2026-09-24T13:46:05.987960+05:30",
+    "time": "2026-09-24T14:19:08.091285+05:30",
     "side": "BUY",
     "symbol": "APOLLOTYRE.NS",
     "qty": 24,
-    "price": 398.6972,
-    "value": 9568.73,
+    "price": 398.7973,
+    "value": 9571.14,
     "costs": 4.03,
     "product": "intraday",
     "reason": "intraday model, confidence 54%"
    },
    {
-    "time": "2026-09-24T13:46:05.987960+05:30",
+    "time": "2026-09-24T14:19:08.091285+05:30",
     "side": "BUY",
     "symbol": "APOLLOHOSP.NS",
     "qty": 1,
-    "price": 8965.428,
-    "value": 8965.43,
+    "price": 8962.4235,
+    "value": 8962.42,
     "costs": 3.78,
     "product": "intraday",
     "reason": "intraday model, confidence 54%"
@@ -1034,8 +1034,8 @@
     "equity": 49393.18
    },
    {
-    "time": "2026-09-24T13:46:05.987960+05:30",
-    "equity": 49322.18
+    "time": "2026-09-24T14:19:08.091285+05:30",
+    "equity": 49322.3
    }
   ],
   "memo": {
@@ -1055,7 +1055,7 @@
     "product": "delivery",
     "exit_on": "2026-09-30",
     "meta": {
-     "last_price": 819.2999877929688
+     "last_price": 820.75
     }
    },
    "KTKBANK.NS": {
@@ -1066,7 +1066,7 @@
     "product": "delivery",
     "exit_on": "2026-09-30",
     "meta": {
-     "last_price": 337.3999938964844
+     "last_price": 339.70001220703125
     }
    },
    "LAURUSLABS.NS": {
@@ -1077,7 +1077,7 @@
     "product": "delivery",
     "exit_on": "2026-09-30",
     "meta": {
-     "last_price": 2037.0
+     "last_price": 2037.0999755859375
     }
    },
    "CORONA.NS": {
@@ -1088,7 +1088,7 @@
     "product": "delivery",
     "exit_on": "2026-09-30",
     "meta": {
-     "last_price": 2101.0
+     "last_price": 2107.199951171875
     }
    },
    "SWANDEF.NS": {
@@ -1099,7 +1099,7 @@
     "product": "delivery",
     "exit_on": "2026-09-30",
     "meta": {
-     "last_price": 2671.0
+     "last_price": 2699.89990234375
     }
    }
   },
@@ -1545,8 +1545,8 @@
     "equity": 49896.67
    },
    {
-    "time": "2026-09-24T13:46:05.987960+05:30",
-    "equity": 49014.32
+    "time": "2026-09-24T14:19:08.091285+05:30",
+    "equity": 49210.32
    }
   ],
   "memo": {
@@ -1566,7 +1566,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 819.2999877929688
+     "last_price": 820.75
     }
    },
    "KTKBANK.NS": {
@@ -1577,7 +1577,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 337.3999938964844
+     "last_price": 339.70001220703125
     }
    },
    "LAURUSLABS.NS": {
@@ -1588,7 +1588,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 2037.0
+     "last_price": 2037.0999755859375
     }
    },
    "CORONA.NS": {
@@ -1599,7 +1599,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 2101.0
+     "last_price": 2107.199951171875
     }
    },
    "SWANDEF.NS": {
@@ -1610,7 +1610,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 2671.0
+     "last_price": 2699.89990234375
     }
    }
   },
@@ -2056,8 +2056,8 @@
     "equity": 49925.01
    },
    {
-    "time": "2026-09-24T13:46:05.987960+05:30",
-    "equity": 49635.56
+    "time": "2026-09-24T14:19:08.091285+05:30",
+    "equity": 49703.41
    }
   ],
   "memo": {
@@ -2077,7 +2077,7 @@
     "product": "delivery",
     "exit_on": "2026-10-12",
     "meta": {
-     "last_price": 819.2999877929688
+     "last_price": 820.75
     }
    },
    "KTKBANK.NS": {
@@ -2088,7 +2088,7 @@
     "product": "delivery",
     "exit_on": "2026-11-18",
     "meta": {
-     "last_price": 337.3999938964844
+     "last_price": 339.70001220703125
     }
    },
    "LAURUSLABS.NS": {
@@ -2099,7 +2099,7 @@
     "product": "delivery",
     "exit_on": "2026-11-06",
     "meta": {
-     "last_price": 2037.0
+     "last_price": 2037.0999755859375
     }
    },
    "CORONA.NS": {
@@ -2110,7 +2110,7 @@
     "product": "delivery",
     "exit_on": "2026-10-05",
     "meta": {
-     "last_price": 2101.0
+     "last_price": 2107.199951171875
     }
    },
    "SWANDEF.NS": {
@@ -2121,7 +2121,7 @@
     "product": "delivery",
     "exit_on": "2026-10-28",
     "meta": {
-     "last_price": 2671.0
+     "last_price": 2699.89990234375
     }
    }
   },
@@ -2567,8 +2567,8 @@
     "equity": 49896.67
    },
    {
-    "time": "2026-09-24T13:46:05.987960+05:30",
-    "equity": 49014.32
+    "time": "2026-09-24T14:19:08.091285+05:30",
+    "equity": 49210.32
    }
   ],
   "memo": {
@@ -2588,7 +2588,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 123.76000213623047
+     "last_price": 123.63999938964844
     }
    }
   },
@@ -2875,8 +2875,8 @@
     "equity": 50003.92
    },
    {
-    "time": "2026-09-24T13:46:05.987960+05:30",
-    "equity": 49611.93
+    "time": "2026-09-24T14:19:08.091285+05:30",
+    "equity": 49563.93
    }
   ],
   "memo": {}
@@ -2894,7 +2894,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 123.76000213623047
+     "last_price": 123.63999938964844
     }
    }
   },
@@ -3181,8 +3181,8 @@
     "equity": 50003.92
    },
    {
-    "time": "2026-09-24T13:46:05.987960+05:30",
-    "equity": 49611.93
+    "time": "2026-09-24T14:19:08.091285+05:30",
+    "equity": 49563.93
    }
   ],
   "memo": {
@@ -3465,7 +3465,7 @@
     "equity": 50000.0
    },
    {
-    "time": "2026-09-24T13:46:05.987960+05:30",
+    "time": "2026-09-24T14:19:08.091285+05:30",
     "equity": 50000.0
    }
   ],
@@ -3484,7 +3484,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 263.75
+     "last_price": 263.54998779296875
     }
    }
   },
@@ -3771,8 +3771,8 @@
     "equity": 50166.51
    },
    {
-    "time": "2026-09-24T13:46:05.987960+05:30",
-    "equity": 49427.85
+    "time": "2026-09-24T14:19:08.091285+05:30",
+    "equity": 49390.45
    }
   ],
   "memo": {}
