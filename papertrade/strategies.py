@@ -466,9 +466,19 @@ STATARB_MAX_POSITIONS = 8
 STATARB_TICKET = 0.12             # of equity per name: many small trades, not a few big ones
 
 
+MARKET_OPEN = dt.time(9, 15)
+
+
 def _day_open(acc: Account, ctx: Ctx) -> dict:
-    """First price seen for each name today - the account's own record of the open."""
+    """First price seen for each name today - the account's own record of the open.
+
+    Only ticks inside market hours count. A tick before the bell carries yesterday's
+    closing prices, and recording those as today's open would make every move look
+    like a gap that needs closing.
+    """
     day = ctx.t.date().isoformat()
+    if ctx.t.time() < MARKET_OPEN:
+        return (acc.memo.get("day_open") or {}).get("px", {}) if (acc.memo.get("day_open") or {}).get("day") == day else {}
     book = acc.memo.get("day_open") or {}
     if book.get("day") != day:
         book = {"day": day, "px": {}}
