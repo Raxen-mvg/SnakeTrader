@@ -132,7 +132,7 @@ def _buy_top(acc: Account, ctx: Ctx, n: int, product: str, exit_on=None, reason=
 INTRADAY_MODEL_AFTER = dt.time(10, 20)
 
 
-INTRADAY_MIN_PROB = 0.45          # only trades the model is confident about
+INTRADAY_MIN_PROB = 0.45          # kept for reference: the old rule, which lost money
 INTRADAY_MIN_TICKET = 5_000.0     # no dust trades: costs would swamp them
 TAKE_PROFIT = 0.02
 STOP_LOSS = -0.015
@@ -163,7 +163,10 @@ def intraday(acc: Account, ctx: Ctx) -> None:
         acc.memo["last_entry"] = today
         return
 
-    wanted = {p["symbol"]: p for p in ipicks if p.get("score", 0) >= INTRADAY_MIN_PROB}
+    # Same rule as the Rs 50,000 account: a trade happens only where the score has been
+    # measured to pay several times what the round trip costs. Measured to date it never
+    # does, so this account now sits out rather than paying charges to lose slowly.
+    wanted = {p["symbol"]: p for p in ipicks if intraday_worth_it(float(p.get("score", 0.0)))}
     for s, p in list(acc.positions.items()):
         if s not in ctx.prices:
             continue
