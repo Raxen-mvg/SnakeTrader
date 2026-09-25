@@ -28,6 +28,7 @@ import numpy as np
 import pandas as pd
 
 from .broker import Account
+from .costs import ZERODHA, order_cost
 from .market import annual_vol, daily_closes
 from .options import NIFTY_LOT, atm_strike, call_premium
 
@@ -359,15 +360,74 @@ EDGE_MULTIPLE = 2.0               # a trade must expect to earn at least this ma
 MAX_NAME_WEIGHT = 0.30
 
 
-def core_edge(rank_pct: float) -> float:
-    """Expected net return per trading day from holding a name at this model rank.
+def round_trip_cost(value: float, product: str = "delivery") -> float:
+    """What it really costs to buy and sell a position of this size, as a fraction of it.
 
-    The model's top name earns about CORE_TOP_EXCESS over 21 days before costs and
-    the edge fades linearly towards the median, so a name must be ranked high enough
-    that its expected gain covers a round trip before it is worth owning at all.
+    Not a flat percentage. Selling from a demat account carries a fixed depository charge
+    of about Rs 15 per scrip per sell day whatever the size, so cost per rupee falls as the
+    position grows: a Rs 5,000 ticket pays 0.83% for a round trip and a Rs 37,500 one pays
+    0.56%. On a Rs 50,000 account that difference decides how many names it can afford to
+    hold at all, which is why the figure is computed rather than assumed.
     """
-    gross = CORE_TOP_EXCESS * max(0.0, (rank_pct - 0.5) / 0.5)
-    return (gross - ROUND_TRIP_DELIVERY) / CORE_HORIZON
+    if value <= 0:
+        return 1.0
+    buy = order_cost("buy", product, value, ZERODHA)["total"]
+    sell = order_cost("sell", product, value, ZERODHA)["total"]
+    return (buy + sell) / value + 2 * SLIP_STOCK / 1e4
+
+
+def exit_cost(value: float, product: str = "delivery") -> float:
+    """Cost of selling a position of this size, as a fraction of it.
+
+    What was paid to get in is spent and gone; the only question about a holding is
+    whether what it is still expected to earn beats the cost of leaving.
+    """
+    if value <= 0:
+        return 1.0
+    return order_cost("sell", product, value, ZERODHA)["total"] / value + SLIP_STOCK / 1e4
+
+
+def core_gross(rank_pct: float) -> float:
+    """Expected excess return over the horizon, before any costs, at this model rank."""
+    return CORE_TOP_EXCESS * max(0.0, (rank_pct - 0.5) / 0.5)
+
+
+def core_edge(rank_pct: float, value: float = 12_500.0) -> float:
+    """Expected net return per trading day from holding a name of this size at this rank.
+
+    The default position size is a quarter of a Rs 50,000 account, which is roughly what
+    the account can hold once the fixed selling charge is paid for.
+    """
+    return (core_gross(rank_pct) - round_trip_cost(value)) / CORE_HORIZON
+
+
+def best_book(ranks: list[float], budget: float, max_names: int = 12) -> tuple[int, float]:
+    """How many of these names the account should hold, and the ticket size.
+
+    Three forces pull against each other. Adding a name means a lower-ranked name, so the
+    average edge falls. It also means a smaller ticket, and every ticket pays the same fixed
+    depository charge on the way out, so the cost per rupee rises. But holding more names
+    cuts the risk of the book roughly as the square root of their number.
+
+    Maximising expected rupees alone would put the whole account in one stock, which is not
+    a portfolio. So the quantity maximised here is expected net return times the square root
+    of the number of names - expected return per unit of risk, for a book of roughly equal
+    and roughly independent positions. Zero names means nothing on the list clears its own
+    cost at any size this account can afford.
+    """
+    best = (0, 0.0, 0.0)
+    for n in range(1, min(max_names, len(ranks)) + 1):
+        ticket = budget / n
+        if ticket < MIN_TICKET:
+            break
+        cost = round_trip_cost(ticket)
+        nets = [core_gross(r) - cost for r in ranks[:n]]
+        if min(nets) <= 0:                       # the marginal name must pay for itself
+            continue
+        score = (sum(nets) / n) * n ** 0.5
+        if score > best[2]:
+            best = (n, ticket, score)
+    return best[0], best[1]
 
 
 CALIBRATION = Path(__file__).resolve().parent.parent / "state" / "intraday_calibration.json"
@@ -491,22 +551,30 @@ def oracle(acc: Account, ctx: Ctx) -> None:
                         reason=f"expected {100 * intraday_edge(float(p.get('score', 0.0))):+.2f}% net, "
                                f"confidence {100 * float(p.get('score', 0.0)):.0f}%")
 
-    # Core book: hold a name while it still expects to earn more than it costs to keep.
+    # Core book: keep a name while what it is still expected to earn beats the cost of
+    # selling it. The money already spent getting in is gone and does not enter the decision.
     for s, pos in list(acc.positions.items()):
         if pos.product == "intraday" or s not in ctx.prices:
             continue
-        if core_edge(ctx.ranks.get(s, 0.0)) <= 0:
-            acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK, reason="expected return no longer covers costs")
+        value = pos.qty * ctx.prices[s]
+        if core_gross(ctx.ranks.get(s, 0.0)) <= exit_cost(value):
+            acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK,
+                     reason="expected return no longer covers the cost of selling")
     if acc.cash < MIN_TICKET:
         return
-    cand = [p for p in ctx.picks
-            if p["symbol"] not in acc.positions and p["symbol"] in ctx.prices
-            and core_edge(ctx.ranks.get(p["symbol"], p.get("rank_pct", 0.0))) > 0]
+    cand = [p for p in ctx.picks if p["symbol"] not in acc.positions and p["symbol"] in ctx.prices]
     if not cand:
         return
-    # As many names as the cash supports at a sensible ticket, sized by expected edge.
-    cand = cand[:max(1, int(acc.cash // MIN_TICKET))]
-    edges = {p["symbol"]: core_edge(ctx.ranks.get(p["symbol"], p.get("rank_pct", 0.0))) for p in cand}
+    # How many names this much money can afford to hold, given that every position pays the
+    # same fixed charge on the way out, and how big each one should therefore be.
+    ranked = [ctx.ranks.get(p["symbol"], p.get("rank_pct", 0.0)) for p in cand]
+    n, ticket = best_book(ranked, acc.cash)
+    if n == 0:
+        return
+    cand = cand[:n]
+    cost = round_trip_cost(ticket)
+    edges = {p["symbol"]: core_gross(ctx.ranks.get(p["symbol"], p.get("rank_pct", 0.0))) - cost
+             for p in cand}
     shares = _capped_shares(edges)
     budget = acc.cash                     # shares are of the cash we started the tick with,
     for p in cand:                        # not of what is left after each purchase
@@ -514,7 +582,8 @@ def oracle(acc: Account, ctx: Ctx) -> None:
         amount = min(budget * share, acc.cash)
         if amount >= MIN_TICKET:
             acc.buy(p["symbol"], amount, ctx.prices[p["symbol"]], ctx.t, "delivery", slippage_bps=SLIP_STOCK,
-                    reason=f"expected {100 * edges[p['symbol']] * CORE_HORIZON:+.2f}% net over {CORE_HORIZON} days")
+                    reason=f"expected {100 * edges[p['symbol']]:+.2f}% net over {CORE_HORIZON} days "
+                           f"after {100 * cost:.2f}% costs")
 
 
 # --- a second account, run on different principles --------------------------
