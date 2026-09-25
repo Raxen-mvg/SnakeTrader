@@ -40,6 +40,23 @@ def main() -> int:
     t = dt.datetime(2026, 9, 25, 10, 30, tzinfo=IST)
 
     print()
+    print("[WHAT IT REALLY COSTS]")
+    check("a small ticket costs more per rupee than a large one",
+          S.round_trip_cost(5_000) > S.round_trip_cost(37_500) > 0,
+          f"{100 * S.round_trip_cost(5_000):.3f}% vs {100 * S.round_trip_cost(37_500):.3f}%")
+    check("the fixed selling charge is what makes small tickets expensive",
+          S.round_trip_cost(5_000) - S.round_trip_cost(50_000) > 0.002)
+    check("selling alone costs less than a round trip", S.exit_cost(12_500) < S.round_trip_cost(12_500))
+    n50, t50 = S.best_book([1.0, 0.99, 0.98, 0.97, 0.95, 0.93, 0.90, 0.87, 0.84, 0.80, 0.77], 50_000)
+    n10, t10 = S.best_book([1.0, 0.99, 0.98, 0.97, 0.95, 0.93, 0.90, 0.87, 0.84, 0.80, 0.77], 1_000_000)
+    check("a bigger account can afford more names", n10 > n50, f"{n10} vs {n50}")
+    check("a small account still diversifies", 3 <= n50 <= 10, f"{n50} names at Rs {t50:,.0f}")
+    check("every name in the chosen book pays for itself",
+          all(S.core_gross(r) > S.round_trip_cost(t50) for r in [1.0, 0.99, 0.98, 0.97, 0.95,
+                                                                 0.93, 0.90, 0.87, 0.84, 0.80, 0.77][:n50]))
+    check("a list of mediocre names is mostly refused", S.best_book([0.66, 0.64, 0.62], 50_000)[0] <= 1)
+
+    print()
     print("[WHAT A TRADE IS EXPECTED TO EARN]")
     check("a top-ranked name clears its costs", S.core_edge(0.99) > 0, f"{100 * S.core_edge(0.99):+.4f}%/day")
     check("a middling name does not", S.core_edge(0.55) <= 0, f"{100 * S.core_edge(0.55):+.4f}%/day")
