@@ -1,39 +1,39 @@
 # Paper trading report
 
-Updated 2026-09-25 09:19 IST. Model picks as of 2026-09-22. Each strategy started with Rs 50,000 of fake money. Costs are Zerodha's published charges.
+Updated 2026-09-25 12:13 IST. Model picks as of 2026-09-22. Each strategy started with Rs 50,000 of fake money. Costs are Zerodha's published charges.
 
 | Strategy | Equity (Rs) | Return | Closed trades | Win rate | Costs paid (Rs) |
 |:---|---:|---:|---:|---:|---:|
-| oracle | 50,044 | +0.09% | 1 | 0% | 66 |
 | nifty_calls | 50,000 | +0.00% | 0 | - | 0 |
 | statarb | 50,000 | +0.00% | 0 | - | 0 |
-| intramonth | 49,758 | -0.48% | 5 | 20% | 207 |
-| gold | 49,692 | -0.62% | 0 | - | 59 |
-| gold_trend | 49,692 | -0.62% | 0 | - | 59 |
-| unified | 49,634 | -0.73% | 0 | - | 53 |
-| benchmark | 49,441 | -1.12% | 0 | - | 59 |
-| intraweek | 49,400 | -1.20% | 5 | 20% | 240 |
-| random_hold | 49,400 | -1.20% | 5 | 20% | 240 |
+| oracle | 49,849 | -0.30% | 2 | 0% | 100 |
+| gold | 49,716 | -0.57% | 0 | - | 59 |
+| gold_trend | 49,716 | -0.57% | 0 | - | 59 |
+| intramonth | 49,554 | -0.89% | 5 | 20% | 207 |
+| benchmark | 49,417 | -1.17% | 0 | - | 59 |
 | intraday | 49,189 | -1.62% | 16 | 19% | 165 |
+| unified | 49,158 | -1.68% | 0 | - | 53 |
+| intraweek | 48,874 | -2.25% | 5 | 20% | 240 |
+| random_hold | 48,874 | -2.25% | 5 | 20% | 240 |
 
-Combined allocator (virtual): Rs 49,747 (-0.51%).
+Combined allocator (virtual): Rs 49,558 (-0.88%).
 
 Profit on 2026-09-25:
 
 | Strategy | Rs | % |
 |:---|---:|---:|
-| intraweek | +270 | +0.55% |
-| random_hold | +270 | +0.55% |
-| unified | +204 | +0.41% |
-| gold_trend | +192 | +0.39% |
-| gold | +192 | +0.39% |
-| oracle | +167 | +0.34% |
-| intramonth | +98 | +0.20% |
+| gold_trend | +216 | +0.44% |
+| gold | +216 | +0.44% |
 | intraday | +0 | +0.00% |
-| nifty_calls | +0 | +0.00% |
 | statarb | +0 | +0.00% |
-| benchmark | -62 | -0.12% |
+| nifty_calls | +0 | +0.00% |
+| oracle | -27 | -0.06% |
+| benchmark | -86 | -0.17% |
+| intramonth | -106 | -0.21% |
+| intraweek | -257 | -0.52% |
+| random_hold | -257 | -0.52% |
+| unified | -272 | -0.55% |
 
-Average per day so far: oracle Rs +22, nifty_calls Rs +0, statarb Rs +0, intramonth Rs -60, gold Rs -77, gold_trend Rs -77, unified Rs -122, benchmark Rs -140, intraweek Rs -150, random_hold Rs -150, intraday Rs -203
+Average per day so far: nifty_calls Rs +0, statarb Rs +0, gold Rs -71, gold_trend Rs -71, oracle Rs -75, intramonth Rs -112, benchmark Rs -146, intraday Rs -203, unified Rs -281, intraweek Rs -282, random_hold Rs -282
 
 Option results are SIMULATED (Black-Scholes on the real Nifty level), not real option prices.
