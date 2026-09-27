@@ -350,10 +350,21 @@ def option_marks(acc: Account, ctx: Ctx) -> dict[str, float]:
 # the round-trip costs are Zerodha's published charges plus the slippage tier.
 GOLD_SYMBOL = "GOLDBEES.NS"
 CORE_HORIZON = 21                 # trading days the ranking model forecasts
-# Measured on the adopted model (research/ADOPTED_RESULT.md): India's top 5 return +1.56%
-# over 21 days AFTER a round trip, so +2.16% before it. The earlier figure here subtracted
-# costs twice and made the model too shy to own anything outside its top few names.
-CORE_TOP_EXCESS = 0.0216          # 21-day excess of the top 5, India, BEFORE costs
+# Recalibrated 2026-09-28, downwards, twice over.
+#
+# The 2.16% here came from the adopted-features measurement, and that measurement did not
+# replicate: on fresh seeds the adopted families went from five of five to one of five in
+# India and their mean net return fell below the baseline. They are out of the live model.
+#
+# The replacement comes from a cost-aware grid run on cached out-of-sample predictions over
+# the full history: at Rs 50,000 the India book nets +0.61% per 21 sessions at two names and
+# +0.48% at three, against round-trip costs of 0.62% to 0.66%, which puts the gross excess of
+# a very short India book at roughly 1.1% rather than 2.16%. Every t-statistic in that grid is
+# below 1.5, so this is a better-founded number and still not a precise one.
+#
+# The direction of the error matters: too high a figure makes the account buy more names than
+# its edge can pay for, because each extra name costs a certain fee to earn an uncertain edge.
+CORE_TOP_EXCESS = 0.0110          # 21-day excess of the top few, India, BEFORE costs
 ROUND_TRIP_DELIVERY = 0.006       # 0.60% in and out, India delivery
 ROUND_TRIP_INTRADAY = 0.0036      # 0.36% in and out, India intraday
 EDGE_MULTIPLE = 2.0               # a trade must expect to earn at least this many times its cost
