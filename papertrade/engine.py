@@ -26,7 +26,12 @@ from .market import IST, latest_prices, now_ist, session_open
 from .strategies import ALWAYS_QUOTE, STRATEGIES, TOP_N, Ctx, option_marks
 
 log = logging.getLogger("papertrade")
-START_CASH = 50_000.0
+# Raised from Rs 50,000 on 2026-09-28: the owner's real account starts at Rs 2 lakh, and
+# account size is not a detail here. The fixed Rs 15.93 depository fee on every sell is
+# 0.32% of a Rs 5,000 position and 0.03% of a Rs 50,000 one, so the same strategy that
+# loses money small can make it larger. Simulating the wrong size answers the wrong
+# question. The four days of Rs 50,000 history are archived beside the state files.
+START_CASH = 200_000.0
 ROOT = Path(__file__).resolve().parent.parent
 STATE = ROOT / "state"
 
