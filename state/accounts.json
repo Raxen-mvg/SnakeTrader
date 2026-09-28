@@ -1,7 +1,7 @@
 {
  "unified": {
   "name": "unified",
-  "cash": 10108.47572151842,
+  "cash": 1163.9266665613582,
   "start_cash": 200000.0,
   "positions": {
    "TFCILTD.NS": {
@@ -12,7 +12,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 139.91
+     "last_price": 139.97
     }
    },
    "LENSKART.NS": {
@@ -23,7 +23,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 661.85
+     "last_price": 663.1
     }
    },
    "NITINSPIN.NS": {
@@ -34,7 +34,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 609.95
+     "last_price": 610.65
     }
    },
    "IPCALAB.NS": {
@@ -45,7 +45,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1927.0
+     "last_price": 1926.0
     }
    },
    "VSSL.NS": {
@@ -56,7 +56,40 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 411.4
+     "last_price": 410.9
+    }
+   },
+   "VIJAYA.NS": {
+    "symbol": "VIJAYA.NS",
+    "qty": 2,
+    "avg_price": 1499.6461000000002,
+    "opened": "2026-09-28T11:34:08.140662+05:30",
+    "product": "delivery",
+    "exit_on": null,
+    "meta": {
+     "last_price": 1497.4
+    }
+   },
+   "DCBBANK.NS": {
+    "symbol": "DCBBANK.NS",
+    "qty": 16,
+    "avg_price": 208.27194000000003,
+    "opened": "2026-09-28T11:34:08.140662+05:30",
+    "product": "delivery",
+    "exit_on": null,
+    "meta": {
+     "last_price": 207.96
+    }
+   },
+   "KTKBANK.NS": {
+    "symbol": "KTKBANK.NS",
+    "qty": 8,
+    "avg_price": 325.28720000000004,
+    "opened": "2026-09-28T11:34:08.140662+05:30",
+    "product": "delivery",
+    "exit_on": null,
+    "meta": {
+     "last_price": 324.8
     }
    }
   },
@@ -115,12 +148,49 @@
     "costs": 14.68,
     "product": "delivery",
     "reason": "rank 0.998, size 6% of cash"
+   },
+   {
+    "time": "2026-09-28T11:34:08.140662+05:30",
+    "side": "BUY",
+    "symbol": "VIJAYA.NS",
+    "qty": 2,
+    "price": 1499.6461,
+    "value": 2999.29,
+    "costs": 3.56,
+    "product": "delivery",
+    "reason": "rank 0.997, size 35% of cash"
+   },
+   {
+    "time": "2026-09-28T11:34:08.140662+05:30",
+    "side": "BUY",
+    "symbol": "DCBBANK.NS",
+    "qty": 16,
+    "price": 208.2719,
+    "value": 3332.35,
+    "costs": 3.96,
+    "product": "delivery",
+    "reason": "rank 0.996, size 35% of cash"
+   },
+   {
+    "time": "2026-09-28T11:34:08.140662+05:30",
+    "side": "BUY",
+    "symbol": "KTKBANK.NS",
+    "qty": 8,
+    "price": 325.2872,
+    "value": 2602.3,
+    "costs": 3.09,
+    "product": "delivery",
+    "reason": "rank 0.996, size 26% of cash"
    }
   ],
   "equity_curve": [
    {
     "time": "2026-09-28T11:31:07.188052+05:30",
     "equity": 199490.72
+   },
+   {
+    "time": "2026-09-28T11:34:08.140662+05:30",
+    "equity": 199604.22
    }
   ],
   "memo": {}
@@ -134,6 +204,10 @@
   "equity_curve": [
    {
     "time": "2026-09-28T11:31:07.188052+05:30",
+    "equity": 200000.0
+   },
+   {
+    "time": "2026-09-28T11:34:08.140662+05:30",
     "equity": 200000.0
    }
   ],
@@ -152,7 +226,7 @@
     "product": "delivery",
     "exit_on": "2026-10-05",
     "meta": {
-     "last_price": 139.91
+     "last_price": 139.97
     }
    },
    "LENSKART.NS": {
@@ -163,7 +237,7 @@
     "product": "delivery",
     "exit_on": "2026-10-05",
     "meta": {
-     "last_price": 661.85
+     "last_price": 663.1
     }
    },
    "NITINSPIN.NS": {
@@ -174,7 +248,7 @@
     "product": "delivery",
     "exit_on": "2026-10-05",
     "meta": {
-     "last_price": 609.95
+     "last_price": 610.65
     }
    },
    "IPCALAB.NS": {
@@ -185,7 +259,7 @@
     "product": "delivery",
     "exit_on": "2026-10-05",
     "meta": {
-     "last_price": 1927.0
+     "last_price": 1926.0
     }
    },
    "VSSL.NS": {
@@ -196,7 +270,7 @@
     "product": "delivery",
     "exit_on": "2026-10-05",
     "meta": {
-     "last_price": 411.4
+     "last_price": 410.9
     }
    }
   },
@@ -261,6 +335,10 @@
    {
     "time": "2026-09-28T11:31:07.188052+05:30",
     "equity": 199468.41
+   },
+   {
+    "time": "2026-09-28T11:34:08.140662+05:30",
+    "equity": 199537.51
    }
   ],
   "memo": {}
@@ -278,7 +356,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 139.91
+     "last_price": 139.97
     }
    },
    "LENSKART.NS": {
@@ -289,7 +367,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 661.85
+     "last_price": 663.1
     }
    },
    "NITINSPIN.NS": {
@@ -300,7 +378,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 609.95
+     "last_price": 610.65
     }
    },
    "IPCALAB.NS": {
@@ -311,7 +389,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1927.0
+     "last_price": 1926.0
     }
    },
    "VSSL.NS": {
@@ -322,7 +400,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 411.4
+     "last_price": 410.9
     }
    }
   },
@@ -387,6 +465,10 @@
    {
     "time": "2026-09-28T11:31:07.188052+05:30",
     "equity": 199468.41
+   },
+   {
+    "time": "2026-09-28T11:34:08.140662+05:30",
+    "equity": 199537.51
    }
   ],
   "memo": {}
@@ -404,7 +486,7 @@
     "product": "delivery",
     "exit_on": "2026-10-22",
     "meta": {
-     "last_price": 139.91
+     "last_price": 139.97
     }
    },
    "LENSKART.NS": {
@@ -415,7 +497,7 @@
     "product": "delivery",
     "exit_on": "2026-11-06",
     "meta": {
-     "last_price": 661.85
+     "last_price": 663.1
     }
    },
    "NITINSPIN.NS": {
@@ -426,7 +508,7 @@
     "product": "delivery",
     "exit_on": "2026-11-20",
     "meta": {
-     "last_price": 609.95
+     "last_price": 610.65
     }
    },
    "IPCALAB.NS": {
@@ -437,7 +519,7 @@
     "product": "delivery",
     "exit_on": "2026-10-02",
     "meta": {
-     "last_price": 1927.0
+     "last_price": 1926.0
     }
    },
    "VSSL.NS": {
@@ -448,7 +530,7 @@
     "product": "delivery",
     "exit_on": "2026-10-21",
     "meta": {
-     "last_price": 411.4
+     "last_price": 410.9
     }
    }
   },
@@ -513,6 +595,10 @@
    {
     "time": "2026-09-28T11:31:07.188052+05:30",
     "equity": 199468.41
+   },
+   {
+    "time": "2026-09-28T11:34:08.140662+05:30",
+    "equity": 199537.51
    }
   ],
   "memo": {}
@@ -530,7 +616,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 121.44
+     "last_price": 121.43
     }
    }
   },
@@ -551,6 +637,10 @@
    {
     "time": "2026-09-28T11:31:07.188052+05:30",
     "equity": 199663.0
+   },
+   {
+    "time": "2026-09-28T11:34:08.140662+05:30",
+    "equity": 199646.56
    }
   ],
   "memo": {}
@@ -564,6 +654,10 @@
   "equity_curve": [
    {
     "time": "2026-09-28T11:31:07.188052+05:30",
+    "equity": 200000.0
+   },
+   {
+    "time": "2026-09-28T11:34:08.140662+05:30",
     "equity": 200000.0
    }
   ],
@@ -587,7 +681,7 @@
      "strike": 22850,
      "expiry": "2026-10-01",
      "vol": 0.10285763485046116,
-     "last_price": 95.16563997358935
+     "last_price": 92.7168202818466
     }
    }
   },
@@ -608,6 +702,10 @@
    {
     "time": "2026-09-28T11:31:07.188052+05:30",
     "equity": 199937.48
+   },
+   {
+    "time": "2026-09-28T11:34:08.140662+05:30",
+    "equity": 199753.82
    }
   ],
   "memo": {
@@ -627,7 +725,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 260.92
+     "last_price": 260.88
     }
    }
   },
@@ -648,6 +746,10 @@
    {
     "time": "2026-09-28T11:31:07.188052+05:30",
     "equity": 199663.07
+   },
+   {
+    "time": "2026-09-28T11:34:08.140662+05:30",
+    "equity": 199632.47
    }
   ],
   "memo": {}
@@ -665,7 +767,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 139.91
+     "last_price": 139.97
     }
    },
    "LENSKART.NS": {
@@ -676,7 +778,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 661.85
+     "last_price": 663.1
     }
    },
    "NITINSPIN.NS": {
@@ -687,7 +789,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 609.95
+     "last_price": 610.65
     }
    },
    "IPCALAB.NS": {
@@ -698,7 +800,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1927.0
+     "last_price": 1926.0
     }
    },
    "VSSL.NS": {
@@ -709,7 +811,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 411.4
+     "last_price": 410.9
     }
    },
    "VIJAYA.NS": {
@@ -720,7 +822,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1496.7
+     "last_price": 1497.4
     }
    },
    "DCBBANK.NS": {
@@ -731,7 +833,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 208.2
+     "last_price": 207.96
     }
    },
    "KTKBANK.NS": {
@@ -742,7 +844,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 325.4
+     "last_price": 324.8
     }
    },
    "SAILIFE.NS": {
@@ -753,7 +855,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1591.0
+     "last_price": 1591.6
     }
    },
    "GKSL.NS": {
@@ -764,7 +866,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 173.55
+     "last_price": 174.01
     }
    },
    "GLOBAL.NS": {
@@ -775,7 +877,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 134.42
+     "last_price": 134.16
     }
    },
    "LAURUSLABS.NS": {
@@ -786,7 +888,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 2007.9
+     "last_price": 2006.5
     }
    }
   },
@@ -928,6 +1030,10 @@
    {
     "time": "2026-09-28T11:31:07.188052+05:30",
     "equity": 199474.15
+   },
+   {
+    "time": "2026-09-28T11:34:08.140662+05:30",
+    "equity": 199468.56
    }
   ],
   "memo": {}
@@ -941,6 +1047,10 @@
   "equity_curve": [
    {
     "time": "2026-09-28T11:31:07.188052+05:30",
+    "equity": 200000.0
+   },
+   {
+    "time": "2026-09-28T11:34:08.140662+05:30",
     "equity": 200000.0
    }
   ],
