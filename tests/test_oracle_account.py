@@ -112,11 +112,28 @@ def main() -> int:
     check("nothing intraday is held overnight",
           not any(p.product == "intraday" for p in acc2.positions.values()))
 
-    fallen = dict(ranks)
+    # Exits, now that a name is held for a minimum period. Three behaviours: one that merely
+    # goes quiet early is kept, one that turns actively bad is sold whenever that happens, and
+    # a quiet one is let go once the minimum hold has passed.
+    quiet = dict(ranks)
     held = [s for s, p in acc.positions.items() if p.product != "intraday"][0]
-    fallen[held] = 0.60
-    S.oracle(acc, ctx(late + dt.timedelta(days=1), prices, picks, fallen, []))
-    check("a name whose expected return stops covering costs is sold", held not in acc.positions)
+    quiet[held] = 0.60                                  # below its costs, but not a disaster
+    S.oracle(acc, ctx(late + dt.timedelta(days=1), prices, picks, quiet, []))
+    check("a name that merely goes quiet is kept while the minimum hold runs",
+          held in acc.positions)
+
+    bad = dict(quiet)
+    bad[held] = 0.02                                    # actively bad, not merely unexciting
+    S.oracle(acc, ctx(late + dt.timedelta(days=2), prices, picks, bad, []))
+    check("a name that turns actively bad is sold straight away", held not in acc.positions)
+
+    acc5 = Account("oracle", 50_000, 50_000)
+    S.oracle(acc5, ctx(t, prices, picks, ranks, []))
+    kept = [s for s, p in acc5.positions.items() if p.product != "intraday"][0]
+    later = t + dt.timedelta(days=int(S.MIN_HOLD_SESSIONS * 7 / 5) + 5)
+    S.oracle(acc5, ctx(later, prices, picks, {**ranks, kept: 0.60}, []))
+    check("once the minimum hold has passed, a quiet name is let go",
+          kept not in acc5.positions, f"after about {S.MIN_HOLD_SESSIONS} sessions")
 
     print()
     print("[STAT ARB]")

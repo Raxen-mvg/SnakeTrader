@@ -370,6 +370,10 @@ ROUND_TRIP_INTRADAY = 0.0036      # 0.36% in and out, India intraday
 EDGE_MULTIPLE = 2.0               # a trade must expect to earn at least this many times its cost
 MAX_NAME_WEIGHT = 0.30
 TYPICAL_CORRELATION = 0.35   # how much two Indian stocks move together, day to day
+# Sessions a name is kept before an ordinary exit is even considered. Sixty-three was the
+# best of the holding periods measured; a hundred and twenty-six was better still but
+# commits the account for half a year on evidence that is monotone rather than precise.
+MIN_HOLD_SESSIONS = 63
 
 
 def round_trip_cost(value: float, product: str = "delivery") -> float:
@@ -400,8 +404,14 @@ def exit_cost(value: float, product: str = "delivery") -> float:
 
 
 def core_gross(rank_pct: float) -> float:
-    """Expected excess return over the horizon, before any costs, at this model rank."""
-    return CORE_TOP_EXCESS * max(0.0, (rank_pct - 0.5) / 0.5)
+    """Expected excess return over the horizon, before any costs, at this model rank.
+
+    Symmetric about the median on purpose. Clamping this at zero said a bottom-ranked stock
+    is merely expected to earn nothing, when the model's own history says such names
+    underperform - and it silently disabled the rule that sells a holding which has turned
+    bad, because "worse than nothing" could never be expressed.
+    """
+    return CORE_TOP_EXCESS * (rank_pct - 0.5) / 0.5
 
 
 # The owner's instruction is that a trade must make SIGNIFICANTLY more than it costs, not
@@ -545,6 +555,14 @@ def _capped_shares(edges: dict[str, float]) -> dict[str, float]:
     return out
 
 
+def _sessions_held(pos, now) -> int:
+    """Trading sessions since a position was opened, counted as weekdays."""
+    import datetime as _dt
+    opened = _dt.date.fromisoformat(pos.opened[:10])
+    days = (now.date() - opened).days
+    return max(int(days * 5 / 7), 0)
+
+
 def oracle(acc: Account, ctx: Ctx) -> None:
     """Rs 50,000, one pot of cash, and no human-chosen allocation.
 
@@ -592,9 +610,22 @@ def oracle(acc: Account, ctx: Ctx) -> None:
         if pos.product == "intraday" or s not in ctx.prices:
             continue
         value = pos.qty * ctx.prices[s]
-        if core_gross(ctx.ranks.get(s, 0.0)) <= exit_cost(value):
+        expected, leaving = core_gross(ctx.ranks.get(s, 0.0)), exit_cost(value)
+        held = _sessions_held(pos, ctx.t)
+        # Measured 2026-09-28: selling as soon as the expected gain dips below the cost of
+        # leaving was the WORST of four policies tested - worse than any fixed holding period -
+        # because it churns. Longer holds lost less and won more often, monotonically: 21
+        # sessions -0.019% a day and 42% of trades profitable, 63 sessions -0.010% and 46%,
+        # 126 sessions -0.004% and 51%. The fee is charged per sale, so time is the cheapest
+        # thing an account owns. Before the minimum hold a name is sold only if it has turned
+        # actively bad, not merely unexciting.
+        if held < MIN_HOLD_SESSIONS:
+            if expected < -leaving:
+                acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK,
+                         reason=f"deteriorated after {held} sessions, not merely gone quiet")
+        elif expected <= leaving:
             acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK,
-                     reason="expected return no longer covers the cost of selling")
+                     reason=f"held {held} sessions; expected return no longer covers selling")
     if acc.cash < MIN_TICKET:
         return
     cand = [p for p in ctx.picks if p["symbol"] not in acc.positions and p["symbol"] in ctx.prices]
