@@ -1,5 +1,5 @@
 {
- "updated": "2026-09-28T11:13:07.201810+05:30",
+ "updated": "2026-09-28T11:16:07.171114+05:30",
  "picks_asof": "2026-09-25",
  "start_cash": 50000.0,
  "strategies": [
@@ -16,8 +16,8 @@
   },
   {
    "strategy": "intramonth",
-   "equity": 49369.76,
-   "return_pct": -1.26,
+   "equity": 49352.51,
+   "return_pct": -1.295,
    "cash": 32981.66,
    "open_positions": 5,
    "closed_trades": 5,
@@ -28,28 +28,28 @@
      "symbol": "SONACOMS.NS",
      "qty": 5,
      "avg_price": 809.86,
-     "last": 820.3,
+     "last": 820.0,
      "exit_on": null
     },
     {
      "symbol": "KTKBANK.NS",
      "qty": 11,
      "avg_price": 341.21,
-     "last": 324.8,
+     "last": 324.75,
      "exit_on": null
     },
     {
      "symbol": "LAURUSLABS.NS",
      "qty": 2,
      "avg_price": 2025.03,
-     "last": 2009.2,
+     "last": 2009.5,
      "exit_on": null
     },
     {
      "symbol": "CORONA.NS",
      "qty": 1,
      "avg_price": 2196.29,
-     "last": 2075.4,
+     "last": 2059.6,
      "exit_on": null
     },
     {
@@ -63,8 +63,8 @@
   },
   {
    "strategy": "oracle",
-   "equity": 49356.58,
-   "return_pct": -1.287,
+   "equity": 49326.08,
+   "return_pct": -1.348,
    "cash": 2401.58,
    "open_positions": 7,
    "closed_trades": 3,
@@ -75,28 +75,28 @@
      "symbol": "SONACOMS.NS",
      "qty": 16,
      "avg_price": 818.13,
-     "last": 820.3,
+     "last": 820.0,
      "exit_on": null
     },
     {
      "symbol": "KTKBANK.NS",
      "qty": 32,
      "avg_price": 337.86,
-     "last": 324.8,
+     "last": 324.75,
      "exit_on": null
     },
     {
      "symbol": "LAURUSLABS.NS",
      "qty": 2,
      "avg_price": 2033.85,
-     "last": 2009.2,
+     "last": 2009.5,
      "exit_on": null
     },
     {
      "symbol": "CORONA.NS",
      "qty": 2,
      "avg_price": 2112.16,
-     "last": 2075.4,
+     "last": 2059.6,
      "exit_on": null
     },
     {
@@ -110,14 +110,14 @@
      "symbol": "LENSKART.NS",
      "qty": 8,
      "avg_price": 672.81,
-     "last": 661.15,
+     "last": 661.2,
      "exit_on": null
     },
     {
      "symbol": "SHRIPISTON.NS",
      "qty": 1,
      "avg_price": 4575.55,
-     "last": 4738.2,
+     "last": 4744.7,
      "exit_on": null
     }
    ]
@@ -134,9 +134,28 @@
    "positions": []
   },
   {
+   "strategy": "benchmark",
+   "equity": 48861.24,
+   "return_pct": -2.278,
+   "cash": 106.6,
+   "open_positions": 1,
+   "closed_trades": 0,
+   "win_rate_pct": null,
+   "costs_paid": 59.17,
+   "positions": [
+    {
+     "symbol": "NIFTYBEES.NS",
+     "qty": 187,
+     "avg_price": 266.49,
+     "last": 260.72,
+     "exit_on": null
+    }
+   ]
+  },
+  {
    "strategy": "unified",
-   "equity": 48860.53,
-   "return_pct": -2.279,
+   "equity": 48844.98,
+   "return_pct": -2.31,
    "cash": 5491.23,
    "open_positions": 8,
    "closed_trades": 0,
@@ -147,28 +166,28 @@
      "symbol": "SONACOMS.NS",
      "qty": 7,
      "avg_price": 821.78,
-     "last": 820.3,
+     "last": 820.0,
      "exit_on": null
     },
     {
      "symbol": "KTKBANK.NS",
      "qty": 18,
      "avg_price": 341.21,
-     "last": 324.8,
+     "last": 324.75,
      "exit_on": null
     },
     {
      "symbol": "LAURUSLABS.NS",
      "qty": 3,
      "avg_price": 2026.33,
-     "last": 2009.2,
+     "last": 2009.5,
      "exit_on": null
     },
     {
      "symbol": "CORONA.NS",
      "qty": 2,
      "avg_price": 2181.07,
-     "last": 2075.4,
+     "last": 2059.6,
      "exit_on": null
     },
     {
@@ -182,40 +201,21 @@
      "symbol": "LENSKART.NS",
      "qty": 9,
      "avg_price": 686.28,
-     "last": 661.15,
+     "last": 661.2,
      "exit_on": null
     },
     {
      "symbol": "AKUMS.NS",
      "qty": 7,
      "avg_price": 836.35,
-     "last": 810.55,
+     "last": 812.15,
      "exit_on": null
     },
     {
      "symbol": "SHRIPISTON.NS",
      "qty": 1,
      "avg_price": 4511.46,
-     "last": 4738.2,
-     "exit_on": null
-    }
-   ]
-  },
-  {
-   "strategy": "benchmark",
-   "equity": 48855.63,
-   "return_pct": -2.289,
-   "cash": 106.6,
-   "open_positions": 1,
-   "closed_trades": 0,
-   "win_rate_pct": null,
-   "costs_paid": 59.17,
-   "positions": [
-    {
-     "symbol": "NIFTYBEES.NS",
-     "qty": 187,
-     "avg_price": 266.49,
-     "last": 260.69,
+     "last": 4744.7,
      "exit_on": null
     }
    ]
@@ -233,8 +233,8 @@
   },
   {
    "strategy": "nifty_calls",
-   "equity": 48763.42,
-   "return_pct": -2.473,
+   "equity": 48729.75,
+   "return_pct": -2.541,
    "cash": 42100.1,
    "open_positions": 1,
    "closed_trades": 0,
@@ -245,7 +245,7 @@
      "symbol": "NIFTY 01Oct 22850 CE (SIMULATED)",
      "qty": 75,
      "avg_price": 104.97,
-     "last": 88.84,
+     "last": 88.4,
      "exit_on": "2026-10-01"
     }
    ]
@@ -271,8 +271,8 @@
   },
   {
    "strategy": "intraweek",
-   "equity": 48294.32,
-   "return_pct": -3.411,
+   "equity": 48227.27,
+   "return_pct": -3.545,
    "cash": 4833.12,
    "open_positions": 5,
    "closed_trades": 5,
@@ -283,28 +283,28 @@
      "symbol": "SONACOMS.NS",
      "qty": 12,
      "avg_price": 811.72,
-     "last": 820.3,
+     "last": 820.0,
      "exit_on": "2026-09-30"
     },
     {
      "symbol": "KTKBANK.NS",
      "qty": 29,
      "avg_price": 343.61,
-     "last": 324.8,
+     "last": 324.75,
      "exit_on": "2026-09-30"
     },
     {
      "symbol": "LAURUSLABS.NS",
      "qty": 4,
      "avg_price": 2027.54,
-     "last": 2009.2,
+     "last": 2009.5,
      "exit_on": "2026-09-30"
     },
     {
      "symbol": "CORONA.NS",
      "qty": 4,
      "avg_price": 2196.69,
-     "last": 2075.4,
+     "last": 2059.6,
      "exit_on": "2026-09-30"
     },
     {
@@ -318,8 +318,8 @@
   },
   {
    "strategy": "random_hold",
-   "equity": 48294.32,
-   "return_pct": -3.411,
+   "equity": 48227.27,
+   "return_pct": -3.545,
    "cash": 4833.12,
    "open_positions": 5,
    "closed_trades": 5,
@@ -330,28 +330,28 @@
      "symbol": "SONACOMS.NS",
      "qty": 12,
      "avg_price": 811.72,
-     "last": 820.3,
+     "last": 820.0,
      "exit_on": "2026-10-12"
     },
     {
      "symbol": "KTKBANK.NS",
      "qty": 29,
      "avg_price": 343.61,
-     "last": 324.8,
+     "last": 324.75,
      "exit_on": "2026-11-18"
     },
     {
      "symbol": "LAURUSLABS.NS",
      "qty": 4,
      "avg_price": 2027.54,
-     "last": 2009.2,
+     "last": 2009.5,
      "exit_on": "2026-11-06"
     },
     {
      "symbol": "CORONA.NS",
      "qty": 4,
      "avg_price": 2196.69,
-     "last": 2075.4,
+     "last": 2059.6,
      "exit_on": "2026-10-05"
     },
     {
@@ -366,7 +366,7 @@
  ],
  "combined": {
   "date": "2026-09-28",
-  "equity": 49027.37,
+  "equity": 49004.13,
   "w_unified": 0.1,
   "w_intraday": 0.1,
   "w_intraweek": 0.1,
