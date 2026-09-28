@@ -369,6 +369,7 @@ ROUND_TRIP_DELIVERY = 0.006       # 0.60% in and out, India delivery
 ROUND_TRIP_INTRADAY = 0.0036      # 0.36% in and out, India intraday
 EDGE_MULTIPLE = 2.0               # a trade must expect to earn at least this many times its cost
 MAX_NAME_WEIGHT = 0.30
+TYPICAL_CORRELATION = 0.35   # how much two Indian stocks move together, day to day
 
 
 def round_trip_cost(value: float, product: str = "delivery") -> float:
@@ -451,7 +452,14 @@ def best_book(ranks: list[float], budget: float, max_names: int = 12) -> tuple[i
         nets = [core_gross(r) - cost for r in ranks[:n]]
         if min(nets) < CORE_MARGIN * cost:       # the marginal name must clear the margin
             continue
-        score = (sum(nets) / n) * n ** 0.5
+        # Diversification does not keep paying. Stocks in one market move together - pairwise
+        # correlation of about a third is normal - so the tenth name reduces risk far less than
+        # the second did, and the benefit saturates. Treating positions as independent (a plain
+        # square root of n) makes the score rise forever and the book size become whatever cap
+        # happens to be written down, which is how this account ended up holding exactly its
+        # maximum of twelve names rather than a number anything chose.
+        effective = n / (1 + (n - 1) * TYPICAL_CORRELATION)
+        score = (sum(nets) / n) * effective ** 0.5
         if score > best[2]:
             best = (n, ticket, score)
     return best[0], best[1]
