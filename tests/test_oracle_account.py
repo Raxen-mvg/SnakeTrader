@@ -127,6 +127,15 @@ def main() -> int:
     S.oracle(acc, ctx(late + dt.timedelta(days=2), prices, picks, bad, []))
     check("a name that turns actively bad is sold straight away", held not in acc.positions)
 
+    acc6 = Account("oracle", 50_000, 50_000)
+    S.oracle(acc6, ctx(t, prices, picks, ranks, []))
+    crashed = [x for x, q in acc6.positions.items() if q.product != "intraday"][0]
+    wreck = dict(prices)
+    wreck[crashed] = prices[crashed] * 0.70          # down 30%, well past the disaster stop
+    S.oracle(acc6, ctx(t + dt.timedelta(days=1), wreck, picks, ranks, []))
+    check("a holding that collapses is sold even with a top rank and no time served",
+          crashed not in acc6.positions)
+
     acc5 = Account("oracle", 50_000, 50_000)
     S.oracle(acc5, ctx(t, prices, picks, ranks, []))
     kept = [s for s, p in acc5.positions.items() if p.product != "intraday"][0]

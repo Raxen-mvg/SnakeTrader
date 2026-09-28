@@ -374,6 +374,7 @@ TYPICAL_CORRELATION = 0.35   # how much two Indian stocks move together, day to 
 # best of the holding periods measured; a hundred and twenty-six was better still but
 # commits the account for half a year on evidence that is monotone rather than precise.
 MIN_HOLD_SESSIONS = 63
+DISASTER_STOP = -0.25        # sell at any age if a holding falls this far from entry
 
 
 def round_trip_cost(value: float, product: str = "delivery") -> float:
@@ -619,6 +620,18 @@ def oracle(acc: Account, ctx: Ctx) -> None:
         # 126 sessions -0.004% and 51%. The fee is charged per sale, so time is the cheapest
         # thing an account owns. Before the minimum hold a name is sold only if it has turned
         # actively bad, not merely unexciting.
+        # A safety net, not an edge. The minimum hold assumes the model's rank keeps telling
+        # the truth about a name, and last week the frozen snapshot went three days stale
+        # without anyone noticing - during which every rank would have been frozen too, and a
+        # collapsing holding would never have triggered the deterioration exit. This fires
+        # only on a disaster and is deliberately far outside normal movement, so it should
+        # almost never be the reason for a sale. If it starts firing regularly, something
+        # upstream is broken and that is what wants fixing.
+        drop = ctx.prices[s] / pos.avg_price - 1
+        if drop <= DISASTER_STOP:
+            acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK,
+                     reason=f"down {100 * drop:.0f}% from entry; selling regardless of rank")
+            continue
         if held < MIN_HOLD_SESSIONS:
             if expected < -leaving:
                 acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK,
