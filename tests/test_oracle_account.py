@@ -88,8 +88,14 @@ def main() -> int:
     check("the weak intraday call is not funded",
           not any(p.product == "intraday" for p in acc.positions.values()))
     check("cash went into the core book", len(acc.positions) > 0, f"{len(acc.positions)} names")
-    check("no name takes more than the cap",
-          max(p.qty * 100.0 for p in acc.positions.values()) <= (S.MAX_NAME_WEIGHT + 0.02) * 50_000)
+    # The cap loosens when few names qualify, otherwise a three-name book would be forced to
+    # leave a tenth of the account in cash. So the test is against the cap that actually
+    # applies, not the headline one.
+    held = [p for s_, p in acc.positions.items() if p.product != "intraday"]
+    cap = max(S.MAX_NAME_WEIGHT, 1.0 / max(len(held), 1))
+    check("no name takes more than the cap that applies to a book this size",
+          max(p.qty * 100.0 for p in held) <= (cap + 0.02) * 50_000,
+          f"{len(held)} names, cap {cap:.2f}")
 
     import json as _json
     S.CALIBRATION.write_text(_json.dumps({"score": [0.4, 0.8], "expected_net": [-0.01, 0.02]}))
