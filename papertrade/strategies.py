@@ -403,6 +403,16 @@ def core_gross(rank_pct: float) -> float:
     return CORE_TOP_EXCESS * max(0.0, (rank_pct - 0.5) / 0.5)
 
 
+# The owner's instruction is that a trade must make SIGNIFICANTLY more than it costs, not
+# merely more. Expressed as a margin: expected net return must be at least this fraction of
+# the round trip. It is set low deliberately, and the reason is uncomfortable - with the
+# expected excess of the best name at 1.1% and a round trip of 0.645% on a Rs 12,500 ticket,
+# the very best name the model can find nets 0.455%, which is 0.7 times its own cost. A
+# demand of "net at least equal to the cost" would mean never trading at all. That the bar
+# has to be set here to permit any trade is itself the measurement.
+CORE_MARGIN = 0.25
+
+
 def core_edge(rank_pct: float, value: float = 12_500.0) -> float:
     """Expected net return per trading day from holding a name of this size at this rank.
 
@@ -410,6 +420,12 @@ def core_edge(rank_pct: float, value: float = 12_500.0) -> float:
     the account can hold once the fixed selling charge is paid for.
     """
     return (core_gross(rank_pct) - round_trip_cost(value)) / CORE_HORIZON
+
+
+def core_worth_it(rank_pct: float, value: float) -> bool:
+    """Is this name expected to make significantly more than it costs, not merely more?"""
+    cost = round_trip_cost(value)
+    return core_gross(rank_pct) - cost >= CORE_MARGIN * cost
 
 
 def best_book(ranks: list[float], budget: float, max_names: int = 12) -> tuple[int, float]:
@@ -433,7 +449,7 @@ def best_book(ranks: list[float], budget: float, max_names: int = 12) -> tuple[i
             break
         cost = round_trip_cost(ticket)
         nets = [core_gross(r) - cost for r in ranks[:n]]
-        if min(nets) <= 0:                       # the marginal name must pay for itself
+        if min(nets) < CORE_MARGIN * cost:       # the marginal name must clear the margin
             continue
         score = (sum(nets) / n) * n ** 0.5
         if score > best[2]:
@@ -582,7 +598,11 @@ def oracle(acc: Account, ctx: Ctx) -> None:
     n, ticket = best_book(ranked, acc.cash)
     if n == 0:
         return
-    cand = cand[:n]
+    # Beyond paying for itself, each name must clear the margin.
+    cand = [p for p in cand[:n]
+            if core_worth_it(ctx.ranks.get(p["symbol"], p.get("rank_pct", 0.0)), ticket)]
+    if not cand:
+        return
     cost = round_trip_cost(ticket)
     edges = {p["symbol"]: core_gross(ctx.ranks.get(p["symbol"], p.get("rank_pct", 0.0))) - cost
              for p in cand}
