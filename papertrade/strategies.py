@@ -556,6 +556,27 @@ def _capped_shares(edges: dict[str, float]) -> dict[str, float]:
     return out
 
 
+def _barred_today(acc: Account, ctx: Ctx) -> set:
+    """Names sold today, which must not be bought back on the same day.
+
+    Without this the disaster stop defeats itself: a holding that has collapsed is sold and
+    then, still carrying a high model rank, bought straight back on the same tick - paying
+    both sides of a round trip to end up where it started.
+    """
+    bar = acc.memo.get("sold_today") or {}
+    return set(bar.get("names", [])) if bar.get("day") == ctx.t.date().isoformat() else set()
+
+
+def _bar_today(acc: Account, ctx: Ctx, symbol: str) -> None:
+    day = ctx.t.date().isoformat()
+    bar = acc.memo.get("sold_today") or {}
+    if bar.get("day") != day:
+        bar = {"day": day, "names": []}
+    if symbol not in bar["names"]:
+        bar["names"].append(symbol)
+    acc.memo["sold_today"] = bar
+
+
 def _sessions_held(pos, now) -> int:
     """Trading sessions since a position was opened, counted as weekdays."""
     import datetime as _dt
@@ -631,6 +652,7 @@ def oracle(acc: Account, ctx: Ctx) -> None:
         if drop <= DISASTER_STOP:
             acc.sell(s, ctx.prices[s], ctx.t, slippage_bps=SLIP_STOCK,
                      reason=f"down {100 * drop:.0f}% from entry; selling regardless of rank")
+            _bar_today(acc, ctx, s)
             continue
         if held < MIN_HOLD_SESSIONS:
             if expected < -leaving:
@@ -641,7 +663,8 @@ def oracle(acc: Account, ctx: Ctx) -> None:
                      reason=f"held {held} sessions; expected return no longer covers selling")
     if acc.cash < MIN_TICKET:
         return
-    cand = [p for p in ctx.picks if p["symbol"] not in acc.positions and p["symbol"] in ctx.prices]
+    cand = [p for p in ctx.picks if p["symbol"] not in acc.positions and p["symbol"] in ctx.prices
+            and p["symbol"] not in _barred_today(acc, ctx)]
     if not cand:
         return
     # How many names this much money can afford to hold, given that every position pays the
