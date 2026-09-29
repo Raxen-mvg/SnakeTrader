@@ -1,0 +1,61 @@
+name: snake-daily
+
+# SNAKE's picks, made on GitHub's servers so the account keeps a current view when the laptop is
+# off. The laptop still trains SNAKE and publishes it into snake_release/; this only uses it.
+# If the laptop already wrote picks for the latest session, the run stops at once - two clocks,
+# one answer. Prices are fetched fresh and discarded; only the picks file is committed.
+on:
+  schedule:
+    # 17:00 IST after the close, and 07:30 IST before the open as a second chance, weekdays.
+    # GitHub starts scheduled runs late and sometimes not at all, hence two slots.
+    - cron: "30 11 * * 1-5"
+    - cron: "0 2 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Score even if the picks file already looks current"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: snake-daily
+  cancel-in-progress: false
+
+jobs:
+  picks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install (versions pinned to the machine SNAKE was trained on)
+        run: |
+          pip install numpy==2.5.3 pandas==3.0.6 duckdb==1.5.5 requests==2.34.2
+          pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Score
+        if: hashFiles('snake_release/model/meta.json') != ''
+        env:
+          SNAKE_BUNDLE_ONLY: "1"
+          PYTHONPATH: ${{ github.workspace }}/snake_release
+        run: |
+          cd snake_release
+          python -m snake.cloud --out ../state/picks_snake.json --accounts ../state/accounts.json \
+            ${{ inputs.force && '--force' || '' }}
+      - name: Save picks
+        run: |
+          git config user.name "paper-trader"
+          git config user.email "paper-trader@users.noreply.github.com"
+          git add state/picks_snake.json 2>/dev/null || exit 0
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -q -m "SNAKE picks $(date -u +%Y-%m-%dT%H:%MZ)"
+          for i in 1 2 3; do
+            git push -q && exit 0
+            git pull -q --rebase -X theirs
+          done
+          exit 1
