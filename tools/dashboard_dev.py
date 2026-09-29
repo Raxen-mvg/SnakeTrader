@@ -7,7 +7,7 @@ import urllib.parse
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-ALLOWED = {"summary.json": "application/json", "picks_snake.json": "application/json",
+ALLOWED = {"summary.json": "application/json", "picks_snake.json": "application/json", "picks_snake_nonews.json": "application/json",
            "trades.csv": "text/csv", "daily_profit.csv": "text/csv"}
 
 

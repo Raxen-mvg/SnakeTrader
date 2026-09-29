@@ -231,9 +231,15 @@ def write_reports(accounts: dict, prices: dict, t: dt.datetime, picks_asof: str)
     (STATE / "REPORT.md").write_text("\n".join(lines), encoding="utf-8")
 
 
-def load_snake_picks() -> dict:
-    """SNAKE's own picks file, with the same company filter as the main list applied."""
-    f = STATE / "picks_snake.json"
+# Each SNAKE account trades from its own picks file. Two versions run side by side from
+# 2026-09-30 so real money decides between them: "snake" is trained with Indian exchange news,
+# "snake_nonews" is the same network trained without it.
+SNAKE_FILES = {"snake": "picks_snake.json", "snake_nonews": "picks_snake_nonews.json"}
+
+
+def load_snake_picks(file: str = "picks_snake.json") -> dict:
+    """A SNAKE picks file, with the same company filter as the main list applied."""
+    f = STATE / file
     if not f.exists():
         return {}
     try:
@@ -266,8 +272,9 @@ def tick(force: bool = False) -> int:
     held = {s for a in accounts.values() for s, p in a.positions.items() if p.product != "option"}
     want = set(ALWAYS_QUOTE) | held | {p["symbol"] for p in picks[: TOP_N * 3]}
     want |= {p["symbol"] for p in (intraday_picks or [])}
-    snake_picks = load_snake_picks()
-    want |= {p["symbol"] for p in snake_picks.get("top", [])[:15]}
+    snake_picks = {n: load_snake_picks(f) for n, f in SNAKE_FILES.items()}
+    for sp in snake_picks.values():
+        want |= {p["symbol"] for p in sp.get("top", [])[:15]}
     prices = latest_prices(sorted(want), asof=t)
     if not prices:
         log.warning("no prices returned (holiday, outage or rate limit); skipping this tick")
@@ -285,7 +292,7 @@ def tick(force: bool = False) -> int:
         ctx = Ctx(t, prices, picks, ranks, first)
         if intraday_picks is not None:
             ctx.intraday_picks = intraday_picks
-        ctx.snake = snake_picks
+        ctx.snake = snake_picks.get(name, {})
         try:
             fn(a, ctx)
         except Exception as exc:                   # one strategy failing must not stop the others
