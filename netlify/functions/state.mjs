@@ -1,7 +1,7 @@
 // Serves the latest paper-trading state from this repository on GitHub.
 // Only an explicit allow-list of files can be read, so the function cannot be used to fetch
 // anything else from the repository.
-const REPO = "Raxen-mvg/oracle-paper-trader";
+const REPO = "Raxen-mvg/SnakeTrader";
 const BRANCH = "main";
 const ALLOWED = {
   "summary.json": "application/json",
