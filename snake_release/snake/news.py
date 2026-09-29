@@ -179,12 +179,19 @@ def news_features(calendar: pd.DataFrame, ann_db: str | None = None,
     FROM c LEFT JOIN daily d ON c.symbol = d.symbol AND c.date = d.date
     """
     out = con.execute(q).df()
+    first = con.execute(f"SELECT MIN(sdate) FROM ({source})").fetchone()[0]
     con.close()
     for g in SINCE:
         raw = out.pop(f"raw_since_{g}")
         # Never announced anything in the window of history we can see: treat as a year ago.
         out[f"news_since_{g}"] = (raw.fillna(CAP_SESSIONS) / CAP_SESSIONS).astype("float32")
+    # Before the feed begins (NSE's archive starts in 2010) there is no news DATA, which is not
+    # the same as a quiet company. Those rows look exactly like a market with no feed: zeros and
+    # has_news = 0. Marking them has_news = 1 taught the first version that twenty years of
+    # silence was normal, and it lost 93% when the announcements began.
+    covered = out["date"] >= pd.Timestamp(first) if first is not None else out["date"] < out["date"].min()
     out["has_news"] = 1.0
     for c in columns():
         out[c] = out[c].fillna(0.0).astype("float32")
+        out.loc[~covered, c] = 0.0
     return out[["symbol", "date"] + columns()]

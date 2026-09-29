@@ -195,6 +195,8 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=DEFAULT_OUT)
     ap.add_argument("--model-tag", default="", help="'smoke_' to test with the smoke model")
+    ap.add_argument("--model-dir", default="",
+                    help="a model folder under snake/ (e.g. model_india_nonews) instead of the promoted one")
     a = ap.parse_args()
     px, bm = load_prices_db()
     today, asof = features_from_prices(px, bm, liquidity_filter=True)
@@ -205,7 +207,7 @@ def main() -> int:
     # The live account scores with whichever variant has been promoted (snake/production.py);
     # --model-tag is only for testing against the default folder.
     from snake.production import model_dir
-    folder = MODEL_DIR if a.model_tag else model_dir()
+    folder = HERE / a.model_dir if a.model_dir else (MODEL_DIR if a.model_tag else model_dir())
     log(f"scoring with {folder.name}")
     write(score(today, asof, folder, a.model_tag), a.out)
     return 0

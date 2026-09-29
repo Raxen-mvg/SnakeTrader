@@ -124,6 +124,8 @@ def announcements(path: str) -> int:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", required=True)
+    ap.add_argument("--out-nonews", default=None,
+                    help="picks for the no-news account, scored with model_nonews/ in the bundle")
     ap.add_argument("--accounts", default=None, help="state/accounts.json, to include holdings")
     ap.add_argument("--force", action="store_true", help="score even if the file looks current")
     a = ap.parse_args()
@@ -134,8 +136,9 @@ def main() -> int:
     universe = json.loads((BUNDLE / "universe.json").read_text())
     held = []
     if a.accounts and Path(a.accounts).exists():
-        acc = json.loads(Path(a.accounts).read_text()).get("snake", {})
-        held = list((acc.get("positions") or {}).keys())
+        accs = json.loads(Path(a.accounts).read_text())
+        for name in ("snake", "snake_nonews"):
+            held += list((accs.get(name, {}).get("positions") or {}).keys())
     symbols = sorted(set(universe) | set(held))
 
     latest = yahoo("^NSEI", "5d")
@@ -143,12 +146,15 @@ def main() -> int:
         log("could not reach Yahoo for the latest session; nothing written")
         return 1
     last_session = str(latest["date"].max().date())
-    out = Path(a.out)
-    if out.exists() and not a.force:
-        cur = json.loads(out.read_text()).get("asof")
-        if cur and cur >= last_session:
-            log(f"picks already describe {cur}; the laptop got there first, nothing to do")
-            return 0
+    nonews = BUNDLE / "model_nonews"
+    outs = [Path(a.out)] + ([Path(a.out_nonews)] if a.out_nonews and nonews.exists() else [])
+
+    def current(p: Path) -> bool:
+        cur = json.loads(p.read_text()).get("asof") if p.exists() else None
+        return bool(cur and cur >= last_session)
+    if not a.force and all(current(p) for p in outs):
+        log(f"picks already describe {last_session}; the laptop got there first, nothing to do")
+        return 0
 
     px, bm = prices(symbols)
     with tempfile.TemporaryDirectory() as td:
@@ -160,7 +166,9 @@ def main() -> int:
     if len(today) < live.MIN_NAMES:
         log("too few names - incomplete day, picks NOT written")
         return 1
-    live.write(live.score(today, asof, BUNDLE / "model"), str(out))
+    live.write(live.score(today, asof, BUNDLE / "model"), a.out)
+    if len(outs) > 1:
+        live.write(live.score(today, asof, nonews), a.out_nonews)
     return 0
 
 
