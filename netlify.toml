@@ -1,0 +1,19 @@
+# Dashboard for the paper-trading accounts.
+#
+# The page is static and never needs rebuilding when the accounts change: it asks a small function
+# for the latest state files, and the function reads them from this repository on GitHub. Netlify
+# therefore rebuilds only when the dashboard's own code changes - not on every tick - which keeps
+# it inside the free tier's build minutes.
+#
+# If this repository is private, set GITHUB_TOKEN in Netlify (Site configuration > Environment
+# variables) to a fine-grained token with read-only access to this repository's contents.
+[build]
+  publish = "site"
+  functions = "netlify/functions"
+  command = "echo static site, nothing to build"
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- site/ netlify/ netlify.toml"
+
+[[redirects]]
+  from = "/api/state"
+  to = "/.netlify/functions/state"
+  status = 200

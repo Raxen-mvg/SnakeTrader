@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paper Trading Accounts</title>
+<meta name="description" content="Live paper-trading accounts on NSE prices: every strategy started with Rs 2,00,000 of fake money.">
+<style>
+  :root {
+    --bg: #f7f7f5; --panel: #ffffff; --ink: #1c1c1a; --muted: #6b6b66; --line: #e4e3de;
+    --up: #147a4a; --down: #b3261e; --accent: #2f5d8a; --chip: #eef2f6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141413; --panel: #1d1d1b; --ink: #ecebe6; --muted: #a09f98; --line: #2f2e2b;
+      --up: #4cc38a; --down: #ff7a6e; --accent: #8ab4de; --chip: #25282c;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #141413; --panel: #1d1d1b; --ink: #ecebe6; --muted: #a09f98; --line: #2f2e2b;
+    --up: #4cc38a; --down: #ff7a6e; --accent: #8ab4de; --chip: #25282c;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 1040px; margin: 0 auto; padding: 24px 16px 48px; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  h2 { font-size: 16px; margin: 32px 0 10px; }
+  .sub { color: var(--muted); margin: 0 0 20px; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+           overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th, td { padding: 9px 12px; text-align: right; border-bottom: 1px solid var(--line);
+           white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; }
+  th { color: var(--muted); font-weight: 600; font-size: 13px; }
+  tr:last-child td { border-bottom: 0; }
+  .up { color: var(--up); } .down { color: var(--down); }
+  .snake td:first-child { font-weight: 700; }
+  .chip { display: inline-block; background: var(--chip); color: var(--accent); border-radius: 999px;
+          padding: 1px 8px; font-size: 12px; font-weight: 600; margin-left: 6px; }
+  .note { color: var(--muted); font-size: 13px; margin-top: 8px; }
+  .err { color: var(--down); }
+  .reason { text-align: left; color: var(--muted); max-width: 360px; overflow: hidden;
+            text-overflow: ellipsis; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Paper Trading Accounts</h1>
+  <p class="sub" id="updated">Loading…</p>
+
+  <div class="panel"><table id="accounts">
+    <thead><tr><th>Strategy</th><th>Equity</th><th>Return</th><th>Open</th><th>Closed</th>
+      <th>Costs paid</th></tr></thead><tbody></tbody></table></div>
+  <p class="note">Every account started with Rs 2,00,000 of fake money on 2026-09-28 or later and
+    trades on live NSE prices, paying real Indian charges on every order. None of this is
+    investment advice.</p>
+
+  <h2>SNAKE's current view <span class="chip" id="snake-asof"></span></h2>
+  <div class="panel"><table id="snake">
+    <thead><tr><th>Stock</th><th>Expected return</th><th>Over</th><th>Rank</th></tr></thead>
+    <tbody></tbody></table></div>
+  <p class="note">The names SNAKE ranks highest, each with the return it expects after
+    calibration and the holding period that return belongs to. It buys only what is expected to
+    beat its own round-trip cost.</p>
+
+  <h2>Recent trades</h2>
+  <div class="panel"><table id="trades">
+    <thead><tr><th>Strategy</th><th>When</th><th>Side</th><th>Stock</th><th>Value</th>
+      <th>Why</th></tr></thead><tbody></tbody></table></div>
+</main>
+<script>
+const rs = v => "Rs " + Math.round(v).toLocaleString("en-IN");
+const pct = v => (v > 0 ? "+" : "") + v.toFixed(2) + "%";
+const cls = v => v > 0 ? "up" : v < 0 ? "down" : "";
+const get = async f => {
+  const r = await fetch("/api/state?f=" + f);
+  if (!r.ok) throw new Error(f + ": " + r.status);
+  return f.endsWith(".json") ? r.json() : r.text();
+};
+function csv(text) {
+  const rows = [], re = /("([^"]|"")*"|[^,\r\n]*)(,|\r?\n|$)/g;
+  let row = [], m;
+  while ((m = re.exec(text)) && m[0] !== "") {
+    let v = m[1];
+    if (v.startsWith('"')) v = v.slice(1, -1).replace(/""/g, '"');
+    row.push(v);
+    if (m[3] !== ",") { rows.push(row); row = []; }
+  }
+  const [head, ...body] = rows;
+  return body.filter(r => r.length === head.length)
+             .map(r => Object.fromEntries(head.map((h, i) => [h, r[i]])));
+}
+const cell = (html, c = "") => `<td class="${c}">${html}</td>`;
+
+(async () => {
+  try {
+    const s = await get("summary.json");
+    document.getElementById("updated").textContent =
+      "Updated " + new Date(s.updated).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) +
+      " IST · model picks as of " + s.picks_asof;
+    const rows = [...s.strategies].sort((a, b) => b.equity - a.equity);
+    document.querySelector("#accounts tbody").innerHTML = rows.map(a =>
+      `<tr class="${a.strategy === "snake" ? "snake" : ""}">` +
+      cell(a.strategy === "snake" ? 'SNAKE<span class="chip">new model</span>' : a.strategy) +
+      cell(rs(a.equity)) + cell(pct(a.return_pct), cls(a.return_pct)) +
+      cell(a.open_positions) + cell(a.closed_trades) + cell(rs(a.costs_paid || 0)) +
+      "</tr>").join("");
+  } catch (e) {
+    document.getElementById("updated").innerHTML =
+      `<span class="err">Could not load the accounts (${e.message}).</span>`;
+  }
+  try {
+    const p = await get("picks_snake.json");
+    document.getElementById("snake-asof").textContent = "as of " + p.asof;
+    document.querySelector("#snake tbody").innerHTML = p.top.slice(0, 12).map(t =>
+      "<tr>" + cell(t.symbol.replace(".NS", "")) +
+      cell(pct(100 * t.expected), cls(t.expected)) + cell(t.horizon + " sessions") +
+      cell("#" + t.rank) + "</tr>").join("");
+  } catch (e) {
+    document.querySelector("#snake tbody").innerHTML =
+      '<tr><td colspan="4" class="note">No SNAKE picks yet — it starts after its first training run.</td></tr>';
+  }
+  try {
+    const t = csv(await get("trades.csv")).slice(-25).reverse();
+    document.querySelector("#trades tbody").innerHTML = t.map(r =>
+      "<tr>" + cell(r.strategy) +
+      cell(new Date(r.time).toLocaleString("en-IN", { timeZone: "Asia/Kolkata",
+        day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })) +
+      cell(r.side, r.side === "BUY" ? "up" : "down") + cell(r.symbol.replace(".NS", "")) +
+      cell(rs(+r.value)) + `<td class="reason" title="${r.reason.replace(/"/g, "&quot;")}">${r.reason}</td>` +
+      "</tr>").join("");
+  } catch (e) {
+    document.querySelector("#trades tbody").innerHTML =
+      '<tr><td colspan="6" class="note">No trades loaded.</td></tr>';
+  }
+})();
+</script>
+</body>
+</html>
