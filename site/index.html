@@ -102,8 +102,9 @@ const cell = (html, c = "") => `<td class="${c}">${html}</td>`;
       " IST · model picks as of " + s.picks_asof;
     const rows = [...s.strategies].sort((a, b) => b.equity - a.equity);
     document.querySelector("#accounts tbody").innerHTML = rows.map(a =>
-      `<tr class="${a.strategy === "snake" ? "snake" : ""}">` +
-      cell(a.strategy === "snake" ? 'SNAKE<span class="chip">new model</span>' : a.strategy) +
+      `<tr class="${a.strategy.startsWith("snake") ? "snake" : ""}">` +
+      cell(a.strategy === "snake" ? 'SNAKE<span class="chip">with news</span>'
+           : a.strategy === "snake_nonews" ? 'SNAKE<span class="chip">no news</span>' : a.strategy) +
       cell(rs(a.equity)) + cell(pct(a.return_pct), cls(a.return_pct)) +
       cell(a.open_positions) + cell(a.closed_trades) + cell(rs(a.costs_paid || 0)) +
       "</tr>").join("");

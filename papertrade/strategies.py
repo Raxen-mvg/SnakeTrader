@@ -889,4 +889,5 @@ def snake(acc: Account, ctx: Ctx) -> None:
     acc.memo["snake_entry"] = ctx.t.date().isoformat()
 
 
-STRATEGIES["snake"] = snake
+STRATEGIES["snake"] = snake              # trained with news; reads picks_snake.json
+STRATEGIES["snake_nonews"] = snake       # same rule, no-news model; reads picks_snake_nonews.json
