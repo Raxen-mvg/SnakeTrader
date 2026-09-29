@@ -1,14 +1,19 @@
 name: paper-trade
 
+# Keeps every account trading and measured when the laptop is off. GitHub starts scheduled runs
+# late and skips many of them (one-shot ticks every 15 minutes arrived about twice a day), so each
+# run now STAYS UP through the session and ticks every three minutes until the close. Three start
+# slots cover a late or missing start; the concurrency group runs them one after another, and a
+# run that starts after the close exits at once. Minutes are free on a public repository.
 on:
   schedule:
-    # Every 15 minutes, 09:15-15:30 IST (03:45-10:00 UTC), Monday-Friday.
-    # GitHub may start scheduled runs a few minutes late; the engine checks the real time.
-    - cron: "*/15 3-10 * * 1-5"
+    - cron: "40 3 * * 1-5"    # 09:10 IST
+    - cron: "0 5 * * 1-5"     # 10:30 IST, if the first never started
+    - cron: "30 6 * * 1-5"    # 12:00 IST, last resort
   workflow_dispatch:
     inputs:
       force:
-        description: "Act even if the market is closed (testing)"
+        description: "One tick even if the market is closed (testing)"
         type: boolean
         default: false
 
@@ -22,7 +27,7 @@ concurrency:
 jobs:
   tick:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 360
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -30,13 +35,24 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
-      - name: Tick
-        run: python -m papertrade.engine ${{ inputs.force && '--force' || '' }}
-      - name: Save state
+      - name: Trade through the session
+        env:
+          FORCE: ${{ inputs.force && '--force' || '' }}
         run: |
           git config user.name "paper-trader"
           git config user.email "paper-trader@users.noreply.github.com"
-          git add state
-          if git diff --cached --quiet; then exit 0; fi
-          git commit -m "tick $(date -u +%Y-%m-%dT%H:%MZ)"
-          for i in 1 2 3; do git pull --rebase && git push && break; sleep 5; done
+          stop=$(( $(date +%s) + 350 * 60 ))
+          while [ "$(date +%s)" -lt "$stop" ]; do
+            # Start every tick from the latest state: the laptop may have ticked in between.
+            git fetch -q origin main && git reset -q --hard origin/main
+            python -m papertrade.engine $FORCE || true
+            git add state
+            if ! git diff --cached --quiet; then
+              git commit -q -m "tick $(date -u +%Y-%m-%dT%H:%MZ)"
+              # If the laptop pushed first, drop this tick rather than overwrite its state.
+              git push -q || { git fetch -q origin main; git reset -q --hard origin/main; }
+            fi
+            [ -n "$FORCE" ] && break
+            [ "$(TZ=Asia/Kolkata date +%H%M)" -gt 1532 ] && break
+            sleep 180
+          done
