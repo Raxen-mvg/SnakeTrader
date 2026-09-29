@@ -1,4 +1,4 @@
-# Oracle paper trader
+# SnakeTrader
 
 Every strategy trades its own ₹2,00,000 of fake money at live NSE prices, paying Zerodha's
 published charges on every order: transaction tax, stamp duty, exchange and SEBI fees, GST, the
@@ -47,7 +47,7 @@ site never needs rebuilding when the accounts change.
 
 To deploy on Netlify (free tier):
 
-1. In Netlify: **Add new site → Import an existing project → GitHub**, and pick this repository.
+1. In Netlify: **Add new site → Import an existing project → GitHub**, and pick **SnakeTrader**.
    Build settings come from `netlify.toml`; leave them as they are.
 2. While this repository is private, create a fine-grained GitHub token with **read-only access to
    this repository's Contents**, and add it in Netlify under **Site configuration → Environment
