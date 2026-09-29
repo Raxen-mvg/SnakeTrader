@@ -9,7 +9,8 @@ during market hours, and GitHub Actions — so it keeps going when the laptop is
 
 | Account | Rule |
 |---|---|
-| **snake** | **SNAKE**, the deep multi-horizon model with news features. Buys only what it expects to beat its own round trip; keeps a holding only while it still expects to beat the cost of selling it. Holding period is whatever the model says. |
+| **snake** | **SNAKE with news**: the deep multi-horizon model with NSE announcement features, trained on 2010 onward. Buys only what it expects to beat its own round trip; keeps a holding only while it still expects to beat the cost of selling it. Holding period is whatever the model says. |
+| **snake_nonews** | **SNAKE without news**: the same network and the same trading rule, trained on the full price history without announcements. The two run side by side until December 2026 to see which makes more money. |
 | oracle | The production model. Money goes to whatever is expected to earn most per day net of costs; nothing is bought below its cost. |
 | unified | The production model's top names, sized by rank |
 | intraweek | Top 5 held for 5 trading days |
@@ -26,14 +27,16 @@ during market hours, and GitHub Actions — so it keeps going when the laptop is
 
 - **Oracle** picks (`state/picks_IN.json`) are exported from the research machine's nightly
   snapshot.
-- **SNAKE** picks (`state/picks_snake.json`) come from either clock:
+- **SNAKE** picks (`state/picks_snake.json` with news, `state/picks_snake_nonews.json` without)
+  come from either clock:
   - the laptop, each morning, after refreshing a fortnight of NSE announcements;
   - the `snake-daily` workflow on GitHub Actions, after the close and again before the open, from
     the model release in `snake_release/`. It fetches prices from Yahoo and a year of
     announcements from NSE, computes the same features with the same code, and commits the picks.
     If the laptop already wrote picks for the latest session, it stops at once.
 
-`snake_release/` holds SNAKE's weights (about a megabyte), its feature list and calibration, the
+`snake_release/` holds both SNAKE models' weights (`model/` with news, `model_nonews/` without,
+about a megabyte each), their feature lists and calibration, the
 universe it scores, and its code with the production feature modules copied verbatim, so cloud
 features cannot drift from training. The research machine republishes it whenever SNAKE is
 retrained. No price data is ever committed.
@@ -66,14 +69,15 @@ All in `state/`:
 | `equity.csv` | Equity per strategy at every tick |
 | `daily_profit.csv` | Profit per strategy per day |
 | `picks_IN.json` | The production model's current picks |
-| `picks_snake.json` | SNAKE's current picks: every scored name's expected return and best horizon |
+| `picks_snake.json` | SNAKE with news: every scored name's expected return and best horizon |
+| `picks_snake_nonews.json` | SNAKE without news, same format |
 | `accounts.json` | Full account state (source of truth) |
 
 ## Manual runs
 
 - `python -m papertrade.engine --force` acts regardless of market hours. On GitHub: **Actions →
   paper-trade → Run workflow**, tick *force*.
-- **Actions → snake-daily → Run workflow** recomputes SNAKE's picks in the cloud now.
+- **Actions → snake-daily → Run workflow** recomputes both SNAKE picks files in the cloud now.
 
 Tests: `python tests/test_papertrade.py`, `python tests/test_oracle_account.py`,
 `python tests/test_snake_account.py`.
