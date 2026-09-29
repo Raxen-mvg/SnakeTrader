@@ -13,7 +13,7 @@ if ($now.DayOfWeek -notin 'Saturday','Sunday' -and $now.TimeOfDay -ge [TimeSpan]
 git add state
 git diff --cached --quiet
 if ($LASTEXITCODE -ne 0) {
-    git -c user.name="Saksham Maheshwari" -c user.email="clearaedu@gmail.com" commit -q -m "tick $(Get-Date -Format 'yyyy-MM-dd HH:mm')"
+    git -c user.name="Saksham Maheshwari" -c user.email="rockboy5431@gmail.com" commit -q -m "tick $(Get-Date -Format 'yyyy-MM-dd HH:mm')"
     for ($i = 0; $i -lt 3; $i++) {
         git push -q 2>&1 | Out-Null
         if ($LASTEXITCODE -eq 0) { break }

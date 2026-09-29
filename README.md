@@ -1,49 +1,90 @@
 # Oracle paper trader
 
-Every strategy trades its own Rs 50,000 of fake money at live (slightly delayed) NSE prices,
-paying Zerodha's published charges on every order. Runs on GitHub Actions every 15 minutes
-during market hours, so it keeps going when the research machine is off.
+Every strategy trades its own ₹2,00,000 of fake money at live NSE prices, paying Zerodha's
+published charges on every order: transaction tax, stamp duty, exchange and SEBI fees, GST, the
+flat depository charge on every sale, and slippage. It runs from two clocks — the research laptop
+during market hours, and GitHub Actions — so it keeps going when the laptop is off.
 
-## Strategies
+## Accounts
 
 | Account | Rule |
 |---|---|
-| intraday | Top 5 model picks bought after 09:30, sold after 15:05 |
+| **snake** | **SNAKE**, the deep multi-horizon model with news features. Buys only what it expects to beat its own round trip; keeps a holding only while it still expects to beat the cost of selling it. Holding period is whatever the model says. |
+| oracle | The production model. Money goes to whatever is expected to earn most per day net of costs; nothing is bought below its cost. |
+| unified | The production model's top names, sized by rank |
 | intraweek | Top 5 held for 5 trading days |
 | intramonth | Top 5; a name is kept while the model ranks it in its top 25% |
-| random_hold | Top 5, each held a random 2-40 trading days (control) |
+| random_hold | Top 5, each held a random 2–40 trading days (control) |
+| intraday | Same-day trades, gated on a calibrated expected edge (rarely trades, by design) |
+| statarb | Market-neutral reversion sleeve (currently switched off) |
 | gold | GOLDBEES held |
 | gold_trend | GOLDBEES only while above its 200-day average |
-| nifty_calls | SIMULATED: one ATM Nifty call Monday to Thursday, Black-Scholes priced |
+| nifty_calls | SIMULATED: one at-the-money Nifty call, Black-Scholes priced |
 | benchmark | NIFTYBEES held; every strategy must beat this |
 
-A virtual combined account re-weights across strategies by recent risk-adjusted return.
+## Where picks come from
 
-## Data for a frontend or backend
+- **Oracle** picks (`state/picks_IN.json`) are exported from the research machine's nightly
+  snapshot.
+- **SNAKE** picks (`state/picks_snake.json`) come from either clock:
+  - the laptop, each morning, after refreshing a fortnight of NSE announcements;
+  - the `snake-daily` workflow on GitHub Actions, after the close and again before the open, from
+    the model release in `snake_release/`. It fetches prices from Yahoo and a year of
+    announcements from NSE, computes the same features with the same code, and commits the picks.
+    If the laptop already wrote picks for the latest session, it stops at once.
 
-All in `state/`, updated every tick:
+`snake_release/` holds SNAKE's weights (about a megabyte), its feature list and calibration, the
+universe it scores, and its code with the production feature modules copied verbatim, so cloud
+features cannot drift from training. The research machine republishes it whenever SNAKE is
+retrained. No price data is ever committed.
+
+## Dashboard
+
+`site/` is a static dashboard showing every account, SNAKE's current top names with expected return
+and horizon, and recent trades with the reason for each. It reads state through a Netlify function
+(`netlify/functions/state.mjs`) that fetches an allow-list of files from this repository, so the
+site never needs rebuilding when the accounts change.
+
+To deploy on Netlify (free tier):
+
+1. In Netlify: **Add new site → Import an existing project → GitHub**, and pick this repository.
+   Build settings come from `netlify.toml`; leave them as they are.
+2. While this repository is private, create a fine-grained GitHub token with **read-only access to
+   this repository's Contents**, and add it in Netlify under **Site configuration → Environment
+   variables** as `GITHUB_TOKEN`. Once the repository is public this step is unnecessary.
+
+To check the page locally: `python tools/dashboard_dev.py`, then open `http://127.0.0.1:8765`.
+
+## State files
+
+All in `state/`:
 
 | File | Contents |
 |---|---|
 | `summary.json` | Per strategy: equity, return %, cash, open positions, closed trades, win rate, costs paid; plus the combined account |
-| `trades.csv` | Every order: time, strategy, side, symbol, qty, fill price, value, costs, product, realised P&L, reason |
+| `trades.csv` | Every order: time, strategy, side, symbol, quantity, fill price, value, costs, product, reason |
 | `equity.csv` | Equity per strategy at every tick |
-| `combined.csv` | Combined account equity and daily weights |
-| `REPORT.md` | Human-readable table |
-| `picks_IN.json` | Current model picks (pushed from the research machine) |
+| `daily_profit.csv` | Profit per strategy per day |
+| `picks_IN.json` | The production model's current picks |
+| `picks_snake.json` | SNAKE's current picks: every scored name's expected return and best horizon |
 | `accounts.json` | Full account state (source of truth) |
 
-Raw file URLs from this repo (or the GitHub contents API) are enough for a frontend; a backend can
-poll `summary.json`.
+## Manual runs
 
-## Manual run
+- `python -m papertrade.engine --force` acts regardless of market hours. On GitHub: **Actions →
+  paper-trade → Run workflow**, tick *force*.
+- **Actions → snake-daily → Run workflow** recomputes SNAKE's picks in the cloud now.
 
-`python -m papertrade.engine --force` acts regardless of market hours. In GitHub: Actions,
-paper-trade, Run workflow, tick "force".
+Tests: `python tests/test_papertrade.py`, `python tests/test_oracle_account.py`,
+`python tests/test_snake_account.py`.
 
 ## Honest limits
 
-- Prices come from a free delayed feed; fills add slippage (0.15% stocks, 0.05% ETFs, 0.5% options).
-- Option trades are simulated from the real Nifty level and realised volatility, not real option quotes.
-- Futures are excluded: Rs 50,000 cannot margin one Nifty lot.
-- If new picks are not pushed, strategies keep trading on the last picks.
+- Prices come from a free feed; fills add slippage (0.15% stocks, 0.05% ETFs, 0.5% options).
+- Option trades are simulated from the real Nifty level and realised volatility, not real quotes.
+- GitHub starts scheduled workflows late and sometimes skips them, so with the laptop off the
+  accounts may tick only a few times a day. SNAKE decides once a day, so it is least affected.
+- If picks go stale, strategies keep trading on the last ones; SNAKE stops buying and stops
+  selling on its model's say-so once its picks are more than four days old, keeping only its
+  disaster stop.
+- Nothing here is investment advice.
