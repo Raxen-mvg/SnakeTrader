@@ -810,3 +810,83 @@ def statarb(acc: Account, ctx: Ctx) -> None:
 STRATEGIES["oracle"] = oracle
 STRATEGIES["statarb"] = statarb
 ALWAYS_QUOTE = ALWAYS_QUOTE + STATARB_UNIVERSE   # the stat-arb book needs its whole cross-section quoted      # defined below the table, so registered here
+
+
+# ---------------------------------------------------------------------------------------------
+# SNAKE: a separate model with its own Rs 2 lakh, trading India from 2026-09-29.
+#
+# A deep network trained on every market's daily history plus Indian exchange announcements,
+# predicting six holding periods at once. Its picks file carries, for every scored name, the
+# best return it expects across those horizons after calibration against what that level of
+# prediction actually paid. The account uses one rule for everything, the same one measured in
+# its backtest: buy only what is expected to beat its own round trip, keep a holding only while
+# it is still expected to beat the cost of selling it. The holding period is therefore whatever
+# the model says - it is never set in advance.
+# ---------------------------------------------------------------------------------------------
+SNAKE_NAMES = 6
+SNAKE_STALE_DAYS = 4          # calendar days: stop BUYING on a picks file older than this
+
+
+def _snake_fresh(ctx: Ctx) -> bool:
+    s = getattr(ctx, "snake", None) or {}
+    try:
+        asof = dt.date.fromisoformat(s.get("asof", ""))
+    except ValueError:
+        return False
+    return (ctx.t.date() - asof).days <= SNAKE_STALE_DAYS
+
+
+def snake(acc: Account, ctx: Ctx) -> None:
+    """SNAKE's own book: expected return against real cost, decided per name."""
+    if ctx.t.time() < ENTRY_AFTER:
+        return
+    s = getattr(ctx, "snake", None) or {}
+    expected = s.get("expected", {})
+    fresh = _snake_fresh(ctx)
+
+    for sym, pos in list(acc.positions.items()):
+        if sym not in ctx.prices:
+            continue
+        price = ctx.prices[sym]
+        move = price / pos.avg_price - 1
+        if move <= DISASTER_STOP:
+            acc.sell(sym, price, ctx.t, slippage_bps=SLIP_STOCK, reason=f"disaster stop {100 * move:+.1f}%")
+            _bar_today(acc, ctx, sym)
+            continue
+        if not fresh:
+            continue                      # no current view of this name: hold, do not guess
+        want = expected.get(sym)
+        leaving = exit_cost(pos.qty * price)
+        if want is None or want <= leaving:
+            why = ("no longer scored" if want is None
+                   else f"expects {100 * want:+.2f}%, selling costs {100 * leaving:.2f}%")
+            acc.sell(sym, price, ctx.t, slippage_bps=SLIP_STOCK, reason=f"SNAKE exit: {why}")
+            _bar_today(acc, ctx, sym)
+
+    if not fresh or acc.memo.get("snake_entry") == ctx.t.date().isoformat():
+        return
+    free = SNAKE_NAMES - len(acc.positions)
+    if free <= 0 or acc.cash < MIN_TICKET:
+        return
+    equity = acc.equity(ctx.prices)
+    ticket = min(equity / SNAKE_NAMES, acc.cash / free)
+    if ticket < MIN_TICKET:
+        return
+    barred = _barred_today(acc, ctx)
+    bought = 0
+    for p in s.get("top", []):
+        sym = p["symbol"]
+        if bought >= free or sym in acc.positions or sym in barred or sym not in ctx.prices:
+            continue
+        need = round_trip_cost(ticket)
+        if float(p.get("expected", 0.0)) <= need:
+            break                         # the list is sorted: nothing further down clears it
+        ok = acc.buy(sym, min(ticket, acc.cash), ctx.prices[sym], ctx.t, "delivery",
+                     slippage_bps=SLIP_STOCK,
+                     reason=f"SNAKE expects {100 * float(p['expected']):+.2f}% over "
+                            f"{p.get('horizon', '?')} sessions against a {100 * need:.2f}% round trip")
+        bought += int(bool(ok))
+    acc.memo["snake_entry"] = ctx.t.date().isoformat()
+
+
+STRATEGIES["snake"] = snake
