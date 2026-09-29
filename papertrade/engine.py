@@ -231,6 +231,21 @@ def write_reports(accounts: dict, prices: dict, t: dt.datetime, picks_asof: str)
     (STATE / "REPORT.md").write_text("\n".join(lines), encoding="utf-8")
 
 
+def load_snake_picks() -> dict:
+    """SNAKE's own picks file, with the same company filter as the main list applied."""
+    f = STATE / "picks_snake.json"
+    if not f.exists():
+        return {}
+    try:
+        d = json.loads(f.read_text())
+    except (json.JSONDecodeError, OSError):
+        return {}
+    blocked = not_companies()
+    d["top"] = [p for p in d.get("top", []) if is_company(p["symbol"], blocked)]
+    d["expected"] = {k: v for k, v in d.get("expected", {}).items() if is_company(k, blocked)}
+    return d
+
+
 def tick(force: bool = False) -> int:
     t = now_ist()
     if not force and not session_open(t):
@@ -251,6 +266,8 @@ def tick(force: bool = False) -> int:
     held = {s for a in accounts.values() for s, p in a.positions.items() if p.product != "option"}
     want = set(ALWAYS_QUOTE) | held | {p["symbol"] for p in picks[: TOP_N * 3]}
     want |= {p["symbol"] for p in (intraday_picks or [])}
+    snake_picks = load_snake_picks()
+    want |= {p["symbol"] for p in snake_picks.get("top", [])[:15]}
     prices = latest_prices(sorted(want), asof=t)
     if not prices:
         log.warning("no prices returned (holiday, outage or rate limit); skipping this tick")
@@ -268,6 +285,7 @@ def tick(force: bool = False) -> int:
         ctx = Ctx(t, prices, picks, ranks, first)
         if intraday_picks is not None:
             ctx.intraday_picks = intraday_picks
+        ctx.snake = snake_picks
         try:
             fn(a, ctx)
         except Exception as exc:                   # one strategy failing must not stop the others
