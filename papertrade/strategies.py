@@ -891,3 +891,4 @@ def snake(acc: Account, ctx: Ctx) -> None:
 
 STRATEGIES["snake"] = snake              # trained with news; reads picks_snake.json
 STRATEGIES["snake_nonews"] = snake       # same rule, no-news model; reads picks_snake_nonews.json
+STRATEGIES["snake_abs"] = snake          # same rule, absolute-return model; reads picks_snake_abs.json

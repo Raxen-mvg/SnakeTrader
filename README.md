@@ -10,6 +10,7 @@ during market hours, and GitHub Actions — so it keeps going when the laptop is
 | Account | Rule |
 |---|---|
 | **snake** | **SNAKE with news**: the deep multi-horizon model with NSE announcement features, trained on 2010 onward. Buys only what it expects to beat its own round trip; keeps a holding only while it still expects to beat the cost of selling it. Holding period is whatever the model says. |
+| **snake_abs** | **SNAKE absolute return**: the same trading rule, with a network trained to predict each stock's own return (not its rank against the others), with NSE news, the results calendar (announced board meetings, past results reactions, peers' reactions) and market state as inputs. Backtest 2013–2026: Rs 2 lakh became Rs 63.8 and Rs 71.5 lakh on two seed pairs, with worst drawdowns near −44%. Live from 30 September 2026. |
 | **snake_nonews** | **SNAKE without news**: the same network and the same trading rule, trained on the full price history without announcements. The two run side by side until December 2026 to see which makes more money. |
 | oracle | The production model. Money goes to whatever is expected to earn most per day net of costs; nothing is bought below its cost. |
 | unified | The production model's top names, sized by rank |
@@ -71,6 +72,7 @@ All in `state/`:
 | `picks_IN.json` | The production model's current picks |
 | `picks_snake.json` | SNAKE with news: every scored name's expected return and best horizon |
 | `picks_snake_nonews.json` | SNAKE without news, same format |
+| `picks_snake_abs.json` | SNAKE absolute return, same format |
 | `accounts.json` | Full account state (source of truth) |
 
 ## Manual runs

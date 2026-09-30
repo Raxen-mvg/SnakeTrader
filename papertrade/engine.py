@@ -233,8 +233,11 @@ def write_reports(accounts: dict, prices: dict, t: dt.datetime, picks_asof: str)
 
 # Each SNAKE account trades from its own picks file. Two versions run side by side from
 # 2026-09-30 so real money decides between them: "snake" is trained with Indian exchange news,
-# "snake_nonews" is the same network trained without it.
-SNAKE_FILES = {"snake": "picks_snake.json", "snake_nonews": "picks_snake_nonews.json"}
+# "snake_nonews" is the same network trained without it. A third, "snake_abs", joined on
+# 2026-09-30: a network trained to predict each stock's own return, with the results calendar and
+# market state as inputs, which made the most money on both seed pairs in backtest.
+SNAKE_FILES = {"snake": "picks_snake.json", "snake_nonews": "picks_snake_nonews.json",
+               "snake_abs": "picks_snake_abs.json"}
 
 
 def load_snake_picks(file: str = "picks_snake.json") -> dict:
