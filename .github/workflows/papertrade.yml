@@ -2,14 +2,21 @@ name: paper-trade
 
 # Keeps every account trading and measured when the laptop is off. GitHub starts scheduled runs
 # late and skips many of them (one-shot ticks every 15 minutes arrived about twice a day), so each
-# run now STAYS UP through the session and ticks every three minutes until the close. Three start
+# run now STAYS UP through the session and ticks every three minutes until the close. Several start
 # slots cover a late or missing start; the concurrency group runs them one after another, and a
 # run that starts after the close exits at once. Minutes are free on a public repository.
 on:
   schedule:
-    - cron: "40 3 * * 1-5"    # 09:10 IST
-    - cron: "0 5 * * 1-5"     # 10:30 IST, if the first never started
-    - cron: "30 6 * * 1-5"    # 12:00 IST, last resort
+    # Odd minutes, because GitHub drops the most runs at the top of the hour. On 30 September the
+    # 09:10 slot never fired; extra slots cost nothing, since a slot that finds a run already going
+    # waits behind it and exits at the close.
+    - cron: "37 3 * * 1-5"    # 09:07 IST
+    - cron: "53 3 * * 1-5"    # 09:23 IST
+    - cron: "17 4 * * 1-5"    # 09:47 IST
+    - cron: "43 4 * * 1-5"    # 10:13 IST
+    - cron: "11 5 * * 1-5"    # 10:41 IST
+    - cron: "29 6 * * 1-5"    # 11:59 IST
+    - cron: "47 7 * * 1-5"    # 13:17 IST
   workflow_dispatch:
     inputs:
       force:
