@@ -74,10 +74,14 @@ def load_prices_db(db_path: str = MAIN_DB) -> tuple[pd.DataFrame, pd.DataFrame]:
     from quantlab.db import DB, OPERATING_COMPANY_SQL
 
     db = DB(db_path, read_only=True, threads=8, memory_limit="6GB")
-    syms = db.q(f"SELECT symbol FROM universe WHERE market = 'IN' AND ({OPERATING_COMPANY_SQL})"
-                )["symbol"].tolist()
+    # NSE listings only: every SNAKE was trained on the NSE daily table (3,533 '.NS' symbols). On
+    # 2026-09-30 the price database gained BSE listings under market 'IN', and an evening run scored
+    # 490 '.BO' names the models had never seen, some of them at the top of the list.
+    syms = db.q(f"SELECT symbol FROM universe WHERE market = 'IN' AND symbol LIKE '%.NS' "
+                f"AND ({OPERATING_COMPANY_SQL})")["symbol"].tolist()
     cal = db.q("""SELECT DISTINCT p.date FROM prices p JOIN universe u USING (symbol)
-                  WHERE u.market = 'IN' ORDER BY p.date DESC LIMIT ?""", [HISTORY_SESSIONS])
+                  WHERE u.market = 'IN' AND u.symbol LIKE '%.NS'
+                  ORDER BY p.date DESC LIMIT ?""", [HISTORY_SESSIONS])
     start = pd.to_datetime(cal["date"]).min()
     last = pd.to_datetime(cal["date"]).max()
 
@@ -228,6 +232,15 @@ def main() -> int:
     # --model-tag is only for testing against the default folder.
     from snake.production import model_dir
     folder = HERE / a.model_dir if a.model_dir else (MODEL_DIR if a.model_tag else model_dir())
+    # Never replace a picks file that already describes a later session: the cloud may have scored
+    # a fresher day than this machine's database holds.
+    try:
+        have = json.loads(Path(a.out).read_text()).get("asof", "")
+    except (OSError, ValueError):
+        have = ""
+    if have and have > str(asof.date()):
+        log(f"{a.out} already describes {have}, later than {asof.date()}; left as it is")
+        return 0
     log(f"scoring with {folder.name}")
     write(score(today, asof, folder, a.model_tag), a.out)
     return 0

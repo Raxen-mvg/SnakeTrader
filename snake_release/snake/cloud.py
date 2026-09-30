@@ -163,7 +163,7 @@ def main() -> int:
     sys.path.insert(0, str(BUNDLE))
     from snake import live
 
-    universe = json.loads((BUNDLE / "universe.json").read_text())
+    universe = [s for s in json.loads((BUNDLE / "universe.json").read_text()) if s.endswith(".NS")]
     held = []
     if a.accounts and Path(a.accounts).exists():
         accs = json.loads(Path(a.accounts).read_text())
