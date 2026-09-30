@@ -102,7 +102,8 @@ def load_prices_db(db_path: str = MAIN_DB) -> tuple[pd.DataFrame, pd.DataFrame]:
 
 
 def features_from_prices(px: pd.DataFrame, bm: pd.DataFrame, liquidity_filter: bool = True,
-                         ann_db: str | None = None) -> tuple[pd.DataFrame, pd.Timestamp]:
+                         ann_db: str | None = None,
+                         bm_db: str | None = None) -> tuple[pd.DataFrame, pd.Timestamp]:
     """From a price panel to today's feature rows, exactly as the training table was built.
 
     liquidity_filter=False is for a panel that has ALREADY been restricted to yesterday's liquid
@@ -139,6 +140,20 @@ def features_from_prices(px: pd.DataFrame, bm: pd.DataFrame, liquidity_filter: b
     from snake import news
     nf = news.news_features(d[d["symbol"].isin(today["symbol"])][["symbol", "date"]], ann_db)
     today = today.merge(nf[nf["date"] == asof], on=["symbol", "date"], how="left")
+
+    # Results calendar and market state (snake/calendar.py), for the models trained with them.
+    # Computed over the whole price panel, as in training, then today's rows kept.
+    from snake import calendar
+    panel = px[["symbol", "date", "adj_close"]].copy()
+    panel["date"] = pd.to_datetime(panel["date"])
+    try:
+        cf = calendar.all_features(panel, bm_db or calendar.BM_DB)
+        today = today.merge(cf[cf["date"] == asof], on=["symbol", "date"], how="left")
+        log(f"results meeting announced and pending for {int((today['cal_upcoming'] > 0).sum())} "
+            f"names; market {100 * float(cf.loc[cf['date'] == asof, 'mkt_ret_21'].iloc[0]):+.1f}% "
+            f"over 21 sessions")
+    except Exception as e:                   # the older models do not need these columns
+        log(f"calendar features unavailable ({type(e).__name__}: {e}); scoring without them")
     return today, asof
 
 
@@ -149,6 +164,11 @@ def score(today: pd.DataFrame, asof: pd.Timestamp, model_dir: Path = MODEL_DIR,
 
     meta = json.loads((Path(model_dir) / f"{tag}meta.json").read_text())
     cols = meta["features"]
+    # A model trained on the results calendar or market state must never be scored with those
+    # columns silently zeroed - that is a different model. Fail loudly instead.
+    lost = [c for c in cols if c.startswith(("cal_", "mkt_")) and c not in today.columns]
+    if lost:
+        raise RuntimeError(f"model needs {len(lost)} calendar/market columns that were not built")
     for c in cols:
         if c not in today.columns:
             today[c] = 0.0

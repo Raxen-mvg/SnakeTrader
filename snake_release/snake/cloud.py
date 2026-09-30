@@ -83,6 +83,16 @@ def prices(symbols: list[str]) -> tuple[pd.DataFrame, pd.DataFrame]:
     px = pd.concat(got, ignore_index=True)
     px["market"] = "IN"
     px["volume"] = px["volume"].fillna(0).astype("int64")
+    # During market hours Yahoo's daily series for many names carries today's moving bar in place
+    # of yesterday's, so the latest date can exist for only half the universe (740 of 1,526 on
+    # 2026-09-30 at 13:10). Score the latest session that at least 80% of names actually have.
+    per_day = px.groupby("date")["symbol"].nunique()
+    complete = per_day[per_day >= 0.8 * px["symbol"].nunique()]
+    if len(complete):
+        px = px[px["date"] <= complete.index.max()]
+        if complete.index.max() < per_day.index.max():
+            log(f"latest session {per_day.index.max().date()} has only {per_day.iloc[-1]:,} names; "
+                f"scoring {complete.index.max().date()} instead")
     keep = sorted(px["date"].unique())[-SESSIONS:]
     px = px[px["date"].isin(set(keep))]
     bm = yahoo("^NSEI")[["date", "adj_close"]]
@@ -121,11 +131,31 @@ def announcements(path: str) -> int:
     return n
 
 
+def board_meetings(path: str) -> int:
+    """Results meetings announced over the past NEWS_DAYS and the next sixty days, into scratch."""
+    import subprocess
+    r = subprocess.run([sys.executable, str(BUNDLE / "collect_nse_board_meetings.py"), "--log", "-",
+                        "--dest", path, "--start", str(date.today() - timedelta(days=NEWS_DAYS))],
+                       cwd=BUNDLE, capture_output=True, text=True)
+    import duckdb
+    try:
+        con = duckdb.connect(path, read_only=True)
+        n = con.execute("SELECT COUNT(*) FROM board_meetings").fetchone()[0]
+        con.close()
+    except Exception:
+        n = 0
+    if r.returncode != 0:
+        log(f"board-meeting fetch failed: {r.stderr.strip()[-300:]}")
+    return n
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", required=True)
     ap.add_argument("--out-nonews", default=None,
                     help="picks for the no-news account, scored with model_nonews/ in the bundle")
+    ap.add_argument("--out-abs", default=None,
+                    help="picks for the absolute-return account, scored with model_abs/ in the bundle")
     ap.add_argument("--accounts", default=None, help="state/accounts.json, to include holdings")
     ap.add_argument("--force", action="store_true", help="score even if the file looks current")
     a = ap.parse_args()
@@ -137,7 +167,7 @@ def main() -> int:
     held = []
     if a.accounts and Path(a.accounts).exists():
         accs = json.loads(Path(a.accounts).read_text())
-        for name in ("snake", "snake_nonews"):
+        for name in ("snake", "snake_nonews", "snake_abs"):
             held += list((accs.get(name, {}).get("positions") or {}).keys())
     symbols = sorted(set(universe) | set(held))
 
@@ -147,7 +177,10 @@ def main() -> int:
         return 1
     last_session = str(latest["date"].max().date())
     nonews = BUNDLE / "model_nonews"
+    absm = BUNDLE / "model_abs"
     outs = [Path(a.out)] + ([Path(a.out_nonews)] if a.out_nonews and nonews.exists() else [])
+    if a.out_abs and absm.exists():
+        outs.append(Path(a.out_abs))
 
     def current(p: Path) -> bool:
         cur = json.loads(p.read_text()).get("asof") if p.exists() else None
@@ -160,15 +193,20 @@ def main() -> int:
     with tempfile.TemporaryDirectory() as td:
         ann = str(Path(td) / "ann.duckdb")
         log(f"{announcements(ann):,} announcements from the past {NEWS_DAYS} days")
+        bmdb = str(Path(td) / "bm.duckdb")
+        log(f"{board_meetings(bmdb):,} board meetings from the past {NEWS_DAYS} days and next 60")
         # The universe is yesterday's liquid list already, so it is not filtered a second time.
-        today, asof = live.features_from_prices(px, bm, liquidity_filter=False, ann_db=ann)
+        today, asof = live.features_from_prices(px, bm, liquidity_filter=False, ann_db=ann,
+                                                bm_db=bmdb)
     log(f"{len(today):,} names scored as of {asof.date()}")
     if len(today) < live.MIN_NAMES:
         log("too few names - incomplete day, picks NOT written")
         return 1
     live.write(live.score(today, asof, BUNDLE / "model"), a.out)
-    if len(outs) > 1:
+    if a.out_nonews and nonews.exists():
         live.write(live.score(today, asof, nonews), a.out_nonews)
+    if a.out_abs and absm.exists():
+        live.write(live.score(today, asof, absm), a.out_abs)
     return 0
 
 
