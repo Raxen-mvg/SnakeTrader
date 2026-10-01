@@ -825,6 +825,8 @@ ALWAYS_QUOTE = ALWAYS_QUOTE + STATARB_UNIVERSE   # the stat-arb book needs its w
 # ---------------------------------------------------------------------------------------------
 SNAKE_NAMES = 6
 SNAKE_STALE_DAYS = 4          # calendar days: stop BUYING on a picks file older than this
+SNAKE_SIZING_POWER = {"snake_abs": 2.0}   # conviction sizing; every other SNAKE stakes equally
+SNAKE_SIZE_LO, SNAKE_SIZE_HI, SNAKE_MAX_WEIGHT = 0.5, 1.6, 0.30
 
 
 def _snake_fresh(ctx: Ctx) -> bool:
@@ -873,19 +875,35 @@ def snake(acc: Account, ctx: Ctx) -> None:
     if ticket < MIN_TICKET:
         return
     barred = _barred_today(acc, ctx)
-    bought = 0
+    need = round_trip_cost(ticket)
+    chosen = []
     for p in s.get("top", []):
         sym = p["symbol"]
-        if bought >= free or sym in acc.positions or sym in barred or sym not in ctx.prices:
+        if len(chosen) >= free or sym in acc.positions or sym in barred or sym not in ctx.prices:
             continue
-        need = round_trip_cost(ticket)
         if float(p.get("expected", 0.0)) <= need:
             break                         # the list is sorted: nothing further down clears it
-        ok = acc.buy(sym, min(ticket, acc.cash), ctx.prices[sym], ctx.t, "delivery",
-                     slippage_bps=SLIP_STOCK,
-                     reason=f"SNAKE expects {100 * float(p['expected']):+.2f}% over "
-                            f"{p.get('horizon', '?')} sessions against a {100 * need:.2f}% round trip")
-        bought += int(bool(ok))
+        chosen.append(p)
+    # Conviction sizing (snake_abs only): stake in proportion to expected return squared, against
+    # the average of what is held and what is bought today, between half and 1.6x the equal stake
+    # and never more than 30% of the account. Backtest 2013-2026, absolute-return model: Rs 2 lakh
+    # became Rs 1.24 and 1.62 crore on two seed pairs, against Rs 63.8 and 71.5 lakh equal-sized.
+    power = SNAKE_SIZING_POWER.get(acc.name, 0.0)
+    held_exp = [float(expected[x]) for x in acc.positions if x in expected]
+    ref = sum(held_exp + [float(p["expected"]) for p in chosen]) / max(len(held_exp) + len(chosen), 1)
+    for p in chosen:
+        sym = p["symbol"]
+        size = ticket
+        if power > 0 and ref > 0:
+            mult = min(max((float(p["expected"]) / ref) ** power, SNAKE_SIZE_LO), SNAKE_SIZE_HI)
+            size = min(ticket * mult, SNAKE_MAX_WEIGHT * equity)
+        size = min(size, acc.cash)
+        if size < MIN_TICKET:
+            break
+        acc.buy(sym, size, ctx.prices[sym], ctx.t, "delivery", slippage_bps=SLIP_STOCK,
+                reason=f"SNAKE expects {100 * float(p['expected']):+.2f}% over "
+                       f"{p.get('horizon', '?')} sessions against a {100 * need:.2f}% round trip"
+                       + (f"; stake {size / ticket:.2f}x the equal share" if power > 0 else ""))
     acc.memo["snake_entry"] = ctx.t.date().isoformat()
 
 
