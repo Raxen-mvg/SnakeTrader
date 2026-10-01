@@ -1,0 +1,35 @@
+{
+ "features": [
+  "age",
+  "log_age",
+  "gain",
+  "peak_gain",
+  "from_peak",
+  "entry_exp",
+  "expected",
+  "exp_drop",
+  "fresh_exp",
+  "fresh_gap",
+  "rank_p1",
+  "rank_p3",
+  "rank_p5",
+  "rank_p10",
+  "rank_p21",
+  "rank_p63",
+  "mkt_ret_5",
+  "mkt_ret_21",
+  "mkt_ret_63",
+  "mkt_above_200",
+  "mkt_breadth_50",
+  "mkt_vol_21"
+ ],
+ "horizon": 10,
+ "rule": {
+  "margin": 0.02,
+  "min_age": 10
+ },
+ "rows": 808852,
+ "trained_through": "2026-09-04",
+ "built": "2026-10-01 14:34",
+ "from_oos": "snake_oos_india_abs_s2.parquet"
+}

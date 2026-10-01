@@ -167,7 +167,8 @@ def main() -> int:
     held = []
     if a.accounts and Path(a.accounts).exists():
         accs = json.loads(Path(a.accounts).read_text())
-        for name in ("snake", "snake_nonews", "snake_abs", "snake_abs_conv"):
+        for name in ("snake", "snake_nonews", "snake_abs", "snake_abs_conv", "snake_abs_exit",
+                     "snake_abs_exit_conv"):
             held += list((accs.get(name, {}).get("positions") or {}).keys())
     symbols = sorted(set(universe) | set(held))
 
@@ -206,7 +207,8 @@ def main() -> int:
     if a.out_nonews and nonews.exists():
         live.write(live.score(today, asof, nonews), a.out_nonews)
     if a.out_abs and absm.exists():
-        live.write(live.score(today, asof, absm), a.out_abs)
+        ectx = live.exit_context(a.accounts, px) if a.accounts else None
+        live.write(live.score(today, asof, absm, exit_ctx=ectx), a.out_abs)
     return 0
 
 

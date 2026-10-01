@@ -248,7 +248,10 @@ def write_reports(accounts: dict, prices: dict, t: dt.datetime, picks_asof: str)
 SNAKE_FILES = {"snake": "picks_snake.json", "snake_nonews": "picks_snake_nonews.json",
                "snake_abs": "picks_snake_abs.json",
                # the same absolute-return picks, staked by conviction - a fourth arm of the race
-               "snake_abs_conv": "picks_snake_abs.json"}
+               "snake_abs_conv": "picks_snake_abs.json",
+               # and two that also sell on the trained exit model, equal and conviction staked
+               "snake_abs_exit": "picks_snake_abs.json",
+               "snake_abs_exit_conv": "picks_snake_abs.json"}
 
 
 def load_snake_picks(file: str = "picks_snake.json") -> dict:

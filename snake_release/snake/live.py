@@ -162,7 +162,7 @@ def features_from_prices(px: pd.DataFrame, bm: pd.DataFrame, liquidity_filter: b
 
 
 def score(today: pd.DataFrame, asof: pd.Timestamp, model_dir: Path = MODEL_DIR,
-          tag: str = "") -> dict:
+          tag: str = "", exit_ctx: dict | None = None) -> dict:
     """Every name's best expected return across horizons, from the saved model."""
     import torch
 
@@ -195,7 +195,19 @@ def score(today: pd.DataFrame, asof: pd.Timestamp, model_dir: Path = MODEL_DIR,
     best = exp.max(axis=1)
     horizon = exp.idxmax(axis=1)
     order = best.sort_values(ascending=False)
-    return {"asof": str(pd.Timestamp(asof).date()), "model": "SNAKE",
+    extra = {}
+    # The trained exit (snake/exit_model.py), for accounts that use it: scored here, where the
+    # predictions and prices already are, so the trader only has to compare a number to a margin.
+    if exit_ctx and (Path(model_dir) / "exit_model.txt").exists():
+        from snake.exit_model import live_scores
+        pdf = pd.DataFrame(p, index=today["symbol"].values, columns=[f"p{h}" for h in HORIZONS])
+        mcols = [c for c in today.columns if c.startswith("mkt_")]
+        market = {c: float(today[c].iloc[0]) for c in mcols if pd.notna(today[c].iloc[0])}
+        extra = live_scores(model_dir, pdf, best, exit_ctx["panel"], market, exit_ctx["accounts"],
+                            pd.Timestamp(asof))
+        n = sum(len(v) for v in extra.get("exit_scores", {}).values())
+        log(f"exit scores for {n} held names across {len(extra.get('exit_scores', {}))} accounts")
+    return {**extra, "asof": str(pd.Timestamp(asof).date()), "model": "SNAKE",
             "model_built": meta.get("built"), "trained_through": meta.get("trained_through"),
             "names_scored": int(len(order)),
             "top": [{"symbol": s, "expected": round(float(best[s]), 6),
@@ -215,10 +227,25 @@ def write(out: dict, path: str) -> None:
            f"{top['horizon']} sessions" if top else ""))
 
 
+def exit_context(accounts_path: str, px: pd.DataFrame) -> dict | None:
+    """Held positions of the accounts that sell on the trained exit model, with the price panel."""
+    from snake.exit_model import EXIT_ACCOUNTS
+    try:
+        accs = json.loads(Path(accounts_path).read_text())
+    except (OSError, ValueError):
+        return None
+    held = {n: (accs.get(n, {}).get("positions") or {}) for n in EXIT_ACCOUNTS}
+    if not any(held.values()):
+        return None
+    return {"accounts": held, "panel": px[["symbol", "date", "adj_close"]]}
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=DEFAULT_OUT)
     ap.add_argument("--model-tag", default="", help="'smoke_' to test with the smoke model")
+    ap.add_argument("--accounts", default=r"C:\Projects\oracle-paper-trader\state\accounts.json",
+                    help="the paper trader's accounts, for exit scores")
     ap.add_argument("--model-dir", default="",
                     help="a model folder under snake/ (e.g. model_india_nonews) instead of the promoted one")
     a = ap.parse_args()
@@ -242,7 +269,7 @@ def main() -> int:
         log(f"{a.out} already describes {have}, later than {asof.date()}; left as it is")
         return 0
     log(f"scoring with {folder.name}")
-    write(score(today, asof, folder, a.model_tag), a.out)
+    write(score(today, asof, folder, a.model_tag, exit_context(a.accounts, px)), a.out)
     return 0
 
 
