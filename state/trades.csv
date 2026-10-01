@@ -1,63 +1,64 @@
-strategy,time,side,symbol,qty,price,value,costs,product,reason
-unified,2026-09-28T11:31:07.188052+05:30,BUY,TFCILTD.NS,499,140.1199,69919.81,83.02,delivery,"rank 1.000, size 35% of cash"
-unified,2026-09-28T11:31:07.188052+05:30,BUY,LENSKART.NS,71,662.8428,47061.84,55.88,delivery,"rank 0.999, size 24% of cash"
-unified,2026-09-28T11:31:07.188052+05:30,BUY,NITINSPIN.NS,64,610.8649,39095.36,46.42,delivery,"rank 0.999, size 20% of cash"
-unified,2026-09-28T11:31:07.188052+05:30,BUY,IPCALAB.NS,11,1929.8905,21228.8,25.21,delivery,"rank 0.998, size 11% of cash"
-unified,2026-09-28T11:31:07.188052+05:30,BUY,VSSL.NS,30,412.0171,12360.51,14.68,delivery,"rank 0.998, size 6% of cash"
-unified,2026-09-28T11:34:08.140662+05:30,BUY,VIJAYA.NS,2,1499.6461,2999.29,3.56,delivery,"rank 0.997, size 35% of cash"
-unified,2026-09-28T11:34:08.140662+05:30,BUY,DCBBANK.NS,16,208.2719,3332.35,3.96,delivery,"rank 0.996, size 35% of cash"
-unified,2026-09-28T11:34:08.140662+05:30,BUY,KTKBANK.NS,8,325.2872,2602.3,3.09,delivery,"rank 0.996, size 26% of cash"
-intraweek,2026-09-28T11:31:07.188052+05:30,BUY,TFCILTD.NS,285,140.1199,39934.16,47.42,delivery,model rank 1.000
-intraweek,2026-09-28T11:31:07.188052+05:30,BUY,LENSKART.NS,60,662.8428,39770.57,47.22,delivery,model rank 0.999
-intraweek,2026-09-28T11:31:07.188052+05:30,BUY,NITINSPIN.NS,65,610.8649,39706.22,47.15,delivery,model rank 0.999
-intraweek,2026-09-28T11:31:07.188052+05:30,BUY,IPCALAB.NS,20,1929.8905,38597.81,45.83,delivery,model rank 0.998
-intraweek,2026-09-28T11:31:07.188052+05:30,BUY,VSSL.NS,97,412.0171,39965.66,47.46,delivery,model rank 0.998
-intramonth,2026-09-28T11:31:07.188052+05:30,BUY,TFCILTD.NS,285,140.1199,39934.16,47.42,delivery,model rank 1.000
-intramonth,2026-09-28T11:31:07.188052+05:30,BUY,LENSKART.NS,60,662.8428,39770.57,47.22,delivery,model rank 0.999
-intramonth,2026-09-28T11:31:07.188052+05:30,BUY,NITINSPIN.NS,65,610.8649,39706.22,47.15,delivery,model rank 0.999
-intramonth,2026-09-28T11:31:07.188052+05:30,BUY,IPCALAB.NS,20,1929.8905,38597.81,45.83,delivery,model rank 0.998
-intramonth,2026-09-28T11:31:07.188052+05:30,BUY,VSSL.NS,97,412.0171,39965.66,47.46,delivery,model rank 0.998
-random_hold,2026-09-28T11:31:07.188052+05:30,BUY,TFCILTD.NS,285,140.1199,39934.16,47.42,delivery,model rank 1.000
-random_hold,2026-09-28T11:31:07.188052+05:30,BUY,LENSKART.NS,60,662.8428,39770.57,47.22,delivery,model rank 0.999
-random_hold,2026-09-28T11:31:07.188052+05:30,BUY,NITINSPIN.NS,65,610.8649,39706.22,47.15,delivery,model rank 0.999
-random_hold,2026-09-28T11:31:07.188052+05:30,BUY,IPCALAB.NS,20,1929.8905,38597.81,45.83,delivery,model rank 0.998
-random_hold,2026-09-28T11:31:07.188052+05:30,BUY,VSSL.NS,97,412.0171,39965.66,47.46,delivery,model rank 0.998
-gold,2026-09-28T11:31:07.188052+05:30,BUY,GOLDBEES.NS,1644,121.5007,199747.18,237.18,delivery,gold held
-nifty_calls,2026-09-28T11:31:07.188052+05:30,BUY,NIFTY 01Oct 22850 CE (SIMULATED),75,95.6415,7173.11,26.83,option,"SIMULATED Black-Scholes, realised vol 10.3%"
-benchmark,2026-09-28T11:31:07.188052+05:30,BUY,NIFTYBEES.NS,765,261.0505,199703.6,237.13,delivery,benchmark held
-oracle,2026-09-28T11:31:07.188052+05:30,BUY,TFCILTD.NS,120,140.1199,16814.38,19.97,delivery,expected +0.49% net over 21 days after 0.61% costs
-oracle,2026-09-28T11:31:07.188052+05:30,BUY,LENSKART.NS,25,662.8428,16571.07,19.68,delivery,expected +0.48% net over 21 days after 0.61% costs
-oracle,2026-09-28T11:31:07.188052+05:30,BUY,NITINSPIN.NS,27,610.8649,16493.35,19.58,delivery,expected +0.48% net over 21 days after 0.61% costs
-oracle,2026-09-28T11:31:07.188052+05:30,BUY,IPCALAB.NS,8,1929.8905,15439.12,18.33,delivery,expected +0.48% net over 21 days after 0.61% costs
-oracle,2026-09-28T11:31:07.188052+05:30,BUY,VSSL.NS,40,412.0171,16480.68,19.57,delivery,expected +0.48% net over 21 days after 0.61% costs
-oracle,2026-09-28T11:31:07.188052+05:30,BUY,VIJAYA.NS,11,1498.9451,16488.4,19.58,delivery,expected +0.48% net over 21 days after 0.61% costs
-oracle,2026-09-28T11:31:07.188052+05:30,BUY,DCBBANK.NS,79,208.5123,16472.47,19.56,delivery,expected +0.48% net over 21 days after 0.61% costs
-oracle,2026-09-28T11:31:07.188052+05:30,BUY,KTKBANK.NS,50,325.8881,16294.41,19.35,delivery,expected +0.48% net over 21 days after 0.61% costs
-oracle,2026-09-28T11:31:07.188052+05:30,BUY,SAILIFE.NS,10,1593.3865,15933.87,18.92,delivery,expected +0.47% net over 21 days after 0.61% costs
-oracle,2026-09-28T11:31:07.188052+05:30,BUY,GKSL.NS,94,173.8103,16338.17,19.4,delivery,expected +0.47% net over 21 days after 0.61% costs
-oracle,2026-09-28T11:31:07.188052+05:30,BUY,GLOBAL.NS,122,134.6216,16423.84,19.5,delivery,expected +0.47% net over 21 days after 0.61% costs
-oracle,2026-09-28T11:31:07.188052+05:30,BUY,LAURUSLABS.NS,8,2010.9119,16087.29,19.1,delivery,expected +0.47% net over 21 days after 0.61% costs
-snake,2026-09-30T10:21:18.486922+05:30,BUY,SEAMECLTD.NS,20,1637.4525,32749.05,38.89,delivery,SNAKE expects +7.10% over 63 sessions against a 0.57% round trip
-snake,2026-09-30T10:21:18.486922+05:30,BUY,VISHNU.NS,48,684.1747,32840.39,38.99,delivery,SNAKE expects +7.10% over 63 sessions against a 0.57% round trip
-snake,2026-09-30T10:21:18.486922+05:30,BUY,BLSE.NS,102,324.5361,33102.68,39.31,delivery,SNAKE expects +7.09% over 63 sessions against a 0.57% round trip
-snake,2026-09-30T10:21:18.486922+05:30,BUY,NITINSPIN.NS,55,604.0047,33220.26,39.45,delivery,SNAKE expects +7.08% over 63 sessions against a 0.57% round trip
-snake,2026-09-30T10:21:18.486922+05:30,BUY,THEJO.NS,15,2142.509,32137.63,38.16,delivery,SNAKE expects +7.07% over 63 sessions against a 0.57% round trip
-snake,2026-09-30T10:21:18.486922+05:30,BUY,PRICOLLTD.NS,43,760.7394,32711.79,38.84,delivery,SNAKE expects +7.06% over 63 sessions against a 0.57% round trip
-snake_nonews,2026-09-30T10:21:18.486922+05:30,BUY,SEAMECLTD.NS,20,1637.4525,32749.05,38.89,delivery,SNAKE expects +6.26% over 63 sessions against a 0.57% round trip
-snake_nonews,2026-09-30T10:21:18.486922+05:30,BUY,VIJAYA.NS,22,1456.0809,32033.78,38.04,delivery,SNAKE expects +6.26% over 63 sessions against a 0.57% round trip
-snake_nonews,2026-09-30T10:21:18.486922+05:30,BUY,BLSE.NS,102,324.5361,33102.68,39.31,delivery,SNAKE expects +6.25% over 63 sessions against a 0.57% round trip
-snake_nonews,2026-09-30T10:21:18.486922+05:30,BUY,VISHNU.NS,48,684.1747,32840.39,38.99,delivery,SNAKE expects +6.24% over 63 sessions against a 0.57% round trip
-snake_nonews,2026-09-30T10:21:18.486922+05:30,BUY,PRICOLLTD.NS,43,760.7394,32711.79,38.84,delivery,SNAKE expects +6.23% over 63 sessions against a 0.57% round trip
-snake_nonews,2026-09-30T10:21:18.486922+05:30,BUY,CRAFTSMAN.NS,3,10481.699,31445.1,37.34,delivery,SNAKE expects +6.22% over 63 sessions against a 0.57% round trip
-snake_abs,2026-10-01T09:31:06.710525+05:30,BUY,GANDHAR.NS,119,279.0179,33203.13,39.43,delivery,SNAKE expects +7.38% over 63 sessions against a 0.57% round trip
-snake_abs,2026-10-01T09:31:06.710525+05:30,BUY,BLUSPRING.NS,228,145.7483,33230.61,39.46,delivery,SNAKE expects +7.37% over 63 sessions against a 0.57% round trip
-snake_abs,2026-10-01T09:31:06.710525+05:30,BUY,AYMSYNTEX.NS,115,288.432,33169.68,39.39,delivery,SNAKE expects +7.36% over 63 sessions against a 0.57% round trip
-snake_abs,2026-10-01T09:31:06.710525+05:30,BUY,RUBYMILLS.NS,66,504.8562,33320.51,39.56,delivery,SNAKE expects +7.35% over 63 sessions against a 0.57% round trip
-snake_abs,2026-10-01T09:31:06.710525+05:30,BUY,BHAGYANGR.NS,82,404.6561,33181.8,39.4,delivery,SNAKE expects +7.34% over 63 sessions against a 0.57% round trip
-snake_abs,2026-10-01T09:31:06.710525+05:30,BUY,CNL.NS,30,1083.2224,32496.67,38.59,delivery,SNAKE expects +7.33% over 63 sessions against a 0.57% round trip
-snake_abs_conv,2026-10-01T10:43:06.318704+05:30,BUY,GANDHAR.NS,119,280.0194,33322.31,39.57,delivery,SNAKE expects +7.38% over 63 sessions against a 0.57% round trip; stake 1.01x the equal share
-snake_abs_conv,2026-10-01T10:43:06.318704+05:30,BUY,BLUSPRING.NS,230,145.2075,33397.72,39.66,delivery,SNAKE expects +7.37% over 63 sessions against a 0.57% round trip; stake 1.00x the equal share
-snake_abs_conv,2026-10-01T10:43:06.318704+05:30,BUY,AYMSYNTEX.NS,118,282.1726,33296.37,39.54,delivery,SNAKE expects +7.36% over 63 sessions against a 0.57% round trip; stake 1.00x the equal share
-snake_abs_conv,2026-10-01T10:43:06.318704+05:30,BUY,RUBYMILLS.NS,65,507.7605,33004.43,39.19,delivery,SNAKE expects +7.35% over 63 sessions against a 0.57% round trip; stake 1.00x the equal share
-snake_abs_conv,2026-10-01T10:43:06.318704+05:30,BUY,BHAGYANGR.NS,80,410.2645,32821.16,38.97,delivery,SNAKE expects +7.34% over 63 sessions against a 0.57% round trip; stake 1.00x the equal share
-snake_abs_conv,2026-10-01T10:43:06.318704+05:30,BUY,CNL.NS,30,1088.5304,32655.91,38.78,delivery,SNAKE expects +7.33% over 63 sessions against a 0.57% round trip; stake 0.99x the equal share
+strategy,time,side,symbol,qty,price,value,costs,product,reason,pnl
+unified,2026-09-28T11:31:07.188052+05:30,BUY,TFCILTD.NS,499,140.1199,69919.81,83.02,delivery,"rank 1.000, size 35% of cash",
+unified,2026-09-28T11:31:07.188052+05:30,BUY,LENSKART.NS,71,662.8428,47061.84,55.88,delivery,"rank 0.999, size 24% of cash",
+unified,2026-09-28T11:31:07.188052+05:30,BUY,NITINSPIN.NS,64,610.8649,39095.36,46.42,delivery,"rank 0.999, size 20% of cash",
+unified,2026-09-28T11:31:07.188052+05:30,BUY,IPCALAB.NS,11,1929.8905,21228.8,25.21,delivery,"rank 0.998, size 11% of cash",
+unified,2026-09-28T11:31:07.188052+05:30,BUY,VSSL.NS,30,412.0171,12360.51,14.68,delivery,"rank 0.998, size 6% of cash",
+unified,2026-09-28T11:34:08.140662+05:30,BUY,VIJAYA.NS,2,1499.6461,2999.29,3.56,delivery,"rank 0.997, size 35% of cash",
+unified,2026-09-28T11:34:08.140662+05:30,BUY,DCBBANK.NS,16,208.2719,3332.35,3.96,delivery,"rank 0.996, size 35% of cash",
+unified,2026-09-28T11:34:08.140662+05:30,BUY,KTKBANK.NS,8,325.2872,2602.3,3.09,delivery,"rank 0.996, size 26% of cash",
+intraweek,2026-09-28T11:31:07.188052+05:30,BUY,TFCILTD.NS,285,140.1199,39934.16,47.42,delivery,model rank 1.000,
+intraweek,2026-09-28T11:31:07.188052+05:30,BUY,LENSKART.NS,60,662.8428,39770.57,47.22,delivery,model rank 0.999,
+intraweek,2026-09-28T11:31:07.188052+05:30,BUY,NITINSPIN.NS,65,610.8649,39706.22,47.15,delivery,model rank 0.999,
+intraweek,2026-09-28T11:31:07.188052+05:30,BUY,IPCALAB.NS,20,1929.8905,38597.81,45.83,delivery,model rank 0.998,
+intraweek,2026-09-28T11:31:07.188052+05:30,BUY,VSSL.NS,97,412.0171,39965.66,47.46,delivery,model rank 0.998,
+intramonth,2026-09-28T11:31:07.188052+05:30,BUY,TFCILTD.NS,285,140.1199,39934.16,47.42,delivery,model rank 1.000,
+intramonth,2026-09-28T11:31:07.188052+05:30,BUY,LENSKART.NS,60,662.8428,39770.57,47.22,delivery,model rank 0.999,
+intramonth,2026-09-28T11:31:07.188052+05:30,BUY,NITINSPIN.NS,65,610.8649,39706.22,47.15,delivery,model rank 0.999,
+intramonth,2026-09-28T11:31:07.188052+05:30,BUY,IPCALAB.NS,20,1929.8905,38597.81,45.83,delivery,model rank 0.998,
+intramonth,2026-09-28T11:31:07.188052+05:30,BUY,VSSL.NS,97,412.0171,39965.66,47.46,delivery,model rank 0.998,
+random_hold,2026-09-28T11:31:07.188052+05:30,BUY,TFCILTD.NS,285,140.1199,39934.16,47.42,delivery,model rank 1.000,
+random_hold,2026-09-28T11:31:07.188052+05:30,BUY,LENSKART.NS,60,662.8428,39770.57,47.22,delivery,model rank 0.999,
+random_hold,2026-09-28T11:31:07.188052+05:30,BUY,NITINSPIN.NS,65,610.8649,39706.22,47.15,delivery,model rank 0.999,
+random_hold,2026-09-28T11:31:07.188052+05:30,BUY,IPCALAB.NS,20,1929.8905,38597.81,45.83,delivery,model rank 0.998,
+random_hold,2026-09-28T11:31:07.188052+05:30,BUY,VSSL.NS,97,412.0171,39965.66,47.46,delivery,model rank 0.998,
+gold,2026-09-28T11:31:07.188052+05:30,BUY,GOLDBEES.NS,1644,121.5007,199747.18,237.18,delivery,gold held,
+nifty_calls,2026-09-28T11:31:07.188052+05:30,BUY,NIFTY 01Oct 22850 CE (SIMULATED),75,95.6415,7173.11,26.83,option,"SIMULATED Black-Scholes, realised vol 10.3%",
+nifty_calls,2026-10-01T13:28:09.492051+05:30,SELL,NIFTY 01Oct 22850 CE (SIMULATED),75,0.0,0.0,23.6,option,SIMULATED option exit,-7196.71
+benchmark,2026-09-28T11:31:07.188052+05:30,BUY,NIFTYBEES.NS,765,261.0505,199703.6,237.13,delivery,benchmark held,
+oracle,2026-09-28T11:31:07.188052+05:30,BUY,TFCILTD.NS,120,140.1199,16814.38,19.97,delivery,expected +0.49% net over 21 days after 0.61% costs,
+oracle,2026-09-28T11:31:07.188052+05:30,BUY,LENSKART.NS,25,662.8428,16571.07,19.68,delivery,expected +0.48% net over 21 days after 0.61% costs,
+oracle,2026-09-28T11:31:07.188052+05:30,BUY,NITINSPIN.NS,27,610.8649,16493.35,19.58,delivery,expected +0.48% net over 21 days after 0.61% costs,
+oracle,2026-09-28T11:31:07.188052+05:30,BUY,IPCALAB.NS,8,1929.8905,15439.12,18.33,delivery,expected +0.48% net over 21 days after 0.61% costs,
+oracle,2026-09-28T11:31:07.188052+05:30,BUY,VSSL.NS,40,412.0171,16480.68,19.57,delivery,expected +0.48% net over 21 days after 0.61% costs,
+oracle,2026-09-28T11:31:07.188052+05:30,BUY,VIJAYA.NS,11,1498.9451,16488.4,19.58,delivery,expected +0.48% net over 21 days after 0.61% costs,
+oracle,2026-09-28T11:31:07.188052+05:30,BUY,DCBBANK.NS,79,208.5123,16472.47,19.56,delivery,expected +0.48% net over 21 days after 0.61% costs,
+oracle,2026-09-28T11:31:07.188052+05:30,BUY,KTKBANK.NS,50,325.8881,16294.41,19.35,delivery,expected +0.48% net over 21 days after 0.61% costs,
+oracle,2026-09-28T11:31:07.188052+05:30,BUY,SAILIFE.NS,10,1593.3865,15933.87,18.92,delivery,expected +0.47% net over 21 days after 0.61% costs,
+oracle,2026-09-28T11:31:07.188052+05:30,BUY,GKSL.NS,94,173.8103,16338.17,19.4,delivery,expected +0.47% net over 21 days after 0.61% costs,
+oracle,2026-09-28T11:31:07.188052+05:30,BUY,GLOBAL.NS,122,134.6216,16423.84,19.5,delivery,expected +0.47% net over 21 days after 0.61% costs,
+oracle,2026-09-28T11:31:07.188052+05:30,BUY,LAURUSLABS.NS,8,2010.9119,16087.29,19.1,delivery,expected +0.47% net over 21 days after 0.61% costs,
+snake,2026-09-30T10:21:18.486922+05:30,BUY,SEAMECLTD.NS,20,1637.4525,32749.05,38.89,delivery,SNAKE expects +7.10% over 63 sessions against a 0.57% round trip,
+snake,2026-09-30T10:21:18.486922+05:30,BUY,VISHNU.NS,48,684.1747,32840.39,38.99,delivery,SNAKE expects +7.10% over 63 sessions against a 0.57% round trip,
+snake,2026-09-30T10:21:18.486922+05:30,BUY,BLSE.NS,102,324.5361,33102.68,39.31,delivery,SNAKE expects +7.09% over 63 sessions against a 0.57% round trip,
+snake,2026-09-30T10:21:18.486922+05:30,BUY,NITINSPIN.NS,55,604.0047,33220.26,39.45,delivery,SNAKE expects +7.08% over 63 sessions against a 0.57% round trip,
+snake,2026-09-30T10:21:18.486922+05:30,BUY,THEJO.NS,15,2142.509,32137.63,38.16,delivery,SNAKE expects +7.07% over 63 sessions against a 0.57% round trip,
+snake,2026-09-30T10:21:18.486922+05:30,BUY,PRICOLLTD.NS,43,760.7394,32711.79,38.84,delivery,SNAKE expects +7.06% over 63 sessions against a 0.57% round trip,
+snake_nonews,2026-09-30T10:21:18.486922+05:30,BUY,SEAMECLTD.NS,20,1637.4525,32749.05,38.89,delivery,SNAKE expects +6.26% over 63 sessions against a 0.57% round trip,
+snake_nonews,2026-09-30T10:21:18.486922+05:30,BUY,VIJAYA.NS,22,1456.0809,32033.78,38.04,delivery,SNAKE expects +6.26% over 63 sessions against a 0.57% round trip,
+snake_nonews,2026-09-30T10:21:18.486922+05:30,BUY,BLSE.NS,102,324.5361,33102.68,39.31,delivery,SNAKE expects +6.25% over 63 sessions against a 0.57% round trip,
+snake_nonews,2026-09-30T10:21:18.486922+05:30,BUY,VISHNU.NS,48,684.1747,32840.39,38.99,delivery,SNAKE expects +6.24% over 63 sessions against a 0.57% round trip,
+snake_nonews,2026-09-30T10:21:18.486922+05:30,BUY,PRICOLLTD.NS,43,760.7394,32711.79,38.84,delivery,SNAKE expects +6.23% over 63 sessions against a 0.57% round trip,
+snake_nonews,2026-09-30T10:21:18.486922+05:30,BUY,CRAFTSMAN.NS,3,10481.699,31445.1,37.34,delivery,SNAKE expects +6.22% over 63 sessions against a 0.57% round trip,
+snake_abs,2026-10-01T09:31:06.710525+05:30,BUY,GANDHAR.NS,119,279.0179,33203.13,39.43,delivery,SNAKE expects +7.38% over 63 sessions against a 0.57% round trip,
+snake_abs,2026-10-01T09:31:06.710525+05:30,BUY,BLUSPRING.NS,228,145.7483,33230.61,39.46,delivery,SNAKE expects +7.37% over 63 sessions against a 0.57% round trip,
+snake_abs,2026-10-01T09:31:06.710525+05:30,BUY,AYMSYNTEX.NS,115,288.432,33169.68,39.39,delivery,SNAKE expects +7.36% over 63 sessions against a 0.57% round trip,
+snake_abs,2026-10-01T09:31:06.710525+05:30,BUY,RUBYMILLS.NS,66,504.8562,33320.51,39.56,delivery,SNAKE expects +7.35% over 63 sessions against a 0.57% round trip,
+snake_abs,2026-10-01T09:31:06.710525+05:30,BUY,BHAGYANGR.NS,82,404.6561,33181.8,39.4,delivery,SNAKE expects +7.34% over 63 sessions against a 0.57% round trip,
+snake_abs,2026-10-01T09:31:06.710525+05:30,BUY,CNL.NS,30,1083.2224,32496.67,38.59,delivery,SNAKE expects +7.33% over 63 sessions against a 0.57% round trip,
+snake_abs_conv,2026-10-01T10:43:06.318704+05:30,BUY,GANDHAR.NS,119,280.0194,33322.31,39.57,delivery,SNAKE expects +7.38% over 63 sessions against a 0.57% round trip; stake 1.01x the equal share,
+snake_abs_conv,2026-10-01T10:43:06.318704+05:30,BUY,BLUSPRING.NS,230,145.2075,33397.72,39.66,delivery,SNAKE expects +7.37% over 63 sessions against a 0.57% round trip; stake 1.00x the equal share,
+snake_abs_conv,2026-10-01T10:43:06.318704+05:30,BUY,AYMSYNTEX.NS,118,282.1726,33296.37,39.54,delivery,SNAKE expects +7.36% over 63 sessions against a 0.57% round trip; stake 1.00x the equal share,
+snake_abs_conv,2026-10-01T10:43:06.318704+05:30,BUY,RUBYMILLS.NS,65,507.7605,33004.43,39.19,delivery,SNAKE expects +7.35% over 63 sessions against a 0.57% round trip; stake 1.00x the equal share,
+snake_abs_conv,2026-10-01T10:43:06.318704+05:30,BUY,BHAGYANGR.NS,80,410.2645,32821.16,38.97,delivery,SNAKE expects +7.34% over 63 sessions against a 0.57% round trip; stake 1.00x the equal share,
+snake_abs_conv,2026-10-01T10:43:06.318704+05:30,BUY,CNL.NS,30,1088.5304,32655.91,38.78,delivery,SNAKE expects +7.33% over 63 sessions against a 0.57% round trip; stake 0.99x the equal share,
