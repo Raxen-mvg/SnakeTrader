@@ -105,7 +105,8 @@ const cell = (html, c = "") => `<td class="${c}">${html}</td>`;
       `<tr class="${a.strategy.startsWith("snake") ? "snake" : ""}">` +
       cell(a.strategy === "snake" ? 'SNAKE<span class="chip">with news</span>'
            : a.strategy === "snake_nonews" ? 'SNAKE<span class="chip">no news</span>'
-           : a.strategy === "snake_abs" ? 'SNAKE<span class="chip">absolute return</span>' : a.strategy) +
+           : a.strategy === "snake_abs" ? 'SNAKE<span class="chip">absolute return</span>'
+           : a.strategy === "snake_abs_conv" ? 'SNAKE<span class="chip">absolute + conviction</span>' : a.strategy) +
       cell(rs(a.equity)) + cell(pct(a.return_pct), cls(a.return_pct)) +
       cell(a.open_positions) + cell(a.closed_trades) + cell(rs(a.costs_paid || 0)) +
       "</tr>").join("");
