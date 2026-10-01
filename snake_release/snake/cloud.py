@@ -167,7 +167,7 @@ def main() -> int:
     held = []
     if a.accounts and Path(a.accounts).exists():
         accs = json.loads(Path(a.accounts).read_text())
-        for name in ("snake", "snake_nonews", "snake_abs"):
+        for name in ("snake", "snake_nonews", "snake_abs", "snake_abs_conv"):
             held += list((accs.get(name, {}).get("positions") or {}).keys())
     symbols = sorted(set(universe) | set(held))
 
