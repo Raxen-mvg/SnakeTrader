@@ -52,7 +52,7 @@
 
   <div class="panel"><table id="accounts">
     <thead><tr><th>Strategy</th><th>Equity</th><th>Return</th><th>Open</th><th>Closed</th>
-      <th>Costs paid</th></tr></thead><tbody></tbody></table></div>
+      <th>Costs paid</th><th>Goal +10% by 31 Oct</th></tr></thead><tbody></tbody></table></div>
   <p class="note">Every account started with Rs 2,00,000 of fake money on 2026-09-28 or later and
     trades on live NSE prices, paying real Indian charges on every order. None of this is
     investment advice.</p>
@@ -109,6 +109,8 @@ const cell = (html, c = "") => `<td class="${c}">${html}</td>`;
            : a.strategy === "snake_abs_conv" ? 'SNAKE<span class="chip">absolute + conviction</span>' : a.strategy) +
       cell(rs(a.equity)) + cell(pct(a.return_pct), cls(a.return_pct)) +
       cell(a.open_positions) + cell(a.closed_trades) + cell(rs(a.costs_paid || 0)) +
+      cell(a.goal_progress_pct == null ? "" : Math.max(0, a.goal_progress_pct).toFixed(0) + "%",
+           a.goal_progress_pct >= 100 ? "up" : "") +
       "</tr>").join("");
   } catch (e) {
     document.getElementById("updated").innerHTML =
