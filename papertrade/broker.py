@@ -74,23 +74,30 @@ class Account:
         return True
 
     def sell(self, symbol: str, price: float, t: dt.datetime, *, slippage_bps: float = 10.0,
-             broker: Broker = ZERODHA, reason: str = "") -> float | None:
+             broker: Broker = ZERODHA, reason: str = "", qty: int | None = None) -> float | None:
+        """Sell the whole position, or only qty units of it (a trim)."""
         p = self.positions.get(symbol)
         if not p:
+            return None
+        units = p.qty if qty is None else max(0, min(int(qty), p.qty))
+        if units <= 0:
             return None
         if at_circuit_limit(symbol) == "lower":      # sellers only; no one to sell to
             self.memo.setdefault("blocked_fills", []).append(
                 {"time": t.isoformat(), "symbol": symbol, "side": "SELL", "why": "lower circuit"})
             return None
         fill = slippage(price, "sell", slippage_bps)
-        value = p.qty * fill
+        value = units * fill
         cost = order_cost("sell", p.product, value, broker)
         self.cash += value - cost["total"]
-        pnl = value - cost["total"] - p.qty * p.avg_price
-        self.ledger.append({"time": t.isoformat(), "side": "SELL", "symbol": symbol, "qty": p.qty,
+        pnl = value - cost["total"] - units * p.avg_price
+        self.ledger.append({"time": t.isoformat(), "side": "SELL", "symbol": symbol, "qty": units,
                             "price": round(fill, 4), "value": round(value, 2), "costs": round(cost["total"], 2),
                             "product": p.product, "pnl": round(pnl, 2), "reason": reason})
-        del self.positions[symbol]
+        if units >= p.qty:
+            del self.positions[symbol]
+        else:
+            p.qty -= units
         return pnl
 
     # --- valuation ------------------------------------------------------------------
