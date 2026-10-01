@@ -865,6 +865,9 @@ def snake(acc: Account, ctx: Ctx) -> None:
             acc.sell(sym, price, ctx.t, slippage_bps=SLIP_STOCK, reason=f"SNAKE exit: {why}")
             _bar_today(acc, ctx, sym)
 
+    if fresh and SNAKE_SIZING_POWER.get(acc.name) and not acc.memo.get("conviction_rebalanced"):
+        _conviction_rebalance(acc, ctx, expected)
+
     if not fresh or acc.memo.get("snake_entry") == ctx.t.date().isoformat():
         return
     free = SNAKE_NAMES - len(acc.positions)
@@ -905,6 +908,42 @@ def snake(acc: Account, ctx: Ctx) -> None:
                        f"{p.get('horizon', '?')} sessions against a {100 * need:.2f}% round trip"
                        + (f"; stake {size / ticket:.2f}x the equal share" if power > 0 else ""))
     acc.memo["snake_entry"] = ctx.t.date().isoformat()
+
+
+def _conviction_rebalance(acc: Account, ctx: Ctx, expected: dict) -> None:
+    """Once, when conviction sizing is switched on for an account that already holds names bought
+    with equal stakes: resize those holdings to the stakes the sizing rule would have given them,
+    at live prices and paying every real charge. Trims first so the adds have the cash. Moves under
+    10% of the target are skipped, because paying fees to shuffle a few rupees loses money."""
+    power = SNAKE_SIZING_POWER[acc.name]
+    held = {s: float(expected[s]) for s in acc.positions if s in expected and s in ctx.prices}
+    if not held:
+        return
+    equity = acc.equity(ctx.prices)
+    ref = sum(held.values()) / len(held)
+    if ref <= 0:
+        acc.memo["conviction_rebalanced"] = ctx.t.isoformat()
+        return
+    target = {s: min(equity / SNAKE_NAMES * min(max((e / ref) ** power, SNAKE_SIZE_LO), SNAKE_SIZE_HI),
+                     SNAKE_MAX_WEIGHT * equity) for s, e in held.items()}
+    total = sum(target.values())
+    if total > 0.99 * equity:                                  # keep a little cash for charges
+        target = {s: v * 0.99 * equity / total for s, v in target.items()}
+    for s, want in target.items():
+        p, px = acc.positions[s], ctx.prices[s]
+        have = p.qty * px
+        if have - want > 0.10 * want:
+            acc.sell(s, px, ctx.t, slippage_bps=SLIP_STOCK, qty=int((have - want) // px),
+                     reason=f"conviction sizing switched on: trim to {want / (equity / SNAKE_NAMES):.2f}x "
+                            f"the equal share (expects {100 * held[s]:+.2f}%)")
+    for s, want in target.items():
+        p, px = acc.positions.get(s), ctx.prices[s]
+        have = p.qty * px if p else 0.0
+        if want - have > 0.10 * want and acc.cash > MIN_TICKET:
+            acc.buy(s, min(want - have, acc.cash), px, ctx.t, "delivery", slippage_bps=SLIP_STOCK,
+                    reason=f"conviction sizing switched on: add to {want / (equity / SNAKE_NAMES):.2f}x "
+                           f"the equal share (expects {100 * held[s]:+.2f}%)")
+    acc.memo["conviction_rebalanced"] = ctx.t.isoformat()
 
 
 STRATEGIES["snake"] = snake              # trained with news; reads picks_snake.json
