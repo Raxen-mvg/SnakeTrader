@@ -170,6 +170,12 @@ def write_alerts(accounts: dict, prices: dict, t: dt.datetime) -> list[str]:
     return [o["text"] for o in out]
 
 
+# The owner's target for every account: +10% by the end of October 2026. It is MEASURED and shown,
+# never fed to the strategies: a deadline that made a rule take bigger bets would lower the money
+# it is expected to make, which is the opposite of the point.
+GOAL = {"target_pct": 10.0, "by": "2026-10-31"}
+
+
 def write_reports(accounts: dict, prices: dict, t: dt.datetime, picks_asof: str) -> None:
     rows, trades, curves = [], [], []
     for n, a in accounts.items():
@@ -180,6 +186,7 @@ def write_reports(accounts: dict, prices: dict, t: dt.datetime, picks_asof: str)
                      "cash": round(a.cash, 2), "open_positions": len(a.positions),
                      "closed_trades": len(sells), "win_rate_pct": round(100 * len(wins) / len(sells), 1) if sells else None,
                      "costs_paid": round(sum(x["costs"] for x in a.ledger), 2),
+                     "goal_progress_pct": round(100 * (eq / a.start_cash - 1) / GOAL["target_pct"] * 100, 1),
                      "positions": [{"symbol": p.symbol, "qty": p.qty, "avg_price": round(p.avg_price, 2),
                                     "last": round(p.meta.get("last_price", p.avg_price), 2),
                                     "exit_on": p.exit_on} for p in a.positions.values()]})
@@ -205,6 +212,7 @@ def write_reports(accounts: dict, prices: dict, t: dt.datetime, picks_asof: str)
 
     alloc = allocator(accounts, [n for n in accounts if n != "benchmark"])
     summary = {"updated": t.isoformat(), "picks_asof": picks_asof, "start_cash": START_CASH,
+               "goal": GOAL,
                "strategies": sorted(rows, key=lambda r: -r["return_pct"]),
                "combined": alloc.tail(1).to_dict("records")[0] if not alloc.empty else None}
     (STATE / "summary.json").write_text(json.dumps(summary, indent=1))
@@ -213,7 +221,8 @@ def write_reports(accounts: dict, prices: dict, t: dt.datetime, picks_asof: str)
     if not alloc.empty:
         alloc.to_csv(STATE / "combined.csv", index=False)
     lines = [f"# Paper trading report", "", f"Updated {t:%Y-%m-%d %H:%M} IST. Model picks as of {picks_asof}. "
-             f"Each strategy started with Rs {START_CASH:,.0f} of fake money. Costs are Zerodha's published charges.", "",
+             f"Each strategy started with Rs {START_CASH:,.0f} of fake money. Costs are Zerodha's published charges. "
+             f"Goal: +{GOAL['target_pct']:.0f}% by {GOAL['by']} (tracked, not traded on).", "",
              "| Strategy | Equity (Rs) | Return | Closed trades | Win rate | Costs paid (Rs) |", "|:---|---:|---:|---:|---:|---:|"]
     for r in summary["strategies"]:
         wr = f"{r['win_rate_pct']:.0f}%" if r["win_rate_pct"] is not None else "-"
