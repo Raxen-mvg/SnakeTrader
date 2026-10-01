@@ -825,7 +825,11 @@ ALWAYS_QUOTE = ALWAYS_QUOTE + STATARB_UNIVERSE   # the stat-arb book needs its w
 # ---------------------------------------------------------------------------------------------
 SNAKE_NAMES = 6
 SNAKE_STALE_DAYS = 4          # calendar days: stop BUYING on a picks file older than this
-SNAKE_SIZING_POWER = {"snake_abs_conv": 2.0}   # conviction sizing; every other SNAKE stakes equally
+SNAKE_SIZING_POWER = {"snake_abs_conv": 2.0, "snake_abs_exit_conv": 2.0}   # conviction sizing
+# Accounts that also sell on SNAKE's trained exit model (snake/exit_model.py in the model repo):
+# the picks file carries, for each of their holdings, the model's prediction of holding minus
+# switching to the best fresh names over the next ten sessions, after the cost of switching.
+SNAKE_EXIT_ACCOUNTS = {"snake_abs_exit", "snake_abs_exit_conv"}
 SNAKE_SIZE_LO, SNAKE_SIZE_HI, SNAKE_MAX_WEIGHT = 0.5, 1.6, 0.30
 
 
@@ -857,6 +861,15 @@ def snake(acc: Account, ctx: Ctx) -> None:
             continue
         if not fresh:
             continue                      # no current view of this name: hold, do not guess
+        if acc.name in SNAKE_EXIT_ACCOUNTS:
+            es = (s.get("exit_scores") or {}).get(acc.name, {}).get(sym)
+            rule = s.get("exit_rule") or {}
+            if es and es["age"] >= rule.get("min_age", 10) and es["pred"] < -rule.get("margin", 0.02):
+                acc.sell(sym, price, ctx.t, slippage_bps=SLIP_STOCK,
+                         reason=f"SNAKE exit model: switching expected to beat holding by "
+                                f"{-100 * es['pred']:.1f}% over 10 sessions (held {es['age']} sessions)")
+                _bar_today(acc, ctx, sym)
+                continue
         want = expected.get(sym)
         leaving = exit_cost(pos.qty * price)
         if want is None or want <= leaving:
@@ -901,6 +914,7 @@ def snake(acc: Account, ctx: Ctx) -> None:
         if size < MIN_TICKET:
             break
         acc.buy(sym, size, ctx.prices[sym], ctx.t, "delivery", slippage_bps=SLIP_STOCK,
+                meta={"entry_exp": float(p["expected"])},
                 reason=f"SNAKE expects {100 * float(p['expected']):+.2f}% over "
                        f"{p.get('horizon', '?')} sessions against a {100 * need:.2f}% round trip"
                        + (f"; stake {size / ticket:.2f}x the equal share" if power > 0 else ""))
@@ -911,3 +925,5 @@ STRATEGIES["snake"] = snake              # trained with news; reads picks_snake.
 STRATEGIES["snake_nonews"] = snake       # same rule, no-news model; reads picks_snake_nonews.json
 STRATEGIES["snake_abs"] = snake          # same rule, absolute-return model; reads picks_snake_abs.json
 STRATEGIES["snake_abs_conv"] = snake     # the same picks, staked by conviction (SNAKE_SIZING_POWER)
+STRATEGIES["snake_abs_exit"] = snake     # the same picks, selling on the trained exit model
+STRATEGIES["snake_abs_exit_conv"] = snake  # exit model and conviction stakes together

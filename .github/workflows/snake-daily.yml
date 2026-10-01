@@ -36,7 +36,7 @@ jobs:
           cache: pip
       - name: Install (versions pinned to the machine SNAKE was trained on)
         run: |
-          pip install numpy==2.5.3 pandas==3.0.6 duckdb==1.5.5 requests==2.34.2
+          pip install numpy==2.5.3 pandas==3.0.6 duckdb==1.5.5 requests==2.34.2 lightgbm==4.7.0
           pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu
       - name: Score
         if: hashFiles('snake_release/model/meta.json') != ''

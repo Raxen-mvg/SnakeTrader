@@ -102,6 +102,27 @@ def main() -> int:
     S.snake(acc5, ctx(t, prices, picks("2026-09-29", wide)))
     check("snake_abs itself still stakes equally",
           all(30_000 < p.qty * p.avg_price < 34_000 for p in acc5.positions.values()))
+    # The exit-model accounts sell what the trained exit flags, and only past the minimum age.
+    acc6 = Account("snake_abs_exit", 200_000, 200_000)
+    S.snake(acc6, ctx(t, prices, picks("2026-09-29", exp)))
+    held = sorted(acc6.positions)
+    pk = picks("2026-09-30", exp)
+    pk["exit_rule"] = {"margin": 0.02, "min_age": 10}
+    pk["exit_scores"] = {"snake_abs_exit": {held[0]: {"pred": -0.05, "age": 12},
+                                            held[1]: {"pred": 0.01, "age": 12},
+                                            held[2]: {"pred": -0.05, "age": 4}}}
+    t5 = t + dt.timedelta(days=1)
+    S.snake(acc6, ctx(t5, prices, pk))
+    check("exit model: sells a holding it says to switch out of", held[0] not in acc6.positions)
+    check("exit model: keeps one it says to hold", held[1] in acc6.positions)
+    check("exit model: never sells before the minimum age", held[2] in acc6.positions)
+    acc7 = Account("snake_abs", 200_000, 200_000)
+    S.snake(acc7, ctx(t, prices, picks("2026-09-29", exp)))
+    pk2 = dict(pk, exit_scores={"snake_abs": {s: {"pred": -0.5, "age": 50} for s in acc7.positions}})
+    S.snake(acc7, ctx(t5, prices, pk2))
+    check("accounts without the exit model ignore exit scores", len(acc7.positions) == 6)
+    check("buys record the expected return at entry",
+          all("entry_exp" in p.meta for p in acc6.positions.values()))
     check("registered in the strategy table", S.STRATEGIES.get("snake") is S.snake)
     print("ALL PASS" if ok else "FAILURES")
     return 0 if ok else 1
