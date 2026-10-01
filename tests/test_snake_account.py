@@ -88,6 +88,18 @@ def main() -> int:
     S.snake(acc3, ctx(t, prices, {}))
     check("no picks file, no trades", not acc3.positions and acc3.cash == 200_000)
 
+    # snake_abs stakes by conviction: more on the names it expects most from, within bounds.
+    wide = {s: 0.09 - i * 0.012 for i, s in enumerate(names[:6])}
+    acc4 = Account("snake_abs", 200_000, 200_000)
+    S.snake(acc4, ctx(t, prices, picks("2026-09-29", wide)))
+    stake = {s: p.qty * p.avg_price for s, p in acc4.positions.items()}
+    check("conviction sizing: the top name gets more than the sixth",
+          stake.get("AAA.NS", 0) > stake.get("FFF.NS", 1e9), f"{ {k: round(v) for k, v in stake.items()} }")
+    check("conviction sizing: no name above 30% of the account",
+          max(stake.values()) <= 0.30 * 200_000 + 1)
+    check("conviction sizing: never spends more than the cash", acc4.cash >= 0)
+    check("other SNAKEs still stake equally",
+          all(30_000 < x < 34_000 for x in tickets))
     check("registered in the strategy table", S.STRATEGIES.get("snake") is S.snake)
     print("ALL PASS" if ok else "FAILURES")
     return 0 if ok else 1
