@@ -198,7 +198,7 @@ def score(today: pd.DataFrame, asof: pd.Timestamp, model_dir: Path = MODEL_DIR,
     extra = {}
     # The trained exit (snake/exit_model.py), for accounts that use it: scored here, where the
     # predictions and prices already are, so the trader only has to compare a number to a margin.
-    if exit_ctx and (Path(model_dir) / "exit_model.txt").exists():
+    if exit_ctx and (Path(model_dir) / "exit_meta.json").exists():
         from snake.exit_model import live_scores
         pdf = pd.DataFrame(p, index=today["symbol"].values, columns=[f"p{h}" for h in HORIZONS])
         mcols = [c for c in today.columns if c.startswith("mkt_")]
@@ -207,6 +207,15 @@ def score(today: pd.DataFrame, asof: pd.Timestamp, model_dir: Path = MODEL_DIR,
                             pd.Timestamp(asof))
         n = sum(len(v) for v in extra.get("exit_scores", {}).values())
         log(f"exit scores for {n} held names across {len(extra.get('exit_scores', {}))} accounts")
+    # ANACONDA's learned entry (snake/entry_rl.py): buy now or wait, for today's top names.
+    if (Path(model_dir) / "entry_q.txt").exists():
+        from snake.entry_rl import live_wait
+        pdf_all = pd.DataFrame(p, index=today["symbol"].values, columns=[f"p{h}" for h in HORIZONS])
+        ew = live_wait(model_dir, today, pdf_all, best)
+        extra.update(ew)
+        if ew:
+            log(f"entry: wait on {sum(v > 0 for v in ew['entry_wait'].values())} of "
+                f"{len(ew['entry_wait'])} top names")
     return {**extra, "asof": str(pd.Timestamp(asof).date()), "model": "SNAKE",
             "model_built": meta.get("built"), "trained_through": meta.get("trained_through"),
             "names_scored": int(len(order)),

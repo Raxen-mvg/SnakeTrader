@@ -214,7 +214,77 @@ class Policy:
                 if st["age"] >= self.min_age and p < -self.margin]
 
 
-EXIT_ACCOUNTS = ("snake_abs_exit", "snake_abs_exit_conv")
+# --- any-horizon exit (2026-10-01, the owner's framing) ------------------------------------------
+# "Will holding this make me more, or is this the most it will give me?" - asked at every horizon
+# the entry model knows, not over one fixed window. For each H, the target is the held stock's return
+# over the next H sessions minus that of the best fresh names, plus the whole cost of switching. A
+# holding is sold only when switching wins at EVERY horizon: no later point is expected to pay more
+# than taking the money now. It may sell from the first session after the purchase settles.
+GRID = (5, 10, 21, 63)
+EMBARGO_MULTI_DAYS = 100           # longer than the 63-session target, in calendar days
+
+
+def multi_targets(t: pd.DataFrame, o: pd.DataFrame, E_top3: pd.DataFrame) -> pd.DataFrame:
+    """Add target_H for every H in GRID to rows that have symbol and date."""
+    for h in GRID:
+        fwd = o.set_index(["symbol", "date"])[f"fwd_ret_{h}"].clip(-0.5, 2.0)
+        f3 = E_top3.assign(f=[fwd.get((s_, d), np.nan) for s_, d in zip(E_top3["symbol"], E_top3["date"])])
+        fresh = f3.groupby("date")["f"].mean()
+        held = np.array([fwd.get((s_, d), np.nan) for s_, d in zip(t["symbol"], t["date"])])
+        t[f"target_{h}"] = held - t["date"].map(fresh).to_numpy() + SWITCH
+    return t
+
+
+def counterfactual_rows_multi(o: pd.DataFrame, ctx: Context) -> pd.DataFrame:
+    t = counterfactual_rows(o, ctx)
+    E = expected_table(o)
+    top3 = E.sort_values("exp", ascending=False).groupby("date").head(3)
+    t = multi_targets(t, o, top3)
+    return t
+
+
+def fit_by_year_multi(rows: pd.DataFrame, years: list[int], seed: int = 42) -> dict:
+    """{year: {H: model}}, each trained only on positions whose longest target ends before the year."""
+    import lightgbm as lgb
+    models = {}
+    for y in years:
+        if y < FIRST_YEAR:
+            continue
+        cut = pd.Timestamp(f"{y}-01-01") - pd.Timedelta(days=EMBARGO_MULTI_DAYS)
+        tr = rows[rows["date"] < cut]
+        if len(tr) < 2_000:
+            continue
+        models[y] = {}
+        for h in GRID:
+            d = tr.dropna(subset=[f"target_{h}"])
+            m = lgb.LGBMRegressor(n_estimators=300, learning_rate=0.03, num_leaves=15,
+                                  min_child_samples=200, subsample=0.8, subsample_freq=1,
+                                  colsample_bytree=0.8, reg_lambda=5.0, random_state=seed, verbose=-1)
+            m.fit(d[FEATURES], d[f"target_{h}"].clip(-0.5, 0.5))
+            models[y][h] = m
+    log(f"any-horizon exit models for {sorted(models)}")
+    return models
+
+
+class PolicyMulti:
+    """Sell when switching beats holding at every horizon by more than margin; no waiting period
+    beyond the session the purchase settles in."""
+
+    def __init__(self, models: dict, ctx: Context, margin: float = 0.0, min_age: int = 1):
+        self.models, self.ctx, self.margin, self.min_age = models, ctx, margin, min_age
+
+    def __call__(self, dt, states, fresh) -> list[str]:
+        ms = self.models.get(dt.year)
+        if not ms or not states:
+            return []
+        fresh_exp = float(fresh.mean()) if fresh is not None and len(fresh) else 0.0
+        X = self.ctx.features(states, dt, fresh_exp)
+        best = np.max(np.column_stack([ms[h].predict(X) for h in GRID]), axis=1)
+        return [st["symbol"] for st, p in zip(states, best)
+                if st["age"] >= self.min_age and p < -self.margin]
+
+
+EXIT_ACCOUNTS = ("snake_abs_exit", "snake_abs_exit_conv", "snake_anaconda")
 DEFAULT_RULE = {"margin": 0.02, "min_age": 10}
 
 
@@ -242,6 +312,32 @@ def train_production(oos_path: str, model_dir: str, rule: dict | None = None) ->
     return str(out / "exit_model.txt")
 
 
+def train_production_multi(oos_path: str, model_dir: str, margin: float = 0.0) -> None:
+    """The any-horizon exit for the live accounts: one model per horizon, on every year."""
+    import json
+    import lightgbm as lgb
+    from snake import calendar as C
+    o = pd.read_parquet(oos_path)
+    o = o[o["date"] >= "2013-01-01"]
+    prices = C.load_prices()
+    ctx = Context(o, prices, C.market_features(prices))
+    rows = counterfactual_rows_multi(o, ctx)
+    out = Path(model_dir)
+    for h in GRID:
+        d = rows.dropna(subset=[f"target_{h}"])
+        m = lgb.LGBMRegressor(n_estimators=300, learning_rate=0.03, num_leaves=15, min_child_samples=200,
+                              subsample=0.8, subsample_freq=1, colsample_bytree=0.8, reg_lambda=5.0,
+                              random_state=42, verbose=-1)
+        m.fit(d[FEATURES], d[f"target_{h}"].clip(-0.5, 0.5))
+        m.booster_.save_model(str(out / f"exit_model_h{h}.txt"))
+    (out / "exit_meta.json").write_text(json.dumps({
+        "features": FEATURES, "horizons": list(GRID), "rule": {"margin": margin, "min_age": 1},
+        "question": "does holding beat switching to the best fresh names, after every fee, at ANY horizon?",
+        "rows": int(len(rows)), "trained_through": str(rows["date"].max().date()),
+        "built": time.strftime("%Y-%m-%d %H:%M"), "from_oos": Path(oos_path).name}, indent=1))
+    log(f"any-horizon production exit: {len(rows):,} rows, horizons {list(GRID)} -> {out}")
+
+
 def live_scores(model_dir, p: pd.DataFrame, expected: pd.Series, panel: pd.DataFrame,
                 market: dict, accounts: dict, asof: pd.Timestamp) -> dict:
     """Exit scores for every held name of every exit account, for the next session.
@@ -254,10 +350,13 @@ def live_scores(model_dir, p: pd.DataFrame, expected: pd.Series, panel: pd.DataF
     import json
     import lightgbm as lgb
     md = Path(model_dir)
-    if not (md / "exit_model.txt").exists():
+    if not (md / "exit_meta.json").exists():
         return {}
     meta = json.loads((md / "exit_meta.json").read_text())
-    booster = lgb.Booster(model_file=str(md / "exit_model.txt"))
+    if meta.get("horizons"):                    # any-horizon exit: the best horizon decides
+        boosters = [lgb.Booster(model_file=str(md / f"exit_model_h{h}.txt")) for h in meta["horizons"]]
+    else:
+        boosters = [lgb.Booster(model_file=str(md / "exit_model.txt"))]
     ranks = {h: p[f"p{h}"].rank(pct=True) for h in HORIZONS}
     px = panel.copy()
     px["date"] = pd.to_datetime(px["date"])
@@ -292,7 +391,8 @@ def live_scores(model_dir, p: pd.DataFrame, expected: pd.Series, panel: pd.DataF
             rows.append(r)
             keys.append((sym, age))
         if rows:
-            pred = booster.predict(pd.DataFrame(rows, columns=meta["features"]))
+            X = pd.DataFrame(rows, columns=meta["features"])
+            pred = np.max(np.column_stack([b.predict(X) for b in boosters]), axis=1)
             out[acc] = {s: {"pred": round(float(v), 5), "age": a} for (s, a), v in zip(keys, pred)}
     return {"exit_scores": out, "exit_rule": meta["rule"], "exit_model_built": meta["built"]}
 
@@ -301,7 +401,11 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--oos", required=True)
     ap.add_argument("--production", default="", help="model folder: train the live exit model there")
+    ap.add_argument("--any-horizon", action="store_true", help="with --production: the any-horizon exit")
     a = ap.parse_args()
+    if a.production and a.any_horizon:
+        train_production_multi(a.oos, a.production)
+        return 0
     if a.production:
         train_production(a.oos, a.production)
         return 0

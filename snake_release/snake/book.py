@@ -71,7 +71,11 @@ def simulate(d: pd.DataFrame, min_names: int = 50, market_filter: str = "",
              rotate_margin: float = 0.0, rotate_max: int = 1,
              sleeve: pd.DataFrame | None = None,
              first_session: bool = False, trace: list | None = None,
-             exit_policy=None, exact_timing: bool = False) -> tuple[dict, pd.DataFrame]:
+             exit_policy=None, exact_timing: bool = False,
+             vol_power: float = 0.0, meta: pd.Series | None = None, meta_min: float = 0.0,
+             meta_power: float = 0.0, start_date=None, extra_cost: float = 0.0,
+             skip_entry_move: float = 0.0, entry_gate: pd.Series | None = None,
+             gate_min: float = 0.0, gate_fill_next: bool = False) -> tuple[dict, pd.DataFrame]:
     """Walk Rs 2 lakh forward a session at a time, the model choosing when to sell.
 
     market_filter caps how many names may be HELD when the market looks weak, using only columns
@@ -122,6 +126,21 @@ def simulate(d: pd.DataFrame, min_names: int = 50, market_filter: str = "",
     """
     if exact_timing:
         first_session = True
+    BUY, SELL = BUY_PCT + extra_cost, SELL_PCT + extra_cost
+    # entry_gate (snake/entry_timing.py, ANACONDA): the deepest dip expected after buying each
+    # (symbol, date). A name whose expected dip is below -gate_min is not bought today - it waits,
+    # and is bought on a later day when the dip has passed, if SNAKE still ranks it.
+    # Audit knobs (2026-10-02): extra_cost is added to the slippage on EVERY buy and sell (small
+    # companies cost more to trade than the 0.15% assumed); skip_entry_move > 0 refuses a purchase
+    # whose entry session rose by at least that much (an entry_move column), because a stock locked
+    # at its upper price band has no sellers and the fill is fiction.
+    # start_date: begin with Rs 2 lakh on this date, while calibrating on everything before it, so the
+    # same history can be walked from many starting points and a result judged across them.
+    # meta (snake/meta_label.py): P(the pick pays after costs) per (symbol, date). Picks below
+    # meta_min are skipped; meta_power > 0 scales stakes by (P / the day's average P) ** meta_power.
+    # vol_power > 0 also scales each stake by (the day's median volatility / the stock's own) ** power,
+    # within the same bounds as conviction: calmer names get more, wilder names less. Needs a vol_21d
+    # column (the stock's 21-session volatility, known at the day's close).
     dates = list(pd.DatetimeIndex(sorted(d["date"].unique())))
     by_date = {dt: g.set_index("symbol") for dt, g in d.groupby("date", sort=False)}
     # Calibrate only on stocks the account could have bought: the least-traded names move far
@@ -134,6 +153,8 @@ def simulate(d: pd.DataFrame, min_names: int = 50, market_filter: str = "",
     sl_val = 0.0
     sl = sleeve.set_index("date") if sleeve is not None else None
     for dt in dates:
+        if start_date is not None and dt < pd.Timestamp(start_date):
+            continue
         day = by_date.get(dt)
         if day is None or len(day) < min_names:
             continue
@@ -172,7 +193,7 @@ def simulate(d: pd.DataFrame, min_names: int = 50, market_filter: str = "",
                 pos["stale"] += 1
             if exact_timing:
                 decided = (sym in policy_sells or pos["stale"] > 10
-                           or pos["expected"] <= (pre * SELL_PCT + DP_FEE) / max(pre, 1.0))
+                           or pos["expected"] <= (pre * SELL + DP_FEE) / max(pre, 1.0))
                 post_ret = pos["value"] / pos["ticket"] - 1.0
                 tp = take_profit > 0 and post_ret >= take_profit * pos.get("entry_exp", np.inf)
                 if trace is not None and fresh is not None:
@@ -189,13 +210,13 @@ def simulate(d: pd.DataFrame, min_names: int = 50, market_filter: str = "",
                     fill = pos["ticket"] * (1.0 + take_profit * pos["entry_exp"])
                 else:
                     continue
-                cash += fill - (fill * SELL_PCT + DP_FEE)
+                cash += fill - (fill * SELL + DP_FEE)
                 holds.append(pos["age"])
                 rets.append(fill / pos["ticket"] - 1.0)
                 del book[sym]
                 continue
             ret = pos["value"] / pos["ticket"] - 1.0
-            exit_cost = pos["value"] * SELL_PCT + DP_FEE
+            exit_cost = pos["value"] * SELL + DP_FEE
             if trace is not None and fresh is not None:
                 trace.append({"symbol": sym, "entry": pos["entry_date"], "date": dt,
                               "age": pos["age"], "expected": pos["expected"],
@@ -205,7 +226,7 @@ def simulate(d: pd.DataFrame, min_names: int = 50, market_filter: str = "",
             if hit:                                   # the resting limit order fills at the target
                 pos["value"] = pos["ticket"] * (1.0 + take_profit * pos["entry_exp"])
                 ret = pos["value"] / pos["ticket"] - 1.0
-                exit_cost = pos["value"] * SELL_PCT + DP_FEE
+                exit_cost = pos["value"] * SELL + DP_FEE
             leave = (hit or sym in policy_sells or ret <= DISASTER_STOP
                      or pos["expected"] <= exit_cost / max(pos["value"], 1.0) or pos["stale"] > 10)
             if leave:
@@ -230,17 +251,17 @@ def simulate(d: pd.DataFrame, min_names: int = 50, market_filter: str = "",
             for best_sym, best_exp in pool.nlargest(rotate_max).items():
                 worst = min(book, key=lambda k: book[k]["expected"])
                 wv = book[worst]["pre_value"] if exact_timing else book[worst]["value"]
-                switch = SELL_PCT + DP_FEE / max(wv, 1.0) + BUY_PCT
+                switch = SELL + DP_FEE / max(wv, 1.0) + BUY
                 if best_exp - book[worst]["expected"] <= switch + rotate_margin:
                     break
-                cash += wv - (wv * SELL_PCT + DP_FEE)
+                cash += wv - (wv * SELL + DP_FEE)
                 holds.append(book[worst]["age"])
                 rets.append(wv / book[worst]["ticket"] - 1.0)
                 del book[worst]
         free = cap - len(book)
         if sl is not None and free > 0 and sl_val > 0:
             wealth_now = cash + sl_val + sum(p["value"] for p in book.values())
-            need = min(sl_val, max(0.0, free * wealth_now / TOP_K * (1 + BUY_PCT) - cash))
+            need = min(sl_val, max(0.0, free * wealth_now / TOP_K * (1 + BUY) - cash))
             if need > 0:
                 sl_val -= need
                 cash += need * (1.0 - ETF_SELL) - DP_FEE
@@ -253,16 +274,41 @@ def simulate(d: pd.DataFrame, min_names: int = 50, market_filter: str = "",
                 # trade that day; everything else can be held and marked, but never bought.
                 if "tradable" in day.columns:
                     cand = cand[cand.index.isin(day.index[day["tradable"].astype(bool)])]
-                chosen = cand[cand > round_trip(ticket)].nlargest(free)
+                cand = cand[cand > (round_trip(ticket) + 2 * extra_cost)]
+                pm = None
+                if meta is not None:
+                    pm = pd.Series([meta.get((x, dt), np.nan) for x in cand.index], index=cand.index)
+                    if meta_min > 0:
+                        cand = cand[pm.fillna(1.0) >= meta_min]
+                if entry_gate is not None and gate_fill_next:
+                    # Fill the slot with the best name NOT expected to dip, instead of waiting.
+                    gv0 = pd.Series([entry_gate.get((x, dt), np.nan) for x in cand.index], index=cand.index)
+                    cand = cand[~(gv0 < -gate_min).fillna(False)]
+                chosen = cand.nlargest(free)
                 ref = np.mean([p["expected"] for p in book.values()] + list(chosen.values))                     if len(chosen) else 0.0
+                if entry_gate is not None:
+                    gv = pd.Series([entry_gate.get((x, dt), np.nan) for x in chosen.index], index=chosen.index)
+                    chosen = chosen[~(gv < -gate_min).fillna(False)]
+                if skip_entry_move > 0 and "entry_move" in day.columns:
+                    mv = day["entry_move"].reindex(chosen.index)
+                    chosen = chosen[~(mv >= skip_entry_move).fillna(False)]
                 for sym in chosen.index:
                     size = ticket
+                    mult = 1.0
                     if sizing_power > 0 and ref > 0:
-                        mult = float(np.clip((chosen[sym] / ref) ** sizing_power, size_lo, size_hi))
-                        size = min(ticket * mult, max_weight * wealth, cash / (1 + BUY_PCT))
-                    if size < 500 or cash < size * (1 + BUY_PCT):
+                        mult *= (chosen[sym] / ref) ** sizing_power
+                    if meta_power > 0 and pm is not None and pd.notna(pm.get(sym)):
+                        avg_p = float(pm.reindex(chosen.index).mean())
+                        if avg_p > 0:
+                            mult *= (float(pm[sym]) / avg_p) ** meta_power
+                    if vol_power > 0 and "vol_21d" in day.columns and pd.notna(day.at[sym, "vol_21d"]):
+                        mult *= (float(day["vol_21d"].median()) / max(float(day.at[sym, "vol_21d"]), 1e-4)) ** vol_power
+                    if mult != 1.0:
+                        mult = float(np.clip(mult, size_lo, size_hi))
+                        size = min(ticket * mult, max_weight * wealth, cash / (1 + BUY))
+                    if size < 500 or cash < size * (1 + BUY):
                         break
-                    cash -= size * (1 + BUY_PCT)
+                    cash -= size * (1 + BUY)
                     book[sym] = {"age": 0, "ticket": size, "value": size,
                                  "expected": float(cand[sym]), "entry_exp": float(cand[sym]),
                                  "stale": 0, "entry_date": dt}
