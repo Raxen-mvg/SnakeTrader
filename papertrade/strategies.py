@@ -319,13 +319,23 @@ def benchmark(acc: Account, ctx: Ctx) -> None:
         acc.buy(s, acc.cash, ctx.prices[s], ctx.t, "delivery", slippage_bps=SLIP_ETF, reason="benchmark held")
 
 
+def benchmark_smallcap(acc: Account, ctx: Ctx) -> None:
+    """The honest yardstick for SNAKE, which mostly buys small companies: the Nifty Smallcap 250,
+    held through HDFC's ETF. Added 2026-10-02, after the audit showed that simply owning every liquid
+    NSE stock earned about 22% a year over 2014-2026 - so beating the Nifty 50 proves little."""
+    s = "HDFCSML250.NS"
+    if not acc.positions and s in ctx.prices and ctx.t.time() >= ENTRY_AFTER:
+        acc.buy(s, acc.cash, ctx.prices[s], ctx.t, "delivery", slippage_bps=SLIP_ETF,
+                reason="small-cap benchmark held")
+
+
 STRATEGIES = {
     "unified": unified,
     "intraday": intraday, "intraweek": intraweek, "intramonth": intramonth,
     "random_hold": random_hold, "gold": gold, "gold_trend": gold_trend,
-    "nifty_calls": nifty_calls, "benchmark": benchmark,
+    "nifty_calls": nifty_calls, "benchmark": benchmark, "benchmark_smallcap": benchmark_smallcap,
 }
-ALWAYS_QUOTE = ["NIFTYBEES.NS", "GOLDBEES.NS", "^NSEI"]
+ALWAYS_QUOTE = ["NIFTYBEES.NS", "GOLDBEES.NS", "HDFCSML250.NS", "^NSEI"]
 
 
 def option_marks(acc: Account, ctx: Ctx) -> dict[str, float]:

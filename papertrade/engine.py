@@ -357,7 +357,7 @@ def tick(force: bool = False) -> int:
         return 0
     blocked = not_companies()
     for name, a in accounts.items():
-        if name in ("gold", "gold_trend", "benchmark"):     # these hold ETFs on purpose
+        if name in ("gold", "gold_trend", "benchmark", "benchmark_smallcap"):     # these hold ETFs on purpose
             continue
         for s in [x for x in a.positions if not is_company(x, blocked)]:
             if s in prices:
