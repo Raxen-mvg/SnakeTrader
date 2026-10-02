@@ -269,9 +269,68 @@ def load_snake_picks(file: str = "picks_snake.json") -> dict:
     return d
 
 
+def official_closes(symbols: list[str], day: dt.date) -> dict[str, float]:
+    """The exchange's official closing price for `day`, per symbol, from Yahoo's daily bars."""
+    import yfinance as yf
+    syms = sorted(set(symbols))
+    if not syms:
+        return {}
+    df = yf.download(syms, period="5d", interval="1d", group_by="ticker", auto_adjust=False,
+                     progress=False, threads=True)
+    out = {}
+    for s in syms:
+        try:
+            d = df[s] if len(syms) > 1 else df
+            d = d.dropna(subset=["Close"])
+            d.index = pd.to_datetime(d.index).date
+            if day in d.index:
+                out[s] = float(d.loc[day, "Close"])
+        except (KeyError, ValueError):
+            continue
+    return out
+
+
+def mark_close(t: dt.datetime) -> int:
+    """After the close, value every account at the OFFICIAL closing prices, once a day.
+
+    Intraday ticks value holdings at the last price seen, around 15:28; NSE's official close is the
+    average of the last half hour and differs, by about half a percent on 2026-10-01. The day's final
+    number should be the official one, so the last equity point of each day is re-taken here."""
+    summ = STATE / "summary.json"
+    s = json.loads(summ.read_text()) if summ.exists() else {}
+    today = t.date().isoformat()
+    if s.get("close_marked") == today:
+        log.info("already marked at today's official close")
+        return 0
+    accounts = load_accounts(STATE / "accounts.json", list(STRATEGIES), START_CASH)
+    held = {sym for a in accounts.values() for sym, p in a.positions.items() if p.product != "option"}
+    closes = official_closes(sorted(held), t.date())
+    if held and not closes and t.time() >= dt.time(17, 0):
+        s["close_marked"] = today                # no session today (a holiday): nothing to mark
+        summ.write_text(json.dumps(s, indent=1))
+        log.info("no official closes for %s: market holiday", today)
+        return 0
+    if held and len(closes) < 0.9 * len(held):
+        log.warning("official closes for only %d of %d holdings; trying again later", len(closes), len(held))
+        return 0
+    at = t.replace(hour=15, minute=30, second=0, microsecond=0)
+    for a in accounts.values():
+        a.mark(closes, at)                       # options and any missing name keep their last mark
+    save_accounts(STATE / "accounts.json", accounts)
+    _, _, asof = load_picks()
+    write_reports(accounts, closes, at, asof)
+    s = json.loads(summ.read_text())
+    s["close_marked"] = today
+    summ.write_text(json.dumps(s, indent=1))
+    log.info("marked %d accounts at the official close of %s (%d prices)", len(accounts), today, len(closes))
+    return 0
+
+
 def tick(force: bool = False) -> int:
     t = now_ist()
     if not force and not session_open(t):
+        if t.weekday() < 5 and t.time() >= dt.time(16, 0):
+            return mark_close(t)
         log.info("market closed at %s; nothing to do", t)
         return 0
     STATE.mkdir(exist_ok=True)
@@ -327,8 +386,11 @@ def tick(force: bool = False) -> int:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--force", action="store_true", help="act even if the market is closed (testing)")
+    ap.add_argument("--mark-close", action="store_true", help="value every account at today's official close")
     args = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    if args.mark_close:
+        return mark_close(now_ist())
     return tick(force=args.force)
 
 
