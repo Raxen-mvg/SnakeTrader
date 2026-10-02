@@ -25,7 +25,8 @@ during market hours, and GitHub Actions — so it keeps going when the laptop is
 | gold | GOLDBEES held |
 | gold_trend | GOLDBEES only while above its 200-day average |
 | nifty_calls | SIMULATED: one at-the-money Nifty call, Black-Scholes priced |
-| benchmark | NIFTYBEES held; every strategy must beat this |
+| benchmark | NIFTYBEES held |
+| benchmark_smallcap | HDFC Nifty Smallcap 250 ETF held, from 5 October 2026: the honest yardstick for SNAKE, which mostly buys small companies |
 
 ## Read before trusting the backtest numbers above
 
