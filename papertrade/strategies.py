@@ -835,11 +835,16 @@ ALWAYS_QUOTE = ALWAYS_QUOTE + STATARB_UNIVERSE   # the stat-arb book needs its w
 # ---------------------------------------------------------------------------------------------
 SNAKE_NAMES = 6
 SNAKE_STALE_DAYS = 4          # calendar days: stop BUYING on a picks file older than this
-SNAKE_SIZING_POWER = {"snake_abs_conv": 2.0, "snake_abs_exit_conv": 2.0}   # conviction sizing
+SNAKE_SIZING_POWER = {"snake_abs_conv": 2.0, "snake_abs_exit_conv": 2.0,
+                      "snake_anaconda": 2.0}   # conviction sizing
 # Accounts that also sell on SNAKE's trained exit model (snake/exit_model.py in the model repo):
 # the picks file carries, for each of their holdings, the model's prediction of holding minus
 # switching to the best fresh names over the next ten sessions, after the cost of switching.
-SNAKE_EXIT_ACCOUNTS = {"snake_abs_exit", "snake_abs_exit_conv"}
+SNAKE_EXIT_ACCOUNTS = {"snake_abs_exit", "snake_abs_exit_conv", "snake_anaconda"}
+# ANACONDA also has a learned ENTRY (snake/entry_rl.py): for each top name the picks file carries
+# Q(wait) - how much more it expects to pay by buying now rather than waiting a session. A name with
+# Q(wait) > 0 is not bought today; its slot stays empty, exactly as in the backtest.
+SNAKE_ENTRY_ACCOUNTS = {"snake_anaconda"}
 SNAKE_SIZE_LO, SNAKE_SIZE_HI, SNAKE_MAX_WEIGHT = 0.5, 1.6, 0.30
 
 
@@ -899,13 +904,17 @@ def snake(acc: Account, ctx: Ctx) -> None:
         return
     barred = _barred_today(acc, ctx)
     need = round_trip_cost(ticket)
-    chosen = []
+    chosen, waiting = [], 0
+    wait_q = (s.get("entry_wait") or {}) if acc.name in SNAKE_ENTRY_ACCOUNTS else {}
     for p in s.get("top", []):
         sym = p["symbol"]
-        if len(chosen) >= free or sym in acc.positions or sym in barred or sym not in ctx.prices:
+        if len(chosen) + waiting >= free or sym in acc.positions or sym in barred or sym not in ctx.prices:
             continue
         if float(p.get("expected", 0.0)) <= need:
             break                         # the list is sorted: nothing further down clears it
+        if wait_q.get(sym, 0.0) > 0:
+            waiting += 1                  # the learned entry expects a better price: wait, keep the slot
+            continue
         chosen.append(p)
     # Conviction sizing (snake_abs_conv only): stake in proportion to expected return squared, against
     # the average of what is held and what is bought today, between half and 1.6x the equal stake
@@ -937,3 +946,4 @@ STRATEGIES["snake_abs"] = snake          # same rule, absolute-return model; rea
 STRATEGIES["snake_abs_conv"] = snake     # the same picks, staked by conviction (SNAKE_SIZING_POWER)
 STRATEGIES["snake_abs_exit"] = snake     # the same picks, selling on the trained exit model
 STRATEGIES["snake_abs_exit_conv"] = snake  # exit model and conviction stakes together
+STRATEGIES["snake_anaconda"] = snake     # learned entry + exit model + conviction stakes

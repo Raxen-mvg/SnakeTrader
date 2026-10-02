@@ -123,6 +123,18 @@ def main() -> int:
     check("accounts without the exit model ignore exit scores", len(acc7.positions) == 6)
     check("buys record the expected return at entry",
           all("entry_exp" in p.meta for p in acc6.positions.values()))
+    # ANACONDA waits on names its learned entry flags, keeps the slot, and buys the rest.
+    pk3 = picks("2026-09-29", exp)
+    pk3["entry_wait"] = {"AAA.NS": 0.004, "BBB.NS": -0.002}
+    acc8 = Account("snake_anaconda", 200_000, 200_000)
+    S.snake(acc8, ctx(t, prices, pk3))
+    check("anaconda: does not buy a name it should wait on", "AAA.NS" not in acc8.positions)
+    check("anaconda: buys names it should not wait on", "BBB.NS" in acc8.positions)
+    check("anaconda: the waiting name keeps its slot (five bought, not six)", len(acc8.positions) == 5,
+          f"{sorted(acc8.positions)}")
+    acc9 = Account("snake_abs_exit_conv", 200_000, 200_000)
+    S.snake(acc9, ctx(t, prices, pk3))
+    check("other accounts ignore the entry signal", "AAA.NS" in acc9.positions)
     check("registered in the strategy table", S.STRATEGIES.get("snake") is S.snake)
     print("ALL PASS" if ok else "FAILURES")
     return 0 if ok else 1

@@ -251,7 +251,9 @@ SNAKE_FILES = {"snake": "picks_snake.json", "snake_nonews": "picks_snake_nonews.
                "snake_abs_conv": "picks_snake_abs.json",
                # and two that also sell on the trained exit model, equal and conviction staked
                "snake_abs_exit": "picks_snake_abs.json",
-               "snake_abs_exit_conv": "picks_snake_abs.json"}
+               "snake_abs_exit_conv": "picks_snake_abs.json",
+               # ANACONDA: learned entry (wait for a better price) on top of the Viper exit and conviction
+               "snake_anaconda": "picks_snake_abs.json"}
 
 
 def load_snake_picks(file: str = "picks_snake.json") -> dict:
