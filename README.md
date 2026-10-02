@@ -27,6 +27,17 @@ during market hours, and GitHub Actions — so it keeps going when the laptop is
 | nifty_calls | SIMULATED: one at-the-money Nifty call, Black-Scholes priced |
 | benchmark | NIFTYBEES held; every strategy must beat this |
 
+## Read before trusting the backtest numbers above
+
+An audit on 2 October 2026 re-ran the Vipers with harsher, more realistic assumptions. With 0.5%
+slippage each way (small companies cost more to trade than the 0.15% first assumed) and no purchase
+after a session that rose 4.9% or more (a stock locked at its price band cannot really be bought), the
+backtests return about **+22% a year for Viper and +27-33% for Viper Conviction** from 2014, against
+**+22.4% a year for holding every liquid NSE stock in equal amounts** over the same years, +14.9% for the
+Nifty Next 50 and +11.7% for the Nifty 50. With 1% slippage they fall to +9-19%. The crore-sized figures
+in the table above are best-case numbers; the live accounts are the real test. Gains held under a year
+are also taxed at 20%.
+
 ## Where picks come from
 
 - **Oracle** picks (`state/picks_IN.json`) are exported from the research machine's nightly
