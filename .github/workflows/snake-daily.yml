@@ -3,7 +3,8 @@ name: snake-daily
 # SNAKE's picks, made on GitHub's servers so the account keeps a current view when the laptop is
 # off. The laptop still trains SNAKE and publishes it into snake_release/; this only uses it.
 # If the laptop already wrote picks for the latest session, the run stops at once - two clocks,
-# one answer. Prices are fetched fresh and discarded; only the picks file is committed.
+# one answer. Prices are fetched fresh and discarded; only the picks file is committed. The 17:00
+# run also values every account at the day's official close, in case the laptop is off.
 on:
   schedule:
     # 17:00 IST after the close, and 07:30 IST before the open as a second chance, weekdays.
@@ -38,6 +39,9 @@ jobs:
         run: |
           pip install numpy==2.5.3 pandas==3.0.6 duckdb==1.5.5 requests==2.34.2 lightgbm==4.7.0
           pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements.txt
+      - name: Value the accounts at today's official close (after 16:00 IST only; once a day)
+        run: python -m papertrade.engine || true
       - name: Score
         if: hashFiles('snake_release/model/meta.json') != ''
         env:
@@ -53,9 +57,9 @@ jobs:
         run: |
           git config user.name "paper-trader"
           git config user.email "paper-trader@users.noreply.github.com"
-          git add state/picks_snake.json state/picks_snake_nonews.json state/picks_snake_abs.json 2>/dev/null || exit 0
+          git add state
           if git diff --cached --quiet; then exit 0; fi
-          git commit -q -m "SNAKE picks $(date -u +%Y-%m-%dT%H:%MZ)"
+          git commit -q -m "SNAKE picks and official close $(date -u +%Y-%m-%dT%H:%MZ)"
           for i in 1 2 3; do
             git push -q && exit 0
             git pull -q --rebase -X theirs
