@@ -7,7 +7,8 @@ $log = "C:\Projects\StockTradesModel\logs\paper_trader.log"
 git pull -q --rebase 2>&1 | Out-Null
 & $py tools\export_picks.py --out state\picks_IN.json *>> $log
 $now = Get-Date
-if ($now.DayOfWeek -notin 'Saturday','Sunday' -and $now.TimeOfDay -ge [TimeSpan]'09:14' -and $now.TimeOfDay -le [TimeSpan]'15:35') {
+# From 16:00 the engine values every account at the official close instead of trading (once a day).
+if ($now.DayOfWeek -notin 'Saturday','Sunday' -and (($now.TimeOfDay -ge [TimeSpan]'09:14' -and $now.TimeOfDay -le [TimeSpan]'15:35') -or $now.TimeOfDay -ge [TimeSpan]'16:00')) {
     & $py -m papertrade.engine *>> $log
 }
 git add state
