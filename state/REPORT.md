@@ -4,52 +4,52 @@ Updated 2026-10-05 13:28 IST. Model picks as of 2026-10-01. Each strategy starte
 
 | Strategy | Equity (Rs) | Return | Closed trades | Win rate | Costs paid (Rs) |
 |:---|---:|---:|---:|---:|---:|
-| unified | 200,405 | +0.20% | 0 | - | 236 |
-| snake_abs_exit | 200,294 | +0.15% | 0 | - | 235 |
-| snake_abs_exit_conv | 200,293 | +0.15% | 0 | - | 236 |
+| unified | 200,372 | +0.19% | 0 | - | 236 |
+| snake_abs_exit | 200,263 | +0.13% | 0 | - | 235 |
+| snake_abs_exit_conv | 200,260 | +0.13% | 0 | - | 236 |
 | intraday | 200,000 | +0.00% | 0 | - | 0 |
 | gold_trend | 200,000 | +0.00% | 0 | - | 0 |
 | statarb | 200,000 | +0.00% | 0 | - | 0 |
-| gold | 199,679 | -0.16% | 0 | - | 237 |
-| intramonth | 198,930 | -0.54% | 0 | - | 235 |
-| benchmark_smallcap | 198,722 | -0.64% | 0 | - | 237 |
-| random_hold | 198,314 | -0.84% | 1 | 100% | 339 |
-| oracle | 198,286 | -0.86% | 0 | - | 233 |
-| snake_anaconda | 198,102 | -0.95% | 0 | - | 197 |
-| snake_abs | 197,270 | -1.36% | 0 | - | 236 |
-| snake_abs_conv | 197,212 | -1.39% | 0 | - | 236 |
-| benchmark | 196,320 | -1.84% | 0 | - | 237 |
-| intraweek | 195,054 | -2.47% | 5 | 40% | 748 |
-| snake | 192,824 | -3.59% | 0 | - | 234 |
+| gold | 199,663 | -0.17% | 0 | - | 237 |
+| intramonth | 198,923 | -0.54% | 0 | - | 235 |
+| benchmark_smallcap | 198,744 | -0.63% | 0 | - | 237 |
+| oracle | 198,322 | -0.84% | 0 | - | 233 |
+| random_hold | 198,306 | -0.85% | 1 | 100% | 339 |
+| snake_anaconda | 198,075 | -0.96% | 0 | - | 197 |
+| snake_abs | 197,238 | -1.38% | 0 | - | 236 |
+| snake_abs_conv | 197,179 | -1.41% | 0 | - | 236 |
+| benchmark | 196,358 | -1.82% | 0 | - | 237 |
+| intraweek | 195,048 | -2.48% | 5 | 40% | 748 |
 | nifty_calls | 192,776 | -3.61% | 1 | 0% | 50 |
-| snake_nonews | 191,975 | -4.01% | 0 | - | 231 |
+| snake | 192,760 | -3.62% | 0 | - | 234 |
+| snake_nonews | 192,037 | -3.98% | 0 | - | 231 |
 
-Combined allocator (virtual): Rs 198,593 (-0.70%).
+Combined allocator (virtual): Rs 198,583 (-0.71%).
 
 Profit on 2026-10-05:
 
 | Strategy | Rs | % |
 |:---|---:|---:|
-| intramonth | +1,422 | +0.72% |
-| unified | +1,360 | +0.68% |
-| random_hold | +806 | +0.41% |
-| gold | +115 | +0.06% |
+| intramonth | +1,416 | +0.72% |
+| unified | +1,327 | +0.67% |
+| random_hold | +798 | +0.40% |
+| gold | +99 | +0.05% |
 | intraday | +0 | +0.00% |
 | nifty_calls | +0 | +0.00% |
 | gold_trend | +0 | +0.00% |
 | statarb | +0 | +0.00% |
-| oracle | -274 | -0.14% |
-| benchmark | -635 | -0.32% |
-| benchmark_smallcap | -1,278 | -0.64% |
-| snake_abs_conv | -1,782 | -0.90% |
-| snake_abs_exit | -1,787 | -0.88% |
-| snake_abs | -1,788 | -0.90% |
-| snake_abs_exit_conv | -1,797 | -0.89% |
-| snake | -1,877 | -0.96% |
-| snake_anaconda | -1,898 | -0.95% |
-| intraweek | -2,454 | -1.24% |
-| snake_nonews | -3,047 | -1.56% |
+| oracle | -238 | -0.12% |
+| benchmark | -597 | -0.30% |
+| benchmark_smallcap | -1,256 | -0.63% |
+| snake_abs_conv | -1,815 | -0.91% |
+| snake_abs_exit | -1,819 | -0.90% |
+| snake_abs | -1,821 | -0.92% |
+| snake_abs_exit_conv | -1,829 | -0.91% |
+| snake_anaconda | -1,925 | -0.96% |
+| snake | -1,941 | -1.00% |
+| intraweek | -2,460 | -1.25% |
+| snake_nonews | -2,986 | -1.53% |
 
-Average per day so far: snake_abs_exit Rs +147, snake_abs_exit_conv Rs +146, unified Rs +81, statarb Rs +0, intraday Rs +0, gold_trend Rs +0, gold Rs -64, intramonth Rs -214, random_hold Rs -337, oracle Rs -343, benchmark Rs -736, snake_abs Rs -910, intraweek Rs -989, benchmark_smallcap Rs -1,278, snake_abs_conv Rs -1,394, nifty_calls Rs -1,445, snake Rs -1,794, snake_anaconda Rs -1,898, snake_nonews Rs -2,675
+Average per day so far: snake_abs_exit Rs +131, snake_abs_exit_conv Rs +130, unified Rs +74, statarb Rs +0, intraday Rs +0, gold_trend Rs +0, gold Rs -67, intramonth Rs -215, oracle Rs -336, random_hold Rs -339, benchmark Rs -728, snake_abs Rs -921, intraweek Rs -990, benchmark_smallcap Rs -1,256, snake_abs_conv Rs -1,411, nifty_calls Rs -1,445, snake Rs -1,810, snake_anaconda Rs -1,925, snake_nonews Rs -2,654
 
 Option results are SIMULATED (Black-Scholes on the real Nifty level), not real option prices.
