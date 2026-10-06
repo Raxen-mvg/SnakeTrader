@@ -75,6 +75,94 @@ def yahoo(symbol: str, rng: str = "2y") -> pd.DataFrame:
     return pd.DataFrame()
 
 
+def nse_file(url: str) -> bytes | None:
+    """One of the exchange's public end-of-day files; None if it does not exist (a holiday)."""
+    import urllib.error
+    for attempt in range(3):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": UA, "Referer": "https://www.nseindia.com/"})
+            return urllib.request.urlopen(req, timeout=60).read()
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                return None
+            time.sleep(3 * (attempt + 1))
+        except Exception:
+            time.sleep(3 * (attempt + 1))
+    return None
+
+
+def exchange_day(day: date) -> pd.DataFrame:
+    """NSE's own bhavcopy for one session: every listed company's raw open, high, low, close."""
+    import io
+    import zipfile
+    raw = nse_file(f"https://nsearchives.nseindia.com/content/cm/BhavCopy_NSE_CM_0_0_0_{day:%Y%m%d}_F_0000.csv.zip")
+    if not raw:
+        return pd.DataFrame()
+    with zipfile.ZipFile(io.BytesIO(raw)) as z:
+        d = pd.read_csv(io.BytesIO(z.read(next(n for n in z.namelist() if n.lower().endswith(".csv")))))
+    d.columns = [c.strip() for c in d.columns]
+    d["SctySrs"] = d["SctySrs"].astype(str).str.strip()
+    d = d[d["SctySrs"].isin(["EQ", "BE"])].sort_values("SctySrs", key=lambda s: s.map({"EQ": 0, "BE": 1}))
+    out = pd.DataFrame({"symbol": d["TckrSymb"].astype(str).str.strip() + ".NS",
+                        "open": pd.to_numeric(d["OpnPric"], errors="coerce"),
+                        "high": pd.to_numeric(d["HghPric"], errors="coerce"),
+                        "low": pd.to_numeric(d["LwPric"], errors="coerce"),
+                        "close": pd.to_numeric(d["ClsPric"], errors="coerce"),
+                        "prevclose": pd.to_numeric(d["PrvsClsgPric"], errors="coerce"),
+                        "volume": pd.to_numeric(d["TtlTradgVol"], errors="coerce").fillna(0)})
+    out["date"] = pd.Timestamp(day)
+    return out.drop_duplicates("symbol").dropna(subset=["close"])
+
+
+def exchange_index(day: date, name: str = "nifty 50") -> float | None:
+    """The index's official close for one session, from the exchange's daily index file."""
+    import io
+    raw = nse_file(f"https://nsearchives.nseindia.com/content/indices/ind_close_all_{day:%d%m%Y}.csv")
+    if not raw:
+        return None
+    d = pd.read_csv(io.BytesIO(raw))
+    d.columns = [c.strip() for c in d.columns]
+    row = d[d["Index Name"].astype(str).str.strip().str.lower() == name]
+    return float(row["Closing Index Value"].iloc[0]) if len(row) else None
+
+
+def fill_from_exchange(px: pd.DataFrame) -> pd.DataFrame:
+    """Complete the latest sessions Yahoo has only partly from the exchange's own files.
+
+    Yahoo publishes Indian daily bars a few hundred names at a time (631 of 1,527 for 5 Oct at
+    11:00 the next morning), so the cloud kept scoring a session that was days old. The laptop
+    has filled these from the bhavcopy for months (india_close_from_exchange.py); this is the same
+    fill for the cloud. A name is filled only when the exchange's previous close agrees with ours
+    within 2%: otherwise a split or bonus sits between them and a raw close would look like a crash."""
+    n = px["symbol"].nunique()
+    per_day = px.groupby("date")["symbol"].nunique()
+    full = per_day[per_day >= 0.8 * n]
+    if full.empty:
+        return px
+    ist = pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None)
+    end = ist.normalize() if ist.hour >= 16 else ist.normalize() - pd.Timedelta(days=1)
+    todo = pd.bdate_range(full.index.max() + pd.Timedelta(days=1), end)[-5:]
+    universe = set(px["symbol"])
+    for d in todo:
+        ex = exchange_day(d.date())
+        if ex.empty:
+            log(f"no exchange file for {d.date()} (a holiday, or not published yet)")
+            continue
+        have = set(px.loc[px["date"] == d, "symbol"])
+        last = px[px["date"] < d].sort_values("date").groupby("symbol").tail(1).set_index("symbol")
+        ex = ex[ex["symbol"].isin(universe - have) & ex["symbol"].isin(last.index)]
+        agree = (ex["prevclose"] / ex["symbol"].map(last["close"]) - 1).abs() < 0.02
+        ex = ex[agree].copy()
+        ex["adj_close"] = ex["close"] * ex["symbol"].map(last["adj_close"] / last["close"])
+        add = ex[["date", "open", "high", "low", "close", "adj_close", "volume", "symbol"]].copy()
+        add["market"] = "IN"
+        add["volume"] = add["volume"].astype("int64")
+        px = pd.concat([px, add[px.columns]], ignore_index=True)
+        log(f"{d.date()}: Yahoo had {len(have):,} names, the exchange's file added {len(add):,} "
+            f"({int((~agree).sum())} skipped: previous close disagrees, likely a split or bonus)")
+    return px
+
+
 def prices(symbols: list[str]) -> tuple[pd.DataFrame, pd.DataFrame]:
     with ThreadPoolExecutor(max_workers=8) as ex:
         frames = list(ex.map(yahoo, symbols))
@@ -83,6 +171,7 @@ def prices(symbols: list[str]) -> tuple[pd.DataFrame, pd.DataFrame]:
     px = pd.concat(got, ignore_index=True)
     px["market"] = "IN"
     px["volume"] = px["volume"].fillna(0).astype("int64")
+    px = fill_from_exchange(px)
     # During market hours Yahoo's daily series for many names carries today's moving bar in place
     # of yesterday's, so the latest date can exist for only half the universe (740 of 1,526 on
     # 2026-09-30 at 13:10). Score the latest session that at least 80% of names actually have.
@@ -96,6 +185,12 @@ def prices(symbols: list[str]) -> tuple[pd.DataFrame, pd.DataFrame]:
     keep = sorted(px["date"].unique())[-SESSIONS:]
     px = px[px["date"].isin(set(keep))]
     bm = yahoo("^NSEI")[["date", "adj_close"]]
+    for d in sorted(set(keep) - set(bm["date"])):
+        if d > bm["date"].max():                   # the index's close missing for a scored session
+            v = exchange_index(pd.Timestamp(d).date())
+            if v:
+                bm = pd.concat([bm, pd.DataFrame({"date": [d], "adj_close": [v]})], ignore_index=True)
+                log(f"Nifty 50 close for {pd.Timestamp(d).date()} from the exchange: {v:,.2f}")
     return px, bm[bm["date"] >= keep[0]]
 
 
