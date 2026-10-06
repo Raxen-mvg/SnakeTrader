@@ -328,6 +328,48 @@ def mark_close(t: dt.datetime) -> int:
     return 0
 
 
+def recent_splits(symbols: list[str], today: dt.date, days: int = 7) -> dict[str, list[tuple[str, float]]]:
+    """Splits and bonus issues (as share ratios) with an ex-date in the last `days` days, per symbol."""
+    import yfinance as yf
+    out = {}
+    for s in sorted(set(symbols)):
+        try:
+            sp = yf.Ticker(s).splits
+        except Exception:                          # one name failing must not stop the check
+            continue
+        if sp is None or sp.empty:
+            continue
+        for d, r in sp.items():
+            day = pd.Timestamp(d).date()
+            if today - dt.timedelta(days=days) <= day <= today and r and float(r) != 1.0:
+                out.setdefault(s, []).append((day.isoformat(), float(r)))
+    return out
+
+
+def apply_corporate_actions(accounts: dict, t: dt.datetime) -> int:
+    """Once a day, before any trading: adjust holdings for splits and bonus issues."""
+    mark = STATE / "corporate_actions.json"        # summary.json is rewritten every tick
+    s = json.loads(mark.read_text()) if mark.exists() else {}
+    today = t.date().isoformat()
+    if s.get("checked") == today:
+        return 0
+    held = sorted({sym for a in accounts.values() for sym, p in a.positions.items() if p.product != "option"})
+    n = 0
+    found = recent_splits(held, t.date())
+    for sym, events in found.items():
+        for ex_date, ratio in events:
+            for a in accounts.values():
+                if a.apply_split(sym, ratio, ex_date):
+                    n += 1
+                    log.info("ALERT %s: %s split %g-for-1 (ex %s); holding adjusted", a.name, sym, ratio, ex_date)
+    s["checked"] = today
+    s.setdefault("seen", []).extend(
+        {"day": today, "symbol": sym, "ex_date": e, "ratio": r} for sym, ev in found.items() for e, r in ev)
+    STATE.mkdir(exist_ok=True)
+    mark.write_text(json.dumps(s, indent=1))
+    return n
+
+
 def tick(force: bool = False) -> int:
     t = now_ist()
     if not force and not session_open(t):
@@ -345,6 +387,7 @@ def tick(force: bool = False) -> int:
             log.info("ticked %s ago by the other runner; skipping", t - last)
             return 0
     accounts = load_accounts(STATE / "accounts.json", list(STRATEGIES), START_CASH)
+    apply_corporate_actions(accounts, t)
     picks, ranks, asof = load_picks()
     intraday_picks = intraday_model_picks(t)
     held = {s for a in accounts.values() for s, p in a.positions.items() if p.product != "option"}

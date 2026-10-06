@@ -100,6 +100,27 @@ class Account:
             p.qty -= units
         return pnl
 
+    def apply_split(self, symbol: str, ratio: float, ex_date: str) -> bool:
+        """A split or bonus issue: the holding becomes ratio x the shares at 1/ratio the price.
+
+        Without this a 2-for-1 split reads as a 50% crash: on 2026-10-06 BLSE.NS split and the
+        SNAKE accounts sold it at their disaster stop. Applied once per ex-date, and only to a
+        position opened before the ex-date (one bought on or after it already paid the new price)."""
+        p = self.positions.get(symbol)
+        if not p or p.product == "option" or ratio <= 0 or ratio == 1:
+            return False
+        if ex_date in p.meta.get("splits", []) or p.opened[:10] >= ex_date:
+            return False
+        old = p.qty
+        p.qty = int(math.floor(p.qty * ratio + 1e-9))       # fractions are paid out in cash; ignored
+        p.avg_price /= ratio
+        if "last_price" in p.meta:
+            p.meta["last_price"] /= ratio
+        p.meta.setdefault("splits", []).append(ex_date)
+        self.memo.setdefault("corporate_actions", []).append(
+            {"symbol": symbol, "ex_date": ex_date, "ratio": ratio, "qty_before": old, "qty_after": p.qty})
+        return True
+
     # --- valuation ------------------------------------------------------------------
     def equity(self, prices: dict[str, float]) -> float:
         held = 0.0
