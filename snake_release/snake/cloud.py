@@ -172,11 +172,15 @@ def main() -> int:
             held += list((accs.get(name, {}).get("positions") or {}).keys())
     symbols = sorted(set(universe) | set(held))
 
-    latest = yahoo("^NSEI", "5d")
-    if latest.empty:
+    # Overnight Yahoo sometimes serves the index's latest bar with no close (2026-10-06 01:22 IST:
+    # ^NSEI had no 5 Oct close, so 1 Oct looked current and no picks were made). Take the latest
+    # session any of the index and a few of the largest names has a close for.
+    seen = [yahoo(s, "5d") for s in ("^NSEI", "RELIANCE.NS", "HDFCBANK.NS", "TCS.NS", "INFY.NS")]
+    seen = [d for d in seen if not d.empty]
+    if not seen:
         log("could not reach Yahoo for the latest session; nothing written")
         return 1
-    last_session = str(latest["date"].max().date())
+    last_session = str(max(d["date"].max() for d in seen).date())
     nonews = BUNDLE / "model_nonews"
     absm = BUNDLE / "model_abs"
     outs = [Path(a.out)] + ([Path(a.out_nonews)] if a.out_nonews and nonews.exists() else [])
