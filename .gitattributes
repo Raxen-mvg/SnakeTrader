@@ -1,0 +1,3 @@
+# LightGBM cannot read a model file whose line endings Windows git turned into CRLF on checkout
+# ("Model format error, expect a tree here"). Keep the released model byte-for-byte.
+snake_release/** -text
