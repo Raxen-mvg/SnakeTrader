@@ -106,6 +106,16 @@ Tests: `python tests/test_papertrade.py`, `python tests/test_oracle_account.py`,
 - Option trades are simulated from the real Nifty level and realised volatility, not real quotes.
 - GitHub starts scheduled workflows late and sometimes skips them, so with the laptop off the
   accounts may tick only a few times a day. SNAKE decides once a day, so it is least affected.
+- Splits, bonus issues and demergers. Each morning the engine applies any split Yahoo has recorded
+  to every holding (shares up, cost down). A held name priced more than 25% from its last official
+  close - further than NSE's 20% daily band allows - has had a corporate action Yahoo has not
+  recorded yet; it keeps its last value and is not traded until its holding is adjusted by hand.
+  Two such events in the first week (BLSE.NS split 2-for-1; BHAGYANGR.NS demerger, record date
+  8 October 2026) were first sold at the disaster stop; both sales were reversed, and the
+  Bhagyanagar demerger entitlement is carried as a non-tradable position at the value the ex-date
+  price implies until the new company lists.
+- Two clocks: the laptop and GitHub Actions. Each laptop run starts from GitHub's state, and a tick
+  that lost the race to the cloud is dropped, as the cloud drops its own.
 - If picks go stale, strategies keep trading on the last ones; SNAKE stops buying and stops
   selling on its model's say-so once its picks are more than four days old, keeping only its
   disaster stop.
