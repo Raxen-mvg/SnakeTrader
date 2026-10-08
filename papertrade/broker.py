@@ -114,8 +114,9 @@ class Account:
         old = p.qty
         p.qty = int(math.floor(p.qty * ratio + 1e-9))       # fractions are paid out in cash; ignored
         p.avg_price /= ratio
-        if "last_price" in p.meta:
-            p.meta["last_price"] /= ratio
+        for k in ("last_price", "prev_close"):
+            if k in p.meta:
+                p.meta[k] /= ratio
         p.meta.setdefault("splits", []).append(ex_date)
         self.memo.setdefault("corporate_actions", []).append(
             {"symbol": symbol, "ex_date": ex_date, "ratio": ratio, "qty_before": old, "qty_after": p.qty})
