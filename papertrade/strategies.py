@@ -895,7 +895,7 @@ def snake(acc: Account, ctx: Ctx) -> None:
 
     if not fresh or acc.memo.get("snake_entry") == ctx.t.date().isoformat():
         return
-    free = SNAKE_NAMES - len(acc.positions)
+    free = SNAKE_NAMES - sum(p.product != "entitlement" for p in acc.positions.values())
     if free <= 0 or acc.cash < MIN_TICKET:
         return
     equity = acc.equity(ctx.prices)

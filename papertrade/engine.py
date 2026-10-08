@@ -305,7 +305,7 @@ def mark_close(t: dt.datetime) -> int:
         log.info("already marked at today's official close")
         return 0
     accounts = load_accounts(STATE / "accounts.json", list(STRATEGIES), START_CASH)
-    held = {sym for a in accounts.values() for sym, p in a.positions.items() if p.product != "option"}
+    held = {sym for a in accounts.values() for sym, p in a.positions.items() if p.product not in NOT_QUOTED}
     closes = official_closes(sorted(held), t.date())
     if held and not closes and t.time() >= dt.time(17, 0):
         s["close_marked"] = today                # no session today (a holiday): nothing to mark
@@ -315,9 +315,15 @@ def mark_close(t: dt.datetime) -> int:
     if held and len(closes) < 0.9 * len(held):
         log.warning("official closes for only %d of %d holdings; trying again later", len(closes), len(held))
         return 0
+    for sym in corporate_gaps(accounts, closes):  # an unadjusted corporate action keeps its old value
+        log.warning("%s closed far from its last official close: corporate action, not marked", sym)
+        closes.pop(sym)
     at = t.replace(hour=15, minute=30, second=0, microsecond=0)
     for a in accounts.values():
         a.mark(closes, at)                       # options and any missing name keep their last mark
+        for sym, p in a.positions.items():       # tomorrow's reference for the corporate-action check
+            if sym in closes:
+                p.meta["prev_close"] = closes[sym]
     save_accounts(STATE / "accounts.json", accounts)
     _, _, asof = load_picks()
     write_reports(accounts, closes, at, asof)
@@ -353,7 +359,7 @@ def apply_corporate_actions(accounts: dict, t: dt.datetime) -> int:
     today = t.date().isoformat()
     if s.get("checked") == today:
         return 0
-    held = sorted({sym for a in accounts.values() for sym, p in a.positions.items() if p.product != "option"})
+    held = sorted({sym for a in accounts.values() for sym, p in a.positions.items() if p.product not in NOT_QUOTED})
     n = 0
     found = recent_splits(held, t.date())
     for sym, events in found.items():
@@ -368,6 +374,24 @@ def apply_corporate_actions(accounts: dict, t: dt.datetime) -> int:
     STATE.mkdir(exist_ok=True)
     mark.write_text(json.dumps(s, indent=1))
     return n
+
+
+# NSE never lets a stock move more than 20% in a session. A held name priced more than 25% away from
+# its last official close has had a corporate action Yahoo has not recorded - a split, a bonus, a
+# demerger (BHAGYANGR.NS, record date 2026-10-08: 433 -> 39, and five accounts sold it at the disaster
+# stop). Such a name keeps its last value and is not traded until its holding is adjusted.
+GAP = 0.25
+NOT_QUOTED = ("option", "entitlement")       # a demerger entitlement has no market until it lists
+
+
+def corporate_gaps(accounts: dict, prices: dict[str, float]) -> set[str]:
+    out = set()
+    for a in accounts.values():
+        for s, p in a.positions.items():
+            ref = p.meta.get("prev_close")
+            if ref and s in prices and not (1 - GAP) * ref <= prices[s] <= ref / (1 - GAP):
+                out.add(s)
+    return out
 
 
 def tick(force: bool = False) -> int:
@@ -390,7 +414,7 @@ def tick(force: bool = False) -> int:
     apply_corporate_actions(accounts, t)
     picks, ranks, asof = load_picks()
     intraday_picks = intraday_model_picks(t)
-    held = {s for a in accounts.values() for s, p in a.positions.items() if p.product != "option"}
+    held = {s for a in accounts.values() for s, p in a.positions.items() if p.product not in NOT_QUOTED}
     want = set(ALWAYS_QUOTE) | held | {p["symbol"] for p in picks[: TOP_N * 3]}
     want |= {p["symbol"] for p in (intraday_picks or [])}
     snake_picks = {n: load_snake_picks(f) for n, f in SNAKE_FILES.items()}
@@ -400,6 +424,12 @@ def tick(force: bool = False) -> int:
     if not prices:
         log.warning("no prices returned (holiday, outage or rate limit); skipping this tick")
         return 0
+    for s in sorted(corporate_gaps(accounts, prices)):
+        log.info("ALERT %s is %.0f%% from its last official close: a corporate action (split, bonus or "
+                 "demerger) - held at its last value, not traded, until its holding is adjusted",
+                 s, 100 * (prices[s] / next(p.meta["prev_close"] for a in accounts.values()
+                                            for x, p in a.positions.items() if x == s and p.meta.get("prev_close")) - 1))
+        prices.pop(s)
     blocked = not_companies()
     for name, a in accounts.items():
         if name in ("gold", "gold_trend", "benchmark", "benchmark_smallcap"):     # these hold ETFs on purpose
