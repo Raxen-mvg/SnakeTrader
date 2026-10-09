@@ -47,6 +47,28 @@ def log(msg: str) -> None:
     print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} snake.cloud {msg}", flush=True)
 
 
+GAP = 0.25
+
+
+def adjust_gaps(d: pd.DataFrame) -> pd.DataFrame:
+    """Back-adjust a corporate action Yahoo has not adjusted yet.
+
+    NSE never lets a stock move 20% in one session, so a close more than 25% from the previous one is a
+    split, bonus or demerger Yahoo has not yet folded into the history (BHAGYANGR.NS, demerger with
+    record date 2026-10-08: 454.55 then 39 - the network read a 90% crash and SNAKE sold it). Every
+    earlier price is scaled by the ex-date open over the prior close, the price the exchange discovers
+    for the stock after the action, so that day's own move is kept and the action itself is not."""
+    if d.empty or d["symbol"].iloc[0].startswith("^"):
+        return d
+    r = d["close"] / d["close"].shift(1)
+    for i in d.index[((r < 1 - GAP) | (r > 1 / (1 - GAP))).fillna(False)][::-1]:
+        prev = d.at[i - 1, "close"]
+        f = (d.at[i, "open"] if pd.notna(d.at[i, "open"]) and d.at[i, "open"] > 0 else d.at[i, "close"]) / prev
+        for c in ("open", "high", "low", "close", "adj_close"):
+            d.loc[:i - 1, c] = d.loc[:i - 1, c] * f
+    return d
+
+
 def yahoo(symbol: str, rng: str = "2y") -> pd.DataFrame:
     url = (f"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}"
            f"?range={rng}&interval=1d&events=div%2Csplit")
@@ -69,7 +91,7 @@ def yahoo(symbol: str, rng: str = "2y") -> pd.DataFrame:
             ist_now = pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None)
             if ist_now.hour < 16:
                 d = d[d["date"] < ist_now.normalize()]
-            return d.dropna(subset=["close", "adj_close"])
+            return adjust_gaps(d.dropna(subset=["close", "adj_close"]).reset_index(drop=True))
         except Exception:
             time.sleep(2 * (attempt + 1))
     return pd.DataFrame()
