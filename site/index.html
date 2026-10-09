@@ -110,6 +110,7 @@ const cell = (html, c = "") => `<td class="${c}">${html}</td>`;
            : a.strategy === "snake_abs_exit" ? 'VIPER<span class="chip">exit model</span>'
            : a.strategy === "snake_abs_exit_conv" ? 'VIPER<span class="chip">exit model + conviction</span>'
            : a.strategy === "snake_anaconda" ? 'ANACONDA<span class="chip">learned entry + exit + conviction</span>'
+           : a.strategy === "snake_viper_wild" ? 'VIPER WILD<span class="chip">no safety rails, 3 names</span>'
            : a.strategy) +
       cell(rs(a.equity)) + cell(pct(a.return_pct), cls(a.return_pct)) +
       cell(a.open_positions) + cell(a.closed_trades) + cell(rs(a.costs_paid || 0)) +

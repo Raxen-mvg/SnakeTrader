@@ -284,7 +284,7 @@ class PolicyMulti:
                 if st["age"] >= self.min_age and p < -self.margin]
 
 
-EXIT_ACCOUNTS = ("snake_abs_exit", "snake_abs_exit_conv", "snake_anaconda")
+EXIT_ACCOUNTS = ("snake_abs_exit", "snake_abs_exit_conv", "snake_anaconda", "snake_viper_wild")
 DEFAULT_RULE = {"margin": 0.02, "min_age": 10}
 
 

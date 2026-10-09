@@ -135,6 +135,22 @@ def main() -> int:
     acc9 = Account("snake_abs_exit_conv", 200_000, 200_000)
     S.snake(acc9, ctx(t, prices, pk3))
     check("other accounts ignore the entry signal", "AAA.NS" in acc9.positions)
+    # VIPER WILD: three names, big conviction stakes, exit at any age, no disaster stop.
+    accw = Account("snake_viper_wild", 200_000, 200_000)
+    S.snake(accw, ctx(t, prices, picks("2026-09-29", wide)))
+    stakes = {s: p.qty * p.avg_price for s, p in accw.positions.items()}
+    check("wild: holds three names, not six", len(accw.positions) == 3, f"{sorted(accw.positions)}")
+    check("wild: may stake far above 30% of the account on one name",
+          max(stakes.values()) > 0.30 * 200_000, f"{ {k: round(v) for k, v in stakes.items()} }")
+    check("wild: never spends more than the cash", accw.cash >= 0)
+    hw = sorted(accw.positions)
+    pkw = picks("2026-09-30", wide)
+    pkw["exit_rule"] = {"margin": 0.02, "min_age": 10}
+    pkw["exit_scores"] = {"snake_viper_wild": {hw[0]: {"pred": -0.001, "age": 1}}}
+    crash = {s: (px * 0.5 if s == hw[1] else px) for s, px in prices.items()}
+    S.snake(accw, ctx(t5, crash, pkw))
+    check("wild: the exit model sells at any age and any margin", hw[0] not in accw.positions)
+    check("wild: no disaster stop on a 50% fall", hw[1] in accw.positions)
     check("registered in the strategy table", S.STRATEGIES.get("snake") is S.snake)
     print("ALL PASS" if ok else "FAILURES")
     return 0 if ok else 1

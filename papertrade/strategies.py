@@ -836,11 +836,18 @@ ALWAYS_QUOTE = ALWAYS_QUOTE + STATARB_UNIVERSE   # the stat-arb book needs its w
 SNAKE_NAMES = 6
 SNAKE_STALE_DAYS = 4          # calendar days: stop BUYING on a picks file older than this
 SNAKE_SIZING_POWER = {"snake_abs_conv": 2.0, "snake_abs_exit_conv": 2.0,
-                      "snake_anaconda": 2.0}   # conviction sizing
+                      "snake_anaconda": 2.0, "snake_viper_wild": 2.0}   # conviction sizing
 # Accounts that also sell on SNAKE's trained exit model (snake/exit_model.py in the model repo):
 # the picks file carries, for each of their holdings, the model's prediction of holding minus
 # switching to the best fresh names over the next ten sessions, after the cost of switching.
-SNAKE_EXIT_ACCOUNTS = {"snake_abs_exit", "snake_abs_exit_conv", "snake_anaconda"}
+SNAKE_EXIT_ACCOUNTS = {"snake_abs_exit", "snake_abs_exit_conv", "snake_anaconda", "snake_viper_wild"}
+# VIPER WILD (the owner's request, 2026-10-09): Viper Conviction with the safety rails taken off, to see
+# what the models do unsupervised. No disaster stop; the exit model sells whenever it prefers switching
+# (any age, no margin); three names, not six; conviction stakes up to 3x the equal share with no cap on
+# one name's weight; free to buy other names again the same day. Still legal and real: cash only, no borrowing, no
+# short selling, delivery, whole shares, every charge - and no supervision of its decisions.
+SNAKE_WILD = {"snake_viper_wild"}
+WILD_NAMES, WILD_SIZE_HI, WILD_MAX_WEIGHT = 3, 3.0, 1.0
 # ANACONDA also has a learned ENTRY (snake/entry_rl.py): for each top name the picks file carries
 # Q(wait) - how much more it expects to pay by buying now rather than waiting a session. A name with
 # Q(wait) > 0 is not bought today; its slot stays empty, exactly as in the backtest.
@@ -864,13 +871,15 @@ def snake(acc: Account, ctx: Ctx) -> None:
     s = getattr(ctx, "snake", None) or {}
     expected = s.get("expected", {})
     fresh = _snake_fresh(ctx)
+    wild = acc.name in SNAKE_WILD
+    names = WILD_NAMES if wild else SNAKE_NAMES
 
     for sym, pos in list(acc.positions.items()):
         if sym not in ctx.prices:
             continue
         price = ctx.prices[sym]
         move = price / pos.avg_price - 1
-        if move <= DISASTER_STOP:
+        if move <= DISASTER_STOP and not wild:
             acc.sell(sym, price, ctx.t, slippage_bps=SLIP_STOCK, reason=f"disaster stop {100 * move:+.1f}%")
             _bar_today(acc, ctx, sym)
             continue
@@ -878,7 +887,7 @@ def snake(acc: Account, ctx: Ctx) -> None:
             continue                      # no current view of this name: hold, do not guess
         if acc.name in SNAKE_EXIT_ACCOUNTS:
             es = (s.get("exit_scores") or {}).get(acc.name, {}).get(sym)
-            rule = s.get("exit_rule") or {}
+            rule = {"min_age": 0, "margin": 0.0} if wild else (s.get("exit_rule") or {})
             if es and es["age"] >= rule.get("min_age", 10) and es["pred"] < -rule.get("margin", 0.02):
                 acc.sell(sym, price, ctx.t, slippage_bps=SLIP_STOCK,
                          reason=f"SNAKE exit model: switching expected to beat holding by "
@@ -893,16 +902,16 @@ def snake(acc: Account, ctx: Ctx) -> None:
             acc.sell(sym, price, ctx.t, slippage_bps=SLIP_STOCK, reason=f"SNAKE exit: {why}")
             _bar_today(acc, ctx, sym)
 
-    if not fresh or acc.memo.get("snake_entry") == ctx.t.date().isoformat():
+    if not fresh or (acc.memo.get("snake_entry") == ctx.t.date().isoformat() and not wild):
         return
-    free = SNAKE_NAMES - sum(p.product != "entitlement" for p in acc.positions.values())
+    free = names - sum(p.product != "entitlement" for p in acc.positions.values())
     if free <= 0 or acc.cash < MIN_TICKET:
         return
     equity = acc.equity(ctx.prices)
-    ticket = min(equity / SNAKE_NAMES, acc.cash / free)
+    ticket = min(equity / names, acc.cash / free)
     if ticket < MIN_TICKET:
         return
-    barred = _barred_today(acc, ctx)
+    barred = _barred_today(acc, ctx)        # never buy back the same day what was just sold
     need = round_trip_cost(ticket)
     chosen, waiting = [], 0
     wait_q = (s.get("entry_wait") or {}) if acc.name in SNAKE_ENTRY_ACCOUNTS else {}
@@ -927,8 +936,9 @@ def snake(acc: Account, ctx: Ctx) -> None:
         sym = p["symbol"]
         size = ticket
         if power > 0 and ref > 0:
-            mult = min(max((float(p["expected"]) / ref) ** power, SNAKE_SIZE_LO), SNAKE_SIZE_HI)
-            size = min(ticket * mult, SNAKE_MAX_WEIGHT * equity)
+            hi, cap = (WILD_SIZE_HI, WILD_MAX_WEIGHT) if wild else (SNAKE_SIZE_HI, SNAKE_MAX_WEIGHT)
+            mult = min(max((float(p["expected"]) / ref) ** power, SNAKE_SIZE_LO), hi)
+            size = min(ticket * mult, cap * equity)
         size = min(size, acc.cash)
         if size < MIN_TICKET:
             break
@@ -947,3 +957,4 @@ STRATEGIES["snake_abs_conv"] = snake     # the same picks, staked by conviction 
 STRATEGIES["snake_abs_exit"] = snake     # the same picks, selling on the trained exit model
 STRATEGIES["snake_abs_exit_conv"] = snake  # exit model and conviction stakes together
 STRATEGIES["snake_anaconda"] = snake     # learned entry + exit model + conviction stakes
+STRATEGIES["snake_viper_wild"] = snake   # Viper Conviction with no safety rails (SNAKE_WILD)
