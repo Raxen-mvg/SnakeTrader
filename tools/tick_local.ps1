@@ -20,6 +20,16 @@ git checkout -q -- state 2>&1 | Out-Null
 git reset -q --keep origin/main 2>&1 | Out-Null
 & $py tools\export_picks.py --out state\picks_IN.json *>> $log
 $now = Get-Date
+# GitHub's own schedule starts hours late or not at all, and this laptop drops into standby when idle.
+# So whenever it is awake in market hours it makes sure a cloud session is running: one wake covers
+# the rest of the day even if the laptop sleeps again straight after.
+if ($now.DayOfWeek -notin 'Saturday','Sunday' -and $now.TimeOfDay -ge [TimeSpan]'09:00' -and $now.TimeOfDay -le [TimeSpan]'15:00') {
+    $runs = gh run list --workflow papertrade.yml -L 5 --json status 2>$null | ConvertFrom-Json
+    if ($runs -and -not ($runs | Where-Object { $_.status -in 'in_progress', 'queued', 'waiting', 'pending' })) {
+        gh workflow run papertrade.yml 2>&1 | Out-Null
+        "$(Get-Date -Format s) no cloud session running; started one" | Out-File -Append -Encoding utf8 $log
+    }
+}
 # From 16:00 the engine values every account at the official close instead of trading (once a day).
 if ($now.DayOfWeek -notin 'Saturday','Sunday' -and (($now.TimeOfDay -ge [TimeSpan]'09:14' -and $now.TimeOfDay -le [TimeSpan]'15:35') -or $now.TimeOfDay -ge [TimeSpan]'16:00')) {
     & $py -m papertrade.engine *>> $log
