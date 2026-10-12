@@ -151,7 +151,15 @@ def main() -> int:
     S.snake(accw, ctx(t5, crash, pkw))
     check("wild: the exit model sells at any age and any margin", hw[0] not in accw.positions)
     check("wild: no disaster stop on a 50% fall", hw[1] in accw.positions)
-    check("registered in the strategy table", S.STRATEGIES.get("snake") is S.snake)
+    check("registered in the strategy table", S.STRATEGIES.get("snake_abs_exit_conv") is S.snake)
+    # The retired rank SNAKEs sell what they hold after ENTRY_AFTER and never buy again.
+    accr = Account("snake", 200_000, 200_000)
+    S.snake(accr, ctx(t, prices, picks("2026-09-29", exp)))
+    S.STRATEGIES["snake"](accr, ctx(t5, prices, picks("2026-09-30", exp)))
+    check("retired: sells everything", not accr.positions and accr.cash > 190_000)
+    S.STRATEGIES["snake"](accr, ctx(t5 + dt.timedelta(days=1), prices, picks("2026-10-01", exp)))
+    check("retired: never buys again", not accr.positions)
+    check("retired: both rank SNAKEs", S.STRATEGIES["snake_nonews"] is S.retired)
     print("ALL PASS" if ok else "FAILURES")
     return 0 if ok else 1
 

@@ -103,8 +103,8 @@ const cell = (html, c = "") => `<td class="${c}">${html}</td>`;
     const rows = [...s.strategies].sort((a, b) => b.equity - a.equity);
     document.querySelector("#accounts tbody").innerHTML = rows.map(a =>
       `<tr class="${a.strategy.startsWith("snake") ? "snake" : ""}">` +
-      cell(a.strategy === "snake" ? 'SNAKE<span class="chip">with news</span>'
-           : a.strategy === "snake_nonews" ? 'SNAKE<span class="chip">no news</span>'
+      cell(a.strategy === "snake" ? 'SNAKE<span class="chip">with news · retired 12 Oct</span>'
+           : a.strategy === "snake_nonews" ? 'SNAKE<span class="chip">no news · retired 12 Oct</span>'
            : a.strategy === "snake_abs" ? 'SNAKE<span class="chip">absolute return</span>'
            : a.strategy === "snake_abs_conv" ? 'SNAKE<span class="chip">absolute + conviction</span>'
            : a.strategy === "snake_abs_exit" ? 'VIPER<span class="chip">exit model</span>'

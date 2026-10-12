@@ -950,8 +950,25 @@ def snake(acc: Account, ctx: Ctx) -> None:
     acc.memo["snake_entry"] = ctx.t.date().isoformat()
 
 
-STRATEGIES["snake"] = snake              # trained with news; reads picks_snake.json
-STRATEGIES["snake_nonews"] = snake       # same rule, no-news model; reads picks_snake_nonews.json
+# The owner retired the two rank-target SNAKEs on 2026-10-12 (news -5.2%, no news -4.2% after eight
+# sessions, while every absolute-return version was ahead of both benchmarks). A retired account sells
+# what it holds at its first tick after ENTRY_AFTER and never trades again; its record stays.
+SNAKE_RETIRED = {"snake": "2026-10-12", "snake_nonews": "2026-10-12"}
+
+
+def retired(acc: Account, ctx: Ctx) -> None:
+    if ctx.t.time() < ENTRY_AFTER:
+        return
+    for sym, pos in list(acc.positions.items()):
+        if pos.product != "entitlement" and sym in ctx.prices:
+            acc.sell(sym, ctx.prices[sym], ctx.t, slippage_bps=SLIP_STOCK,
+                     reason=f"account retired by the owner on {SNAKE_RETIRED[acc.name]}")
+    if not acc.positions:
+        acc.memo.setdefault("retired_on", ctx.t.date().isoformat())
+
+
+STRATEGIES["snake"] = retired            # was: SNAKE with news (picks_snake.json); retired 2026-10-12
+STRATEGIES["snake_nonews"] = retired     # was: SNAKE without news; retired 2026-10-12
 STRATEGIES["snake_abs"] = snake          # same rule, absolute-return model; reads picks_snake_abs.json
 STRATEGIES["snake_abs_conv"] = snake     # the same picks, staked by conviction (SNAKE_SIZING_POWER)
 STRATEGIES["snake_abs_exit"] = snake     # the same picks, selling on the trained exit model
