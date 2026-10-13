@@ -18,6 +18,8 @@ if ($code) {
 }
 git checkout -q -- state 2>&1 | Out-Null
 git reset -q --keep origin/main 2>&1 | Out-Null
+# The trained models live only in the encrypted bundle on GitHub; unpack them if this copy lacks them.
+if (-not (Test-Path snake_release\model_abs\exit_model.txt)) { & $py tools\bundle.py unlock *>> $log }
 & $py tools\export_picks.py --out state\picks_IN.json *>> $log
 $now = Get-Date
 # GitHub's own schedule starts hours late or not at all, and this laptop drops into standby when idle.

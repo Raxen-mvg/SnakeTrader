@@ -44,6 +44,10 @@ are also taxed at 20%.
 
 ## Where picks come from
 
+The trained models themselves - SNAKE's network weights, the Viper exit model, ANACONDA's entry model,
+the intraday model and the model code - are not published here. They travel only as one encrypted file,
+`bundle/models.enc`, which the cloud runners unlock with a repository secret (`tools/bundle.py`).
+
 - **Oracle** picks (`state/picks_IN.json`) are exported from the research machine's nightly
   snapshot.
 - **SNAKE** picks (`state/picks_snake.json` with news, `state/picks_snake_nonews.json` without)

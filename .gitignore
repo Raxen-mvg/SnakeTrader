@@ -2,3 +2,7 @@ __pycache__/
 *.pyc
 .venv/
 *.tmp
+
+# Trained models travel only inside bundle/models.enc (tools/bundle.py); never commit them in the clear
+snake_release/
+state/intraday_model.txt
