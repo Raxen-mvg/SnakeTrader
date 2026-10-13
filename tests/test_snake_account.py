@@ -151,6 +151,30 @@ def main() -> int:
     S.snake(accw, ctx(t5, crash, pkw))
     check("wild: the exit model sells at any age and any margin", hw[0] not in accw.positions)
     check("wild: no disaster stop on a 50% fall", hw[1] in accw.positions)
+    # VIPER TICK WILD: on every third tick it re-asks the exit model at live prices and acts on it.
+    acct = Account("snake_viper_tick", 200_000, 200_000)
+    S.snake(acct, ctx(t, prices, picks("2026-09-29", wide)))
+    ht = sorted(acct.positions)
+    pkt = picks("2026-09-30", wide)
+    pkt["exit_scores"] = {"snake_viper_tick": {s: {"pred": 0.01, "age": 1} for s in ht}}
+    saved = S._live_exit_preds
+    S._live_exit_preds = lambda a, c, s: {ht[0]: -0.004}
+    acct.memo["ticks"] = 0
+    S.snake(acct, ctx(t5, prices, pkt))
+    S.snake(acct, ctx(t5 + dt.timedelta(minutes=3), prices, pkt))
+    check("tick: holds while the live check has not run", ht[0] in acct.positions)
+    S.snake(acct, ctx(t5 + dt.timedelta(minutes=6), prices, pkt))
+    check("tick: sells on the third tick when the live exit says switch", ht[0] not in acct.positions)
+    check("tick: buys a fresh pick in its place", len(acct.positions) == 3, f"{sorted(acct.positions)}")
+    S._live_exit_preds = saved
+    # The real booster loads from the release and scores a live input.
+    inp = {k: 0.0 for k in ["age", "log_age", "gain", "peak_gain", "from_peak", "entry_exp", "expected",
+                            "exp_drop", "fresh_exp", "fresh_gap"]}
+    inp.update(age=3, entry_exp=0.07, expected=0.07, fresh_exp=0.07, base=100.0, peak_px=110.0)
+    acc_r = Account("snake_viper_tick", 200_000, 200_000)
+    acc_r.buy("AAA.NS", 30_000, 100.0, t, "delivery")
+    real = S._live_exit_preds(acc_r, ctx(t5, {"AAA.NS": 104.0}, {}), {"exit_inputs": {"snake_viper_tick": {"AAA.NS": inp}}})
+    check("tick: the release exit model scores a live price", "AAA.NS" in real and abs(real["AAA.NS"]) < 1, f"{real}")
     check("registered in the strategy table", S.STRATEGIES.get("snake_abs_exit_conv") is S.snake)
     # The retired rank SNAKEs sell what they hold after ENTRY_AFTER and never buy again.
     accr = Account("snake", 200_000, 200_000)

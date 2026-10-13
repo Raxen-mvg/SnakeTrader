@@ -255,7 +255,9 @@ SNAKE_FILES = {"snake": "picks_snake.json", "snake_nonews": "picks_snake_nonews.
                # ANACONDA: learned entry (wait for a better price) on top of the Viper exit and conviction
                "snake_anaconda": "picks_snake_abs.json",
                # VIPER WILD: Viper Conviction with no safety rails, unsupervised (owner, 2026-10-09)
-               "snake_viper_wild": "picks_snake_abs.json"}
+               "snake_viper_wild": "picks_snake_abs.json",
+               # VIPER TICK WILD: VIPER WILD that re-asks its exit model on live prices (owner, 2026-10-13)
+               "snake_viper_tick": "picks_snake_abs.json"}
 
 
 def load_snake_picks(file: str = "picks_snake.json") -> dict:

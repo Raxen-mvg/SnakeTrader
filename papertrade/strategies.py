@@ -836,18 +836,60 @@ ALWAYS_QUOTE = ALWAYS_QUOTE + STATARB_UNIVERSE   # the stat-arb book needs its w
 SNAKE_NAMES = 6
 SNAKE_STALE_DAYS = 4          # calendar days: stop BUYING on a picks file older than this
 SNAKE_SIZING_POWER = {"snake_abs_conv": 2.0, "snake_abs_exit_conv": 2.0,
-                      "snake_anaconda": 2.0, "snake_viper_wild": 2.0}   # conviction sizing
+                      "snake_anaconda": 2.0, "snake_viper_wild": 2.0,
+                      "snake_viper_tick": 2.0}   # conviction sizing
 # Accounts that also sell on SNAKE's trained exit model (snake/exit_model.py in the model repo):
 # the picks file carries, for each of their holdings, the model's prediction of holding minus
 # switching to the best fresh names over the next ten sessions, after the cost of switching.
-SNAKE_EXIT_ACCOUNTS = {"snake_abs_exit", "snake_abs_exit_conv", "snake_anaconda", "snake_viper_wild"}
+SNAKE_EXIT_ACCOUNTS = {"snake_abs_exit", "snake_abs_exit_conv", "snake_anaconda", "snake_viper_wild",
+                       "snake_viper_tick"}
 # VIPER WILD (the owner's request, 2026-10-09): Viper Conviction with the safety rails taken off, to see
 # what the models do unsupervised. No disaster stop; the exit model sells whenever it prefers switching
 # (any age, no margin); three names, not six; conviction stakes up to 3x the equal share with no cap on
 # one name's weight; free to buy other names again the same day. Still legal and real: cash only, no borrowing, no
 # short selling, delivery, whole shares, every charge - and no supervision of its decisions.
-SNAKE_WILD = {"snake_viper_wild"}
+SNAKE_WILD = {"snake_viper_wild", "snake_viper_tick"}
 WILD_NAMES, WILD_SIZE_HI, WILD_MAX_WEIGHT = 3, 3.0, 1.0
+# VIPER TICK WILD (the owner's request, 2026-10-13): VIPER WILD that may also change its mind during the
+# session. Every TICK_EVERY ticks it re-asks the trained exit model with live prices - gain since entry
+# and the fall from the best close are recomputed from the live price; every other input (ranks,
+# expected returns, the best fresh names, the market) stays as at last night's close, because the
+# model was trained on closes and those inputs only exist at a close. If switching now beats holding,
+# it sells and buys the best fresh pick on the same tick. Not backtested in this form.
+SNAKE_TICK = {"snake_viper_tick"}
+TICK_EVERY = 3
+_EXIT_BOOSTER = None
+
+
+def _live_exit_preds(acc: Account, ctx: Ctx, s: dict) -> dict[str, float]:
+    """The exit model's hold-minus-switch prediction for each holding, at the live price."""
+    global _EXIT_BOOSTER
+    inputs = (s.get("exit_inputs") or {}).get(acc.name, {})
+    if not inputs:
+        return {}
+    if _EXIT_BOOSTER is None:
+        import json
+        from pathlib import Path
+        import lightgbm as lgb
+        md = Path(__file__).resolve().parent.parent / "snake_release" / "model_abs"
+        meta = json.loads((md / "exit_meta.json").read_text())
+        if meta.get("horizons"):
+            return {}                      # an any-horizon model would need every horizon's booster
+        _EXIT_BOOSTER = (lgb.Booster(model_file=str(md / "exit_model.txt")), meta["features"])
+    booster, feats = _EXIT_BOOSTER
+    rows, syms = [], []
+    for sym, f in inputs.items():
+        if sym not in acc.positions or sym not in ctx.prices or not f.get("base"):
+            continue
+        gain = ctx.prices[sym] / f["base"] - 1
+        peak = max(f["peak_px"] / f["base"] - 1, gain, 0.0)
+        live = dict(f, gain=gain, peak_gain=peak, from_peak=(1 + gain) / (1 + peak) - 1)
+        rows.append([float("nan") if live.get(c) is None else float(live[c]) for c in feats])
+        syms.append(sym)
+    if not rows:
+        return {}
+    import numpy as np
+    return {sym: float(v) for sym, v in zip(syms, booster.predict(np.array(rows, dtype=float)))}
 # ANACONDA also has a learned ENTRY (snake/entry_rl.py): for each top name the picks file carries
 # Q(wait) - how much more it expects to pay by buying now rather than waiting a session. A name with
 # Q(wait) > 0 is not bought today; its slot stays empty, exactly as in the backtest.
@@ -873,6 +915,11 @@ def snake(acc: Account, ctx: Ctx) -> None:
     fresh = _snake_fresh(ctx)
     wild = acc.name in SNAKE_WILD
     names = WILD_NAMES if wild else SNAKE_NAMES
+    live = {}
+    if acc.name in SNAKE_TICK and fresh:
+        acc.memo["ticks"] = acc.memo.get("ticks", 0) + 1
+        if acc.memo["ticks"] % TICK_EVERY == 0:
+            live = _live_exit_preds(acc, ctx, s)
 
     for sym, pos in list(acc.positions.items()):
         if sym not in ctx.prices:
@@ -887,11 +934,14 @@ def snake(acc: Account, ctx: Ctx) -> None:
             continue                      # no current view of this name: hold, do not guess
         if acc.name in SNAKE_EXIT_ACCOUNTS:
             es = (s.get("exit_scores") or {}).get(acc.name, {}).get(sym)
+            if sym in live:
+                es = {"pred": live[sym], "age": (es or {}).get("age", 0), "live": True}
             rule = {"min_age": 0, "margin": 0.0} if wild else (s.get("exit_rule") or {})
             if es and es["age"] >= rule.get("min_age", 10) and es["pred"] < -rule.get("margin", 0.02):
                 acc.sell(sym, price, ctx.t, slippage_bps=SLIP_STOCK,
-                         reason=f"SNAKE exit model: switching expected to beat holding by "
-                                f"{-100 * es['pred']:.1f}% over 10 sessions (held {es['age']} sessions)")
+                         reason=f"SNAKE exit model{' (live, at ' + f'{price:,.2f})' if es.get('live') else ''}: "
+                                f"switching expected to beat holding by "
+                                f"{-100 * es['pred']:.2f}% over 10 sessions (held {es['age']} sessions)")
                 _bar_today(acc, ctx, sym)
                 continue
         want = expected.get(sym)
@@ -975,3 +1025,4 @@ STRATEGIES["snake_abs_exit"] = snake     # the same picks, selling on the traine
 STRATEGIES["snake_abs_exit_conv"] = snake  # exit model and conviction stakes together
 STRATEGIES["snake_anaconda"] = snake     # learned entry + exit model + conviction stakes
 STRATEGIES["snake_viper_wild"] = snake   # Viper Conviction with no safety rails (SNAKE_WILD)
+STRATEGIES["snake_viper_tick"] = snake   # VIPER WILD that re-asks its exit model during the session
