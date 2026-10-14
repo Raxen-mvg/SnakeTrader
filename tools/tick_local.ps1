@@ -10,6 +10,7 @@ $log = "C:\Projects\StockTradesModel\logs\paper_trader.log"
 # Unpushed commits that touch anything outside state/ (code) are never dropped: stand down instead.
 function Rebasing { (Test-Path .git\rebase-merge) -or (Test-Path .git\rebase-apply) }
 if (Rebasing) { git rebase --abort 2>&1 | Out-Null }
+if (Test-Path .git\MERGE_HEAD) { git merge --abort 2>&1 | Out-Null }   # a manual pull that collided with a tick
 git fetch -q origin main 2>&1 | Out-Null
 $code = git diff --name-only origin/main...HEAD | Where-Object { $_ -notlike 'state/*' }
 if ($code) {
