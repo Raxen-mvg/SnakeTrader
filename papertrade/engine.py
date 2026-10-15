@@ -174,6 +174,12 @@ def write_alerts(accounts: dict, prices: dict, t: dt.datetime) -> list[str]:
 # never fed to the strategies: a deadline that made a rule take bigger bets would lower the money
 # it is expected to make, which is the opposite of the point.
 GOAL = {"target_pct": 10.0, "by": "2026-10-31"}
+# Accounts with their own goal (the owner raised VIPER WILD's to +20% on 2026-10-15). Tracked only.
+GOALS = {"snake_viper_wild": {"target_pct": 20.0, "by": "2026-10-31"}}
+
+
+def goal_for(name: str) -> dict:
+    return GOALS.get(name, GOAL)
 
 
 def write_reports(accounts: dict, prices: dict, t: dt.datetime, picks_asof: str) -> None:
@@ -186,7 +192,8 @@ def write_reports(accounts: dict, prices: dict, t: dt.datetime, picks_asof: str)
                      "cash": round(a.cash, 2), "open_positions": len(a.positions),
                      "closed_trades": len(sells), "win_rate_pct": round(100 * len(wins) / len(sells), 1) if sells else None,
                      "costs_paid": round(sum(x["costs"] for x in a.ledger), 2),
-                     "goal_progress_pct": round(100 * (eq / a.start_cash - 1) / GOAL["target_pct"] * 100, 1),
+                     "goal_pct": goal_for(n)["target_pct"],
+                     "goal_progress_pct": round(100 * (eq / a.start_cash - 1) / goal_for(n)["target_pct"] * 100, 1),
                      "positions": [{"symbol": p.symbol, "qty": p.qty, "avg_price": round(p.avg_price, 2),
                                     "last": round(p.meta.get("last_price", p.avg_price), 2),
                                     "exit_on": p.exit_on} for p in a.positions.values()]})
