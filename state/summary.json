@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-19T11:22:08.132041+05:30",
+ "updated": "2026-10-19T11:25:08.105452+05:30",
  "picks_asof": "2026-10-16",
  "start_cash": 200000.0,
  "goal": {
@@ -9,70 +9,70 @@
  "strategies": [
   {
    "strategy": "snake_viper_wild",
-   "equity": 216066.95,
-   "return_pct": 8.033,
+   "equity": 217099.57,
+   "return_pct": 8.55,
    "cash": 941.49,
    "open_positions": 3,
    "closed_trades": 0,
    "win_rate_pct": null,
    "costs_paid": 236.08,
    "goal_pct": 20.0,
-   "goal_progress_pct": 40.2,
+   "goal_progress_pct": 42.7,
    "positions": [
     {
      "symbol": "BLUSPRING.NS",
      "qty": 482,
      "avg_price": 138.43,
-     "last": 163.48,
+     "last": 163.34,
      "exit_on": null
     },
     {
      "symbol": "GANDHAR.NS",
      "qty": 222,
      "avg_price": 300.05,
-     "last": 290.35,
+     "last": 297.4,
      "exit_on": null
     },
     {
      "symbol": "CNL.NS",
      "qty": 62,
      "avg_price": 1056.28,
-     "last": 1159.2,
+     "last": 1151.7,
      "exit_on": null
     }
    ]
   },
   {
    "strategy": "snake_abs_exit_conv",
-   "equity": 213281.48,
-   "return_pct": 6.641,
+   "equity": 213917.86,
+   "return_pct": 6.959,
    "cash": 4950.59,
    "open_positions": 6,
    "closed_trades": 1,
    "win_rate_pct": 100.0,
    "costs_paid": 254.66,
    "goal_pct": 10.0,
-   "goal_progress_pct": 66.4,
+   "goal_progress_pct": 69.6,
    "positions": [
     {
      "symbol": "GANDHAR.NS",
      "qty": 120,
      "avg_price": 278.12,
-     "last": 290.35,
+     "last": 297.4,
      "exit_on": null
     },
     {
      "symbol": "BLUSPRING.NS",
      "qty": 233,
      "avg_price": 143.46,
-     "last": 163.48,
+     "last": 163.34,
      "exit_on": null
     },
     {
      "symbol": "AYMSYNTEX.NS",
      "qty": 120,
      "avg_price": 277.47,
-     "last": 267.9,
+     "last": 268.3,
      "exit_on": null
     },
     {
@@ -86,7 +86,7 @@
      "symbol": "CNL.NS",
      "qty": 30,
      "avg_price": 1075.91,
-     "last": 1159.2,
+     "last": 1151.7,
      "exit_on": null
     },
     {
@@ -100,35 +100,35 @@
   },
   {
    "strategy": "snake_abs_exit",
-   "equity": 213048.7,
-   "return_pct": 6.524,
+   "equity": 213665.57,
+   "return_pct": 6.833,
    "cash": 213.24,
    "open_positions": 7,
    "closed_trades": 1,
    "win_rate_pct": 100.0,
    "costs_paid": 260.28,
    "goal_pct": 10.0,
-   "goal_progress_pct": 65.2,
+   "goal_progress_pct": 68.3,
    "positions": [
     {
      "symbol": "GANDHAR.NS",
      "qty": 119,
      "avg_price": 278.12,
-     "last": 290.35,
+     "last": 297.4,
      "exit_on": null
     },
     {
      "symbol": "BLUSPRING.NS",
      "qty": 232,
      "avg_price": 143.46,
-     "last": 163.48,
+     "last": 163.34,
      "exit_on": null
     },
     {
      "symbol": "AYMSYNTEX.NS",
      "qty": 120,
      "avg_price": 277.47,
-     "last": 267.9,
+     "last": 268.3,
      "exit_on": null
     },
     {
@@ -142,7 +142,7 @@
      "symbol": "CNL.NS",
      "qty": 30,
      "avg_price": 1075.91,
-     "last": 1159.2,
+     "last": 1151.7,
      "exit_on": null
     },
     {
@@ -156,7 +156,7 @@
      "symbol": "DIFFNKG.NS",
      "qty": 12,
      "avg_price": 429.44,
-     "last": 413.2,
+     "last": 412.15,
      "exit_on": null
     }
    ]
@@ -176,35 +176,35 @@
   },
   {
    "strategy": "snake_abs",
-   "equity": 210168.4,
-   "return_pct": 5.084,
+   "equity": 210796.43,
+   "return_pct": 5.398,
    "cash": 4700.31,
    "open_positions": 6,
    "closed_trades": 1,
    "win_rate_pct": 100.0,
    "costs_paid": 254.86,
    "goal_pct": 10.0,
-   "goal_progress_pct": 50.8,
+   "goal_progress_pct": 54.0,
    "positions": [
     {
      "symbol": "GANDHAR.NS",
      "qty": 119,
      "avg_price": 279.02,
-     "last": 290.35,
+     "last": 297.4,
      "exit_on": null
     },
     {
      "symbol": "BLUSPRING.NS",
      "qty": 228,
      "avg_price": 145.75,
-     "last": 163.48,
+     "last": 163.34,
      "exit_on": null
     },
     {
      "symbol": "AYMSYNTEX.NS",
      "qty": 115,
      "avg_price": 288.43,
-     "last": 267.9,
+     "last": 268.3,
      "exit_on": null
     },
     {
@@ -218,7 +218,7 @@
      "symbol": "CNL.NS",
      "qty": 30,
      "avg_price": 1083.22,
-     "last": 1159.2,
+     "last": 1151.7,
      "exit_on": null
     },
     {
@@ -232,35 +232,35 @@
   },
   {
    "strategy": "snake_abs_conv",
-   "equity": 209971.0,
-   "return_pct": 4.985,
+   "equity": 210599.95,
+   "return_pct": 5.3,
    "cash": 4718.25,
    "open_positions": 6,
    "closed_trades": 1,
    "win_rate_pct": 100.0,
    "costs_paid": 254.65,
    "goal_pct": 10.0,
-   "goal_progress_pct": 49.9,
+   "goal_progress_pct": 53.0,
    "positions": [
     {
      "symbol": "GANDHAR.NS",
      "qty": 119,
      "avg_price": 280.02,
-     "last": 290.35,
+     "last": 297.4,
      "exit_on": null
     },
     {
      "symbol": "BLUSPRING.NS",
      "qty": 230,
      "avg_price": 145.21,
-     "last": 163.48,
+     "last": 163.34,
      "exit_on": null
     },
     {
      "symbol": "AYMSYNTEX.NS",
      "qty": 118,
      "avg_price": 282.17,
-     "last": 267.9,
+     "last": 268.3,
      "exit_on": null
     },
     {
@@ -274,7 +274,7 @@
      "symbol": "CNL.NS",
      "qty": 30,
      "avg_price": 1088.53,
-     "last": 1159.2,
+     "last": 1151.7,
      "exit_on": null
     },
     {
@@ -288,210 +288,210 @@
   },
   {
    "strategy": "unified",
-   "equity": 207399.08,
-   "return_pct": 3.7,
+   "equity": 207174.8,
+   "return_pct": 3.587,
    "cash": 1163.93,
    "open_positions": 8,
    "closed_trades": 0,
    "win_rate_pct": null,
    "costs_paid": 235.82,
    "goal_pct": 10.0,
-   "goal_progress_pct": 37.0,
+   "goal_progress_pct": 35.9,
    "positions": [
     {
      "symbol": "TFCILTD.NS",
      "qty": 499,
      "avg_price": 140.12,
-     "last": 158.71,
+     "last": 158.7,
      "exit_on": null
     },
     {
      "symbol": "LENSKART.NS",
      "qty": 71,
      "avg_price": 662.84,
-     "last": 643.6,
+     "last": 639.75,
      "exit_on": null
     },
     {
      "symbol": "NITINSPIN.NS",
      "qty": 64,
      "avg_price": 610.86,
-     "last": 645.3,
+     "last": 646.85,
      "exit_on": null
     },
     {
      "symbol": "IPCALAB.NS",
      "qty": 11,
      "avg_price": 1929.89,
-     "last": 1828.0,
+     "last": 1825.3,
      "exit_on": null
     },
     {
      "symbol": "VSSL.NS",
      "qty": 30,
      "avg_price": 412.02,
-     "last": 372.55,
+     "last": 372.25,
      "exit_on": null
     },
     {
      "symbol": "VIJAYA.NS",
      "qty": 2,
      "avg_price": 1499.65,
-     "last": 1356.1,
+     "last": 1356.2,
      "exit_on": null
     },
     {
      "symbol": "DCBBANK.NS",
      "qty": 16,
      "avg_price": 208.27,
-     "last": 211.91,
+     "last": 211.42,
      "exit_on": null
     },
     {
      "symbol": "KTKBANK.NS",
      "qty": 8,
      "avg_price": 325.29,
-     "last": 332.1,
+     "last": 332.25,
      "exit_on": null
     }
    ]
   },
   {
    "strategy": "snake_viper_tick",
-   "equity": 203602.33,
-   "return_pct": 1.801,
+   "equity": 204702.43,
+   "return_pct": 2.351,
    "cash": 67274.23,
    "open_positions": 2,
    "closed_trades": 0,
    "win_rate_pct": null,
    "costs_paid": 157.41,
    "goal_pct": 10.0,
-   "goal_progress_pct": 18.0,
+   "goal_progress_pct": 23.5,
    "positions": [
     {
      "symbol": "GANDHAR.NS",
      "qty": 222,
      "avg_price": 299.25,
-     "last": 290.35,
+     "last": 297.4,
      "exit_on": null
     },
     {
      "symbol": "CNL.NS",
      "qty": 62,
      "avg_price": 1066.7,
-     "last": 1159.2,
+     "last": 1151.7,
      "exit_on": null
     }
    ]
   },
   {
    "strategy": "random_hold",
-   "equity": 202209.75,
-   "return_pct": 1.105,
+   "equity": 202067.95,
+   "return_pct": 1.034,
    "cash": 32129.15,
    "open_positions": 5,
    "closed_trades": 5,
    "win_rate_pct": 60.0,
    "costs_paid": 432.85,
    "goal_pct": 10.0,
-   "goal_progress_pct": 11.0,
+   "goal_progress_pct": 10.3,
    "positions": [
     {
      "symbol": "TFCILTD.NS",
      "qty": 285,
      "avg_price": 140.12,
-     "last": 158.71,
+     "last": 158.7,
      "exit_on": "2026-10-22"
     },
     {
      "symbol": "LENSKART.NS",
      "qty": 60,
      "avg_price": 662.84,
-     "last": 643.6,
+     "last": 639.75,
      "exit_on": "2026-11-06"
     },
     {
      "symbol": "NITINSPIN.NS",
      "qty": 65,
      "avg_price": 610.86,
-     "last": 645.3,
+     "last": 646.85,
      "exit_on": "2026-11-20"
     },
     {
      "symbol": "VSSL.NS",
      "qty": 97,
      "avg_price": 412.02,
-     "last": 372.55,
+     "last": 372.25,
      "exit_on": "2026-10-21"
     },
     {
      "symbol": "NYKAA.NS",
      "qty": 24,
      "avg_price": 340.31,
-     "last": 339.6,
+     "last": 340.45,
      "exit_on": "2026-11-12"
     }
    ]
   },
   {
    "strategy": "benchmark",
-   "equity": 201361.37,
-   "return_pct": 0.681,
+   "equity": 201315.47,
+   "return_pct": 0.658,
    "cash": 59.27,
    "open_positions": 1,
    "closed_trades": 0,
    "win_rate_pct": null,
    "costs_paid": 237.13,
    "goal_pct": 10.0,
-   "goal_progress_pct": 6.8,
+   "goal_progress_pct": 6.6,
    "positions": [
     {
      "symbol": "NIFTYBEES.NS",
      "qty": 765,
      "avg_price": 261.05,
-     "last": 263.14,
+     "last": 263.08,
      "exit_on": null
     }
    ]
   },
   {
    "strategy": "snake_anaconda",
-   "equity": 200549.99,
-   "return_pct": 0.275,
+   "equity": 201165.37,
+   "return_pct": 0.583,
    "cash": 14002.15,
    "open_positions": 6,
    "closed_trades": 2,
    "win_rate_pct": 50.0,
    "costs_paid": 312.95,
    "goal_pct": 10.0,
-   "goal_progress_pct": 2.7,
+   "goal_progress_pct": 5.8,
    "positions": [
     {
      "symbol": "GANDHAR.NS",
      "qty": 118,
      "avg_price": 282.92,
-     "last": 290.35,
+     "last": 297.4,
      "exit_on": null
     },
     {
      "symbol": "CNL.NS",
      "qty": 31,
      "avg_price": 1061.29,
-     "last": 1159.2,
+     "last": 1151.7,
      "exit_on": null
     },
     {
      "symbol": "BLUSPRING.NS",
      "qty": 223,
      "avg_price": 148.42,
-     "last": 163.48,
+     "last": 163.34,
      "exit_on": null
     },
     {
      "symbol": "AYMSYNTEX.NS",
      "qty": 118,
      "avg_price": 284.28,
-     "last": 267.9,
+     "last": 268.3,
      "exit_on": null
     },
     {
@@ -512,49 +512,49 @@
   },
   {
    "strategy": "intramonth",
-   "equity": 200280.71,
-   "return_pct": 0.14,
+   "equity": 200064.51,
+   "return_pct": 0.032,
    "cash": 1790.51,
    "open_positions": 5,
    "closed_trades": 0,
    "win_rate_pct": null,
    "costs_paid": 235.08,
    "goal_pct": 10.0,
-   "goal_progress_pct": 1.4,
+   "goal_progress_pct": 0.3,
    "positions": [
     {
      "symbol": "TFCILTD.NS",
      "qty": 285,
      "avg_price": 140.12,
-     "last": 158.71,
+     "last": 158.7,
      "exit_on": null
     },
     {
      "symbol": "LENSKART.NS",
      "qty": 60,
      "avg_price": 662.84,
-     "last": 643.6,
+     "last": 639.75,
      "exit_on": null
     },
     {
      "symbol": "NITINSPIN.NS",
      "qty": 65,
      "avg_price": 610.86,
-     "last": 645.3,
+     "last": 646.85,
      "exit_on": null
     },
     {
      "symbol": "IPCALAB.NS",
      "qty": 20,
      "avg_price": 1929.89,
-     "last": 1828.0,
+     "last": 1825.3,
      "exit_on": null
     },
     {
      "symbol": "VSSL.NS",
      "qty": 97,
      "avg_price": 412.02,
-     "last": 372.55,
+     "last": 372.25,
      "exit_on": null
     }
    ]
@@ -600,133 +600,133 @@
   },
   {
    "strategy": "oracle",
-   "equity": 199695.62,
-   "return_pct": -0.152,
+   "equity": 199533.35,
+   "return_pct": -0.233,
    "cash": 3930.41,
    "open_positions": 12,
    "closed_trades": 0,
    "win_rate_pct": null,
    "costs_paid": 232.54,
    "goal_pct": 10.0,
-   "goal_progress_pct": -1.5,
+   "goal_progress_pct": -2.3,
    "positions": [
     {
      "symbol": "TFCILTD.NS",
      "qty": 120,
      "avg_price": 140.12,
-     "last": 158.71,
+     "last": 158.7,
      "exit_on": null
     },
     {
      "symbol": "LENSKART.NS",
      "qty": 25,
      "avg_price": 662.84,
-     "last": 643.6,
+     "last": 639.75,
      "exit_on": null
     },
     {
      "symbol": "NITINSPIN.NS",
      "qty": 27,
      "avg_price": 610.86,
-     "last": 645.3,
+     "last": 646.85,
      "exit_on": null
     },
     {
      "symbol": "IPCALAB.NS",
      "qty": 8,
      "avg_price": 1929.89,
-     "last": 1828.0,
+     "last": 1825.3,
      "exit_on": null
     },
     {
      "symbol": "VSSL.NS",
      "qty": 40,
      "avg_price": 412.02,
-     "last": 372.55,
+     "last": 372.25,
      "exit_on": null
     },
     {
      "symbol": "VIJAYA.NS",
      "qty": 11,
      "avg_price": 1498.95,
-     "last": 1356.1,
+     "last": 1356.2,
      "exit_on": null
     },
     {
      "symbol": "DCBBANK.NS",
      "qty": 79,
      "avg_price": 208.51,
-     "last": 211.91,
+     "last": 211.42,
      "exit_on": null
     },
     {
      "symbol": "KTKBANK.NS",
      "qty": 50,
      "avg_price": 325.89,
-     "last": 332.1,
+     "last": 332.25,
      "exit_on": null
     },
     {
      "symbol": "SAILIFE.NS",
      "qty": 10,
      "avg_price": 1593.39,
-     "last": 1386.7,
+     "last": 1388.6,
      "exit_on": null
     },
     {
      "symbol": "GKSL.NS",
      "qty": 94,
      "avg_price": 173.81,
-     "last": 190.68,
+     "last": 190.2,
      "exit_on": null
     },
     {
      "symbol": "GLOBAL.NS",
      "qty": 122,
      "avg_price": 134.62,
-     "last": 139.9,
+     "last": 139.88,
      "exit_on": null
     },
     {
      "symbol": "LAURUSLABS.NS",
      "qty": 8,
      "avg_price": 2010.91,
-     "last": 2069.9,
+     "last": 2068.1,
      "exit_on": null
     }
    ]
   },
   {
    "strategy": "intraweek",
-   "equity": 198885.68,
-   "return_pct": -0.557,
+   "equity": 198807.53,
+   "return_pct": -0.596,
    "cash": 4810.6,
    "open_positions": 5,
    "closed_trades": 15,
    "win_rate_pct": 46.7,
    "costs_paid": 1761.16,
    "goal_pct": 10.0,
-   "goal_progress_pct": -5.6,
+   "goal_progress_pct": -6.0,
    "positions": [
     {
      "symbol": "KARURVYSYA.NS",
      "qty": 107,
      "avg_price": 369.3,
-     "last": 373.3,
+     "last": 373.35,
      "exit_on": "2026-10-26"
     },
     {
      "symbol": "LAURUSLABS.NS",
      "qty": 19,
      "avg_price": 2072.0,
-     "last": 2069.9,
+     "last": 2068.1,
      "exit_on": "2026-10-26"
     },
     {
      "symbol": "SONACOMS.NS",
      "qty": 49,
      "avg_price": 794.59,
-     "last": 809.9,
+     "last": 809.4,
      "exit_on": "2026-10-26"
     },
     {
@@ -740,49 +740,49 @@
      "symbol": "RADICO.NS",
      "qty": 8,
      "avg_price": 4439.15,
-     "last": 4471.8,
+     "last": 4468.7,
      "exit_on": "2026-10-26"
     }
    ]
   },
   {
    "strategy": "benchmark_smallcap",
-   "equity": 197701.43,
-   "return_pct": -1.149,
+   "equity": 197835.95,
+   "return_pct": -1.082,
    "cash": 125.18,
    "open_positions": 1,
    "closed_trades": 0,
    "win_rate_pct": null,
    "costs_paid": 237.05,
    "goal_pct": 10.0,
-   "goal_progress_pct": -11.5,
+   "goal_progress_pct": -10.8,
    "positions": [
     {
      "symbol": "HDFCSML250.NS",
      "qty": 1121,
      "avg_price": 178.09,
-     "last": 176.25,
+     "last": 176.37,
      "exit_on": null
     }
    ]
   },
   {
    "strategy": "gold",
-   "equity": 197492.92,
-   "return_pct": -1.254,
+   "equity": 197394.28,
+   "return_pct": -1.303,
    "cash": 15.64,
    "open_positions": 1,
    "closed_trades": 0,
    "win_rate_pct": null,
    "costs_paid": 237.18,
    "goal_pct": 10.0,
-   "goal_progress_pct": -12.5,
+   "goal_progress_pct": -13.0,
    "positions": [
     {
      "symbol": "GOLDBEES.NS",
      "qty": 1644,
      "avg_price": 121.5,
-     "last": 120.12,
+     "last": 120.06,
      "exit_on": null
     }
    ]
@@ -816,7 +816,7 @@
  ],
  "combined": {
   "date": "2026-10-19",
-  "equity": 204286.26,
+  "equity": 204820.07,
   "w_unified": 0.071,
   "w_intraday": 0.0,
   "w_intraweek": 0.018,
