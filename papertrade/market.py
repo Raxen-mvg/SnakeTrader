@@ -43,13 +43,19 @@ BAND_TOUCH = 0.001            # within 0.1% of the band counts as stuck at the l
 AT_LIMIT: dict[str, str] = {}  # symbol -> "upper" or "lower", refreshed on every quote call
 
 
-def groww_quotes(symbols: list[str]) -> dict[str, float]:
+def groww_quotes(symbols: list[str], today: dt.date | None = None) -> dict[str, float]:
     """Last traded price straight from Groww for NSE symbols, and today's circuit bands.
 
     Only symbols that actually traded today are returned. Anything that fails, for any
     reason, is simply left out so the caller falls back to the slower feed.
+
+    "Today" is checked on the quote's own last-trade time: on a market holiday Groww still serves
+    the previous session's last price, with the NEXT session's bands, and on 2026-10-20 (Dussehra)
+    two accounts bought BHAGYANGR.NS at a price that did not trade that day - a stock locked at its
+    upper limit, which the stale quote no longer showed.
     """
     import requests
+    today = today or now_ist().date()
     out: dict[str, float] = {}
     with requests.Session() as sess:
         sess.headers.update(GROWW_HEADERS)
@@ -61,6 +67,11 @@ def groww_quotes(symbols: list[str]) -> dict[str, float]:
                 ltp = float(d.get("ltp") or 0)
                 if ltp <= 0 or not d.get("volume"):
                     continue
+                last = int(d.get("lastTradeTime") or 0)
+                if last > 1e11:
+                    last //= 1000                    # milliseconds
+                if not last or dt.datetime.fromtimestamp(last, IST).date() != today:
+                    continue                         # no trade today: holiday, suspension, stale quote
                 out[sym] = ltp
                 hi, lo = d.get("highPriceRange"), d.get("lowPriceRange")
                 AT_LIMIT.pop(sym, None)
@@ -91,7 +102,7 @@ def latest_prices(symbols: list[str], *, asof: dt.datetime | None = None) -> dic
     live = {}
     if session_open(asof or now_ist()):
         try:
-            live = groww_quotes(syms)
+            live = groww_quotes(syms, (asof or now_ist()).date())
             log.info("live quotes from Groww for %d of %d symbols", len(live), len(syms))
         except Exception as exc:
             log.warning("live feed unavailable (%s); falling back to the delayed feed", exc)
