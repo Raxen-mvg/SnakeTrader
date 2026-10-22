@@ -856,7 +856,8 @@ WILD_NAMES, WILD_SIZE_HI, WILD_MAX_WEIGHT = 3, 3.0, 1.0
 # expected returns, the best fresh names, the market) stays as at last night's close, because the
 # model was trained on closes and those inputs only exist at a close. If switching now beats holding,
 # it sells and buys the best fresh pick on the same tick. Not backtested in this form.
-SNAKE_TICK = {"snake_viper_tick"}
+# VIPER WILD itself joined on 2026-10-22, at the owner's request after its first sharp losing day.
+SNAKE_TICK = {"snake_viper_tick", "snake_viper_wild"}
 TICK_EVERY = 3
 _EXIT_BOOSTER = None
 

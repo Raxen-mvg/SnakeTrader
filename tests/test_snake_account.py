@@ -174,6 +174,7 @@ def main() -> int:
     acc_r = Account("snake_viper_tick", 200_000, 200_000)
     acc_r.buy("AAA.NS", 30_000, 100.0, t, "delivery")
     real = S._live_exit_preds(acc_r, ctx(t5, {"AAA.NS": 104.0}, {}), {"exit_inputs": {"snake_viper_tick": {"AAA.NS": inp}}})
+    check("tick: VIPER WILD re-checks during the session too", "snake_viper_wild" in S.SNAKE_TICK)
     check("tick: the release exit model scores a live price", "AAA.NS" in real and abs(real["AAA.NS"]) < 1, f"{real}")
     check("registered in the strategy table", S.STRATEGIES.get("snake_abs_exit_conv") is S.snake)
     # The retired rank SNAKEs sell what they hold after ENTRY_AFTER and never buy again.
