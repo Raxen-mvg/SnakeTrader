@@ -62,6 +62,16 @@ intraweek,2026-11-02T09:31:26.426525+05:30,BUY,CORONA.NS,18,2162.7393,38929.31,4
 intraweek,2026-11-02T09:31:26.426525+05:30,BUY,NRL.NS,247,162.7337,40195.23,47.73,delivery,model rank 0.999,
 intraweek,2026-11-02T09:31:26.426525+05:30,BUY,KTKBANK.NS,133,301.5016,40099.71,47.61,delivery,model rank 0.998,
 intraweek,2026-11-02T09:31:26.426525+05:30,BUY,SOMANYCERA.NS,72,554.5806,39929.81,47.41,delivery,model rank 0.998,
+intraweek,2026-11-09T09:31:59.026662+05:30,SELL,MBAPL.NS,216,200.5587,43320.68,60.28,delivery,5 trading days elapsed,3156.09
+intraweek,2026-11-09T09:31:59.026662+05:30,SELL,CORONA.NS,18,2537.3882,45672.99,62.72,delivery,5 trading days elapsed,6680.96
+intraweek,2026-11-09T09:31:59.026662+05:30,SELL,NRL.NS,247,165.761,40942.96,57.81,delivery,5 trading days elapsed,689.92
+intraweek,2026-11-09T09:31:59.026662+05:30,SELL,KTKBANK.NS,133,323.3642,43007.44,59.96,delivery,5 trading days elapsed,2847.78
+intraweek,2026-11-09T09:31:59.026662+05:30,SELL,SOMANYCERA.NS,72,552.1705,39756.28,56.58,delivery,5 trading days elapsed,-230.11
+intraweek,2026-11-09T09:31:59.026662+05:30,BUY,MBAPL.NS,212,201.1613,42646.19,50.64,delivery,model rank 1.000,
+intraweek,2026-11-09T09:31:59.026662+05:30,BUY,KTKBANK.NS,131,324.3358,42487.99,50.45,delivery,model rank 0.999,
+intraweek,2026-11-09T09:31:59.026662+05:30,BUY,CORONA.NS,16,2545.0118,40720.19,48.35,delivery,model rank 0.999,
+intraweek,2026-11-09T09:31:59.026662+05:30,BUY,LAURUSLABS.NS,17,2411.7121,40999.11,48.68,delivery,model rank 0.998,
+intraweek,2026-11-09T09:31:59.026662+05:30,BUY,NAZARA.NS,104,407.911,42422.74,50.37,delivery,model rank 0.998,
 intramonth,2026-09-28T11:31:07.188052+05:30,BUY,TFCILTD.NS,285,140.1199,39934.16,47.42,delivery,model rank 1.000,
 intramonth,2026-09-28T11:31:07.188052+05:30,BUY,LENSKART.NS,60,662.8428,39770.57,47.22,delivery,model rank 0.999,
 intramonth,2026-09-28T11:31:07.188052+05:30,BUY,NITINSPIN.NS,65,610.8649,39706.22,47.15,delivery,model rank 0.999,
@@ -158,6 +168,7 @@ snake_abs_exit,2026-10-01T14:34:05.333638+05:30,BUY,BHAGYANGR.NS,83,399.5985,331
 snake_abs_exit,2026-10-01T14:34:05.333638+05:30,BUY,CNL.NS,30,1075.9115,32277.34,38.33,delivery,SNAKE expects +7.33% over 63 sessions against a 0.57% round trip,
 snake_abs_exit,2026-10-09T09:31:05.743341+05:30,SELL,BHAGYANGR.NS,83,43.3848,3600.94,19.08,delivery,"SNAKE exit: expects -0.21%, selling costs 0.68%",736.19
 snake_abs_exit,2026-10-09T09:31:05.743341+05:30,BUY,DIFFNKG.NS,12,429.4432,5153.32,6.12,delivery,SNAKE expects +7.35% over 63 sessions against a 0.81% round trip,
+snake_abs_exit,2026-11-09T09:31:59.026662+05:30,SELL,RUBYMILLS.NS,66,474.6869,31329.34,47.84,delivery,SNAKE exit model: switching expected to beat holding by 2.35% over 10 sessions (held 25 sessions),-1573.01
 snake_abs_exit_conv,2026-10-01T14:34:05.333638+05:30,BUY,GANDHAR.NS,120,278.1166,33373.99,39.63,delivery,SNAKE expects +7.38% over 63 sessions against a 0.57% round trip; stake 1.01x the equal share,
 snake_abs_exit_conv,2026-10-01T14:34:05.333638+05:30,BUY,BLUSPRING.NS,233,143.4649,33427.32,39.69,delivery,SNAKE expects +7.37% over 63 sessions against a 0.57% round trip; stake 1.00x the equal share,
 snake_abs_exit_conv,2026-10-01T14:34:05.333638+05:30,BUY,AYMSYNTEX.NS,120,277.4656,33295.87,39.54,delivery,SNAKE expects +7.36% over 63 sessions against a 0.57% round trip; stake 1.00x the equal share,
@@ -165,6 +176,8 @@ snake_abs_exit_conv,2026-10-01T14:34:05.333638+05:30,BUY,RUBYMILLS.NS,66,497.795
 snake_abs_exit_conv,2026-10-01T14:34:05.333638+05:30,BUY,BHAGYANGR.NS,83,399.5985,33166.68,39.38,delivery,SNAKE expects +7.34% over 63 sessions against a 0.57% round trip; stake 1.00x the equal share,
 snake_abs_exit_conv,2026-10-01T14:34:05.333638+05:30,BUY,CNL.NS,30,1075.9115,32277.34,38.33,delivery,SNAKE expects +7.33% over 63 sessions against a 0.57% round trip; stake 0.99x the equal share,
 snake_abs_exit_conv,2026-10-09T09:31:05.743341+05:30,SELL,BHAGYANGR.NS,83,43.3848,3600.94,19.08,delivery,"SNAKE exit: expects -0.21%, selling costs 0.68%",736.19
+snake_abs_exit_conv,2026-11-09T09:31:59.026662+05:30,SELL,RUBYMILLS.NS,66,474.6869,31329.34,47.84,delivery,SNAKE exit model: switching expected to beat holding by 2.35% over 10 sessions (held 25 sessions),-1573.01
+snake_abs_exit_conv,2026-11-09T09:31:59.026662+05:30,BUY,SOLARWORLD.NS,206,110.836,22832.22,27.11,delivery,SNAKE expects +7.37% over 63 sessions against a 0.61% round trip; stake 1.26x the equal share,
 snake_anaconda,2026-10-05T10:05:58.122711+05:30,BUY,GANDHAR.NS,118,282.9238,33385.0,39.64,delivery,SNAKE expects +7.38% over 63 sessions against a 0.57% round trip; stake 1.01x the equal share,
 snake_anaconda,2026-10-05T10:05:58.122711+05:30,BUY,BHAGYANGR.NS,82,405.0567,33214.65,39.44,delivery,SNAKE expects +7.37% over 63 sessions against a 0.57% round trip; stake 1.00x the equal share,
 snake_anaconda,2026-10-05T10:05:58.122711+05:30,BUY,CNL.NS,31,1061.2896,32899.98,39.07,delivery,SNAKE expects +7.36% over 63 sessions against a 0.57% round trip; stake 1.00x the equal share,
@@ -188,6 +201,12 @@ snake_viper_wild,2026-11-02T09:31:26.426525+05:30,SELL,GANDHAR.NS,222,252.5107,5
 snake_viper_wild,2026-11-02T09:31:26.426525+05:30,BUY,GLOBAL.NS,389,143.7152,55905.23,66.38,delivery,SNAKE expects +7.37% over 63 sessions against a 0.55% round trip; stake 1.00x the equal share,
 snake_viper_wild,2026-11-06T14:26:41.382178+05:30,SELL,GLOBAL.NS,389,143.5344,55834.87,73.26,delivery,SNAKE exit model: switching expected to beat holding by 0.16% over 10 sessions (held 4 sessions),-143.62
 snake_viper_wild,2026-11-06T14:26:41.382178+05:30,BUY,CNL.NS,42,1326.8874,55729.27,66.17,delivery,SNAKE expects +7.37% over 63 sessions against a 0.55% round trip; stake 1.00x the equal share,
+snake_viper_wild,2026-11-09T09:31:59.026662+05:30,SELL,QPOWER.NS,52,1435.4436,74643.07,92.78,delivery,SNAKE exit model: switching expected to beat holding by 1.20% over 10 sessions (held 10 sessions),8281.04
+snake_viper_wild,2026-11-09T09:31:59.026662+05:30,SELL,BHAGYANGR.NS,948,72.8506,69062.33,86.99,delivery,SNAKE exit model: switching expected to beat holding by 1.32% over 10 sessions (held 9 sessions),2088.57
+snake_viper_wild,2026-11-09T09:31:59.026662+05:30,SELL,CNL.NS,42,1337.99,56195.58,73.64,delivery,SNAKE exit model: switching expected to beat holding by 0.96% over 10 sessions (held 1 sessions),392.67
+snake_viper_wild,2026-11-09T09:31:59.026662+05:30,BUY,SOLARWORLD.NS,603,110.836,66834.11,79.36,delivery,SNAKE expects +7.37% over 63 sessions against a 0.55% round trip; stake 1.00x the equal share,
+snake_viper_wild,2026-11-09T09:31:59.026662+05:30,BUY,DIFFNKG.NS,156,423.7847,66110.42,78.5,delivery,SNAKE expects +7.35% over 63 sessions against a 0.55% round trip; stake 1.00x the equal share,
+snake_viper_wild,2026-11-09T09:31:59.026662+05:30,BUY,GLOBAL.NS,457,145.1073,66314.05,78.74,delivery,SNAKE expects +7.34% over 63 sessions against a 0.55% round trip; stake 1.00x the equal share,
 snake_viper_tick,2026-10-13T11:43:07.860247+05:30,BUY,GANDHAR.NS,222,299.2482,66433.1,78.88,delivery,SNAKE expects +7.37% over 63 sessions against a 0.55% round trip; stake 1.00x the equal share,
 snake_viper_tick,2026-10-13T11:43:07.860247+05:30,BUY,CNL.NS,62,1066.6977,66135.25,78.53,delivery,SNAKE expects +7.36% over 63 sessions against a 0.55% round trip; stake 1.00x the equal share,
 snake_viper_tick,2026-10-26T09:31:54.957250+05:30,SELL,CNL.NS,62,1016.0736,62996.56,80.69,delivery,"SNAKE exit model (live, at 1,017.60): switching expected to beat holding by 0.03% over 10 sessions (held 8 sessions)",-3219.38
@@ -197,3 +216,9 @@ snake_viper_tick,2026-11-02T09:31:26.426525+05:30,SELL,GANDHAR.NS,222,252.5107,5
 snake_viper_tick,2026-11-02T09:31:26.426525+05:30,BUY,GLOBAL.NS,389,143.7152,55905.23,66.38,delivery,SNAKE expects +7.37% over 63 sessions against a 0.55% round trip; stake 1.00x the equal share,
 snake_viper_tick,2026-11-06T14:26:41.382178+05:30,SELL,GLOBAL.NS,389,143.5344,55834.87,73.26,delivery,SNAKE exit model: switching expected to beat holding by 0.16% over 10 sessions (held 4 sessions),-143.62
 snake_viper_tick,2026-11-06T14:26:41.382178+05:30,BUY,CNL.NS,42,1326.8874,55729.27,66.17,delivery,SNAKE expects +7.37% over 63 sessions against a 0.55% round trip; stake 1.00x the equal share,
+snake_viper_tick,2026-11-09T09:31:59.026662+05:30,SELL,QPOWER.NS,51,1435.4436,73207.62,91.29,delivery,SNAKE exit model: switching expected to beat holding by 1.20% over 10 sessions (held 10 sessions),8121.49
+snake_viper_tick,2026-11-09T09:31:59.026662+05:30,SELL,BHAGYANGR.NS,921,72.8506,67095.37,84.95,delivery,SNAKE exit model: switching expected to beat holding by 1.32% over 10 sessions (held 9 sessions),2028.64
+snake_viper_tick,2026-11-09T09:31:59.026662+05:30,SELL,CNL.NS,42,1337.99,56195.58,73.64,delivery,SNAKE exit model: switching expected to beat holding by 0.96% over 10 sessions (held 1 sessions),392.67
+snake_viper_tick,2026-11-09T09:31:59.026662+05:30,BUY,SOLARWORLD.NS,592,110.836,65614.91,77.91,delivery,SNAKE expects +7.37% over 63 sessions against a 0.55% round trip; stake 1.00x the equal share,
+snake_viper_tick,2026-11-09T09:31:59.026662+05:30,BUY,DIFFNKG.NS,154,423.7847,65262.85,77.49,delivery,SNAKE expects +7.35% over 63 sessions against a 0.55% round trip; stake 1.00x the equal share,
+snake_viper_tick,2026-11-09T09:31:59.026662+05:30,BUY,GLOBAL.NS,449,145.1073,65153.19,77.36,delivery,SNAKE expects +7.34% over 63 sessions against a 0.55% round trip; stake 1.00x the equal share,

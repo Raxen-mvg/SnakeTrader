@@ -12,7 +12,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 171.45,
+     "last_price": 170.35,
      "prev_close": 160.5
     }
    },
@@ -24,7 +24,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 730.0,
+     "last_price": 728.0,
      "prev_close": 724.75
     }
    },
@@ -36,7 +36,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 663.6,
+     "last_price": 662.9,
      "prev_close": 655.5499877929688
     }
    },
@@ -48,7 +48,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1962.8,
+     "last_price": 1968.4,
      "prev_close": 1941.800048828125
     }
    },
@@ -60,7 +60,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 360.2,
+     "last_price": 359.85,
      "prev_close": 362.25
     }
    },
@@ -72,7 +72,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1463.1,
+     "last_price": 1473.0,
      "prev_close": 1468.5999755859375
     }
    },
@@ -84,7 +84,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 207.17,
+     "last_price": 207.43,
      "prev_close": 201.74000549316406
     }
    },
@@ -96,7 +96,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 320.9,
+     "last_price": 323.85,
      "prev_close": 318.8999938964844
     }
    }
@@ -12215,6 +12215,10 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 222222.8
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 221585.76
    }
   ],
   "memo": {}
@@ -24249,73 +24253,72 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 200000.0
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 200000.0
    }
   ],
   "memo": {}
  },
  "intraweek": {
   "name": "intraweek",
-  "cash": 1504.4733672884104,
+  "cash": 4382.756940464649,
   "start_cash": 200000.0,
   "positions": {
    "MBAPL.NS": {
     "symbol": "MBAPL.NS",
-    "qty": 216,
-    "avg_price": 185.668085,
-    "opened": "2026-11-02T09:31:26.426525+05:30",
+    "qty": 212,
+    "avg_price": 201.16129000000004,
+    "opened": "2026-11-09T09:31:59.026662+05:30",
     "product": "delivery",
-    "exit_on": "2026-11-09",
+    "exit_on": "2026-11-16",
     "meta": {
-     "last_price": 201.89,
-     "prev_close": 194.32000732421875
-    }
-   },
-   "CORONA.NS": {
-    "symbol": "CORONA.NS",
-    "qty": 18,
-    "avg_price": 2162.73925,
-    "opened": "2026-11-02T09:31:26.426525+05:30",
-    "product": "delivery",
-    "exit_on": "2026-11-09",
-    "meta": {
-     "last_price": 2547.1,
-     "prev_close": 2441.10009765625
-    }
-   },
-   "NRL.NS": {
-    "symbol": "NRL.NS",
-    "qty": 247,
-    "avg_price": 162.73373500000002,
-    "opened": "2026-11-02T09:31:26.426525+05:30",
-    "product": "delivery",
-    "exit_on": "2026-11-09",
-    "meta": {
-     "last_price": 173.7,
-     "prev_close": 166.8800048828125
+     "last_price": 200.86
     }
    },
    "KTKBANK.NS": {
     "symbol": "KTKBANK.NS",
-    "qty": 133,
-    "avg_price": 301.501575,
-    "opened": "2026-11-02T09:31:26.426525+05:30",
+    "qty": 131,
+    "avg_price": 324.33577500000007,
+    "opened": "2026-11-09T09:31:59.026662+05:30",
     "product": "delivery",
-    "exit_on": "2026-11-09",
+    "exit_on": "2026-11-16",
     "meta": {
-     "last_price": 320.9,
-     "prev_close": 318.8999938964844
+     "last_price": 323.85
     }
    },
-   "SOMANYCERA.NS": {
-    "symbol": "SOMANYCERA.NS",
-    "qty": 72,
-    "avg_price": 554.580625,
-    "opened": "2026-11-02T09:31:26.426525+05:30",
+   "CORONA.NS": {
+    "symbol": "CORONA.NS",
+    "qty": 16,
+    "avg_price": 2545.0117999999998,
+    "opened": "2026-11-09T09:31:59.026662+05:30",
     "product": "delivery",
-    "exit_on": "2026-11-09",
+    "exit_on": "2026-11-16",
     "meta": {
-     "last_price": 552.2,
-     "prev_close": 546.0
+     "last_price": 2541.2
+    }
+   },
+   "LAURUSLABS.NS": {
+    "symbol": "LAURUSLABS.NS",
+    "qty": 17,
+    "avg_price": 2411.71215,
+    "opened": "2026-11-09T09:31:59.026662+05:30",
+    "product": "delivery",
+    "exit_on": "2026-11-16",
+    "meta": {
+     "last_price": 2408.1
+    }
+   },
+   "NAZARA.NS": {
+    "symbol": "NAZARA.NS",
+    "qty": 104,
+    "avg_price": 407.91095,
+    "opened": "2026-11-09T09:31:59.026662+05:30",
+    "product": "delivery",
+    "exit_on": "2026-11-16",
+    "meta": {
+     "last_price": 407.3
     }
    }
   },
@@ -24947,6 +24950,121 @@
     "price": 554.5806,
     "value": 39929.81,
     "costs": 47.41,
+    "product": "delivery",
+    "reason": "model rank 0.998"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "SELL",
+    "symbol": "MBAPL.NS",
+    "qty": 216,
+    "price": 200.5587,
+    "value": 43320.68,
+    "costs": 60.28,
+    "product": "delivery",
+    "pnl": 3156.09,
+    "reason": "5 trading days elapsed"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "SELL",
+    "symbol": "CORONA.NS",
+    "qty": 18,
+    "price": 2537.3882,
+    "value": 45672.99,
+    "costs": 62.72,
+    "product": "delivery",
+    "pnl": 6680.96,
+    "reason": "5 trading days elapsed"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "SELL",
+    "symbol": "NRL.NS",
+    "qty": 247,
+    "price": 165.761,
+    "value": 40942.96,
+    "costs": 57.81,
+    "product": "delivery",
+    "pnl": 689.92,
+    "reason": "5 trading days elapsed"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "SELL",
+    "symbol": "KTKBANK.NS",
+    "qty": 133,
+    "price": 323.3642,
+    "value": 43007.44,
+    "costs": 59.96,
+    "product": "delivery",
+    "pnl": 2847.78,
+    "reason": "5 trading days elapsed"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "SELL",
+    "symbol": "SOMANYCERA.NS",
+    "qty": 72,
+    "price": 552.1705,
+    "value": 39756.28,
+    "costs": 56.58,
+    "product": "delivery",
+    "pnl": -230.11,
+    "reason": "5 trading days elapsed"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "BUY",
+    "symbol": "MBAPL.NS",
+    "qty": 212,
+    "price": 201.1613,
+    "value": 42646.19,
+    "costs": 50.64,
+    "product": "delivery",
+    "reason": "model rank 1.000"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "BUY",
+    "symbol": "KTKBANK.NS",
+    "qty": 131,
+    "price": 324.3358,
+    "value": 42487.99,
+    "costs": 50.45,
+    "product": "delivery",
+    "reason": "model rank 0.999"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "BUY",
+    "symbol": "CORONA.NS",
+    "qty": 16,
+    "price": 2545.0118,
+    "value": 40720.19,
+    "costs": 48.35,
+    "product": "delivery",
+    "reason": "model rank 0.999"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "BUY",
+    "symbol": "LAURUSLABS.NS",
+    "qty": 17,
+    "price": 2411.7121,
+    "value": 40999.11,
+    "costs": 48.68,
+    "product": "delivery",
+    "reason": "model rank 0.998"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "BUY",
+    "symbol": "NAZARA.NS",
+    "qty": 104,
+    "price": 407.911,
+    "value": 42422.74,
+    "costs": 50.37,
     "product": "delivery",
     "reason": "model rank 0.998"
    }
@@ -36967,6 +37085,10 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 216302.51
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 213345.53
    }
   ],
   "memo": {
@@ -36994,7 +37116,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 171.45,
+     "last_price": 170.35,
      "prev_close": 160.5
     }
    },
@@ -37006,7 +37128,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 730.0,
+     "last_price": 728.0,
      "prev_close": 724.75
     }
    },
@@ -37018,7 +37140,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 663.6,
+     "last_price": 662.9,
      "prev_close": 655.5499877929688
     }
    },
@@ -37030,7 +37152,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1962.8,
+     "last_price": 1968.4,
      "prev_close": 1941.800048828125
     }
    },
@@ -37042,7 +37164,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 360.2,
+     "last_price": 359.85,
      "prev_close": 362.25
     }
    }
@@ -49128,6 +49250,10 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 211783.16
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 211382.21
    }
   ],
   "memo": {}
@@ -49145,7 +49271,7 @@
     "product": "delivery",
     "exit_on": "2026-11-20",
     "meta": {
-     "last_price": 663.6,
+     "last_price": 662.9,
      "prev_close": 655.5499877929688
     }
    },
@@ -49157,7 +49283,7 @@
     "product": "delivery",
     "exit_on": "2026-11-12",
     "meta": {
-     "last_price": 350.3,
+     "last_price": 349.4,
      "prev_close": 353.0
     }
    },
@@ -49169,7 +49295,7 @@
     "product": "delivery",
     "exit_on": "2026-12-10",
     "meta": {
-     "last_price": 320.9,
+     "last_price": 323.85,
      "prev_close": 318.8999938964844
     }
    },
@@ -49181,7 +49307,7 @@
     "product": "delivery",
     "exit_on": "2026-11-23",
     "meta": {
-     "last_price": 915.4,
+     "last_price": 914.25,
      "prev_close": 900.0
     }
    },
@@ -49193,7 +49319,7 @@
     "product": "delivery",
     "exit_on": "2026-12-01",
     "meta": {
-     "last_price": 334.4,
+     "last_price": 334.2,
      "prev_close": 340.1000061035156
     }
    },
@@ -49205,7 +49331,7 @@
     "product": "delivery",
     "exit_on": "2026-11-26",
     "meta": {
-     "last_price": 552.2,
+     "last_price": 553.0,
      "prev_close": 546.0
     }
    }
@@ -61501,6 +61627,10 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 204617.4
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 204660.7
    }
   ],
   "memo": {
@@ -61528,7 +61658,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 117.27,
+     "last_price": 117.29,
      "prev_close": 116.19999694824219
     }
    }
@@ -73570,6 +73700,10 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 192807.52
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 192840.4
    }
   ],
   "memo": {}
@@ -85604,10 +85738,14 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 200000.0
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 200000.0
    }
   ],
   "memo": {
-   "last_entry": "2026-11-06"
+   "last_entry": "2026-11-09"
   }
  },
  "nifty_calls": {
@@ -97710,6 +97848,10 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 201835.92
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 201835.92
    }
   ],
   "memo": {
@@ -97729,7 +97871,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 284.54,
+     "last_price": 284.25,
      "prev_close": 284.2200012207031
     }
    }
@@ -109771,6 +109913,10 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 217732.37
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 217510.52
    }
   ],
   "memo": {}
@@ -109788,7 +109934,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 176.86,
+     "last_price": 176.67,
      "prev_close": 175.44000244140625
     }
    }
@@ -120506,6 +120652,10 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 198385.24
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 198172.25
    }
   ],
   "memo": {}
@@ -120523,7 +120673,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 171.45,
+     "last_price": 170.35,
      "prev_close": 160.5
     }
    },
@@ -120535,7 +120685,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 730.0,
+     "last_price": 728.0,
      "prev_close": 724.75
     }
    },
@@ -120547,7 +120697,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 663.6,
+     "last_price": 662.9,
      "prev_close": 655.5499877929688
     }
    },
@@ -120559,7 +120709,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1962.8,
+     "last_price": 1968.4,
      "prev_close": 1941.800048828125
     }
    },
@@ -120571,7 +120721,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 360.2,
+     "last_price": 359.85,
      "prev_close": 362.25
     }
    },
@@ -120583,7 +120733,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1463.1,
+     "last_price": 1473.0,
      "prev_close": 1468.5999755859375
     }
    },
@@ -120595,7 +120745,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 207.17,
+     "last_price": 207.43,
      "prev_close": 201.74000549316406
     }
    },
@@ -120607,7 +120757,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 320.9,
+     "last_price": 323.85,
      "prev_close": 318.8999938964844
     }
    },
@@ -120619,7 +120769,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1813.7,
+     "last_price": 1829.3,
      "prev_close": 1785.0999755859375
     }
    },
@@ -120631,7 +120781,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 158.04,
+     "last_price": 158.25,
      "prev_close": 155.9199981689453
     }
    },
@@ -120643,7 +120793,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 143.75,
+     "last_price": 144.89,
      "prev_close": 143.67999267578125
     }
    },
@@ -120655,7 +120805,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 2398.8,
+     "last_price": 2408.1,
      "prev_close": 2340.0
     }
    }
@@ -132818,6 +132968,10 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 209008.2
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 209504.26
    }
   ],
   "memo": {}
@@ -144852,6 +145006,10 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 200000.0
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 200000.0
    }
   ],
   "memo": {
@@ -156671,6 +156829,10 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 187854.89
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 187854.89
    }
   ],
   "memo": {
@@ -168300,6 +168462,10 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 188910.33
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 188910.33
    }
   ],
   "memo": {
@@ -168341,7 +168507,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 259.62,
+     "last_price": 258.92,
      "prev_close": 251.47999572753906
     }
    },
@@ -168353,7 +168519,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 161.01,
+     "last_price": 160.4,
      "prev_close": 156.1199951171875
     }
    },
@@ -168365,7 +168531,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 267.2,
+     "last_price": 268.0,
      "prev_close": 260.9100036621094
     }
    },
@@ -168377,7 +168543,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 477.55,
+     "last_price": 475.4,
      "prev_close": 473.95001220703125
     }
    },
@@ -168389,7 +168555,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1337.0,
+     "last_price": 1340.0,
      "prev_close": 1327.9000244140625
     }
    },
@@ -179552,6 +179718,10 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 208736.77
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 208554.49
    }
   ],
   "memo": {
@@ -179585,7 +179755,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 259.62,
+     "last_price": 258.92,
      "prev_close": 251.47999572753906
     }
    },
@@ -179597,7 +179767,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 161.01,
+     "last_price": 160.4,
      "prev_close": 156.1199951171875
     }
    },
@@ -179609,7 +179779,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 267.2,
+     "last_price": 268.0,
      "prev_close": 260.9100036621094
     }
    },
@@ -179621,7 +179791,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 477.55,
+     "last_price": 475.4,
      "prev_close": 473.95001220703125
     }
    },
@@ -179633,7 +179803,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1337.0,
+     "last_price": 1340.0,
      "prev_close": 1327.9000244140625
     }
    },
@@ -190496,6 +190666,10 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 208569.68
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 208390.73
    }
   ],
   "memo": {
@@ -190518,7 +190692,7 @@
  },
  "snake_abs_exit": {
   "name": "snake_abs_exit",
-  "cash": 213.23790754490528,
+  "cash": 31494.732067024936,
   "start_cash": 200000.0,
   "positions": {
    "GANDHAR.NS": {
@@ -190530,7 +190704,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073752,
-     "last_price": 259.62,
+     "last_price": 258.92,
      "prev_close": 251.47999572753906
     }
    },
@@ -190543,7 +190717,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073656,
-     "last_price": 161.01,
+     "last_price": 160.4,
      "prev_close": 156.1199951171875
     }
    },
@@ -190556,21 +190730,8 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073559,
-     "last_price": 267.2,
+     "last_price": 268.0,
      "prev_close": 260.9100036621094
-    }
-   },
-   "RUBYMILLS.NS": {
-    "symbol": "RUBYMILLS.NS",
-    "qty": 66,
-    "avg_price": 497.79557500000004,
-    "opened": "2026-10-01T14:34:05.333638+05:30",
-    "product": "delivery",
-    "exit_on": null,
-    "meta": {
-     "entry_exp": 0.073462,
-     "last_price": 477.55,
-     "prev_close": 473.95001220703125
     }
    },
    "CNL.NS": {
@@ -190582,7 +190743,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073269,
-     "last_price": 1337.0,
+     "last_price": 1340.0,
      "prev_close": 1327.9000244140625
     }
    },
@@ -190609,7 +190770,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073462,
-     "last_price": 424.1,
+     "last_price": 423.15,
      "prev_close": 419.6000061035156
     }
    }
@@ -190703,6 +190864,18 @@
     "costs": 6.12,
     "product": "delivery",
     "reason": "SNAKE expects +7.35% over 63 sessions against a 0.81% round trip"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "SELL",
+    "symbol": "RUBYMILLS.NS",
+    "qty": 66,
+    "price": 474.6869,
+    "value": 31329.34,
+    "costs": 47.84,
+    "product": "delivery",
+    "pnl": -1573.01,
+    "reason": "SNAKE exit model: switching expected to beat holding by 2.35% over 10 sessions (held 25 sessions)"
    }
   ],
   "equity_curve": [
@@ -201309,14 +201482,18 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 211734.49
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 211447.46
    }
   ],
   "memo": {
-   "snake_entry": "2026-10-09",
+   "snake_entry": "2026-11-09",
    "sold_today": {
-    "day": "2026-10-09",
+    "day": "2026-11-09",
     "names": [
-     "BHAGYANGR.NS"
+     "RUBYMILLS.NS"
     ]
    },
    "corrections": [
@@ -201327,12 +201504,20 @@
      "sale_costs": 18.69,
      "also": "reversed the SETL.NS buy paid for by that false sale"
     }
+   ],
+   "blocked_fills": [
+    {
+     "time": "2026-11-09T09:31:59.026662+05:30",
+     "symbol": "BHAGYANGR.NS",
+     "side": "BUY",
+     "why": "upper circuit"
+    }
    ]
   }
  },
  "snake_abs_exit_conv": {
   "name": "snake_abs_exit_conv",
-  "cash": 4950.592224676815,
+  "cash": 13372.758242662116,
   "start_cash": 200000.0,
   "positions": {
    "GANDHAR.NS": {
@@ -201344,7 +201529,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073752,
-     "last_price": 259.62,
+     "last_price": 258.92,
      "prev_close": 251.47999572753906
     }
    },
@@ -201357,7 +201542,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073656,
-     "last_price": 161.01,
+     "last_price": 160.4,
      "prev_close": 156.1199951171875
     }
    },
@@ -201370,21 +201555,8 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073559,
-     "last_price": 267.2,
+     "last_price": 268.0,
      "prev_close": 260.9100036621094
-    }
-   },
-   "RUBYMILLS.NS": {
-    "symbol": "RUBYMILLS.NS",
-    "qty": 66,
-    "avg_price": 497.79557500000004,
-    "opened": "2026-10-01T14:34:05.333638+05:30",
-    "product": "delivery",
-    "exit_on": null,
-    "meta": {
-     "entry_exp": 0.073462,
-     "last_price": 477.55,
-     "prev_close": 473.95001220703125
     }
    },
    "CNL.NS": {
@@ -201396,7 +201568,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073269,
-     "last_price": 1337.0,
+     "last_price": 1340.0,
      "prev_close": 1327.9000244140625
     }
    },
@@ -201412,6 +201584,18 @@
      "parent": "BHAGYANGR.NS",
      "record_date": "2026-10-08",
      "valued_as": "7 Oct official close 454.55 minus ex-date discovered price 39.00"
+    }
+   },
+   "SOLARWORLD.NS": {
+    "symbol": "SOLARWORLD.NS",
+    "qty": 206,
+    "avg_price": 110.83600500000001,
+    "opened": "2026-11-09T09:31:59.026662+05:30",
+    "product": "delivery",
+    "exit_on": null,
+    "meta": {
+     "entry_exp": 0.073656,
+     "last_price": 110.67
     }
    }
   },
@@ -201493,6 +201677,29 @@
     "product": "delivery",
     "pnl": 736.19,
     "reason": "SNAKE exit: expects -0.21%, selling costs 0.68%"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "SELL",
+    "symbol": "RUBYMILLS.NS",
+    "qty": 66,
+    "price": 474.6869,
+    "value": 31329.34,
+    "costs": 47.84,
+    "product": "delivery",
+    "pnl": -1573.01,
+    "reason": "SNAKE exit model: switching expected to beat holding by 2.35% over 10 sessions (held 25 sessions)"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "BUY",
+    "symbol": "SOLARWORLD.NS",
+    "qty": 206,
+    "price": 110.836,
+    "value": 22832.22,
+    "costs": 27.11,
+    "product": "delivery",
+    "reason": "SNAKE expects +7.37% over 63 sessions against a 0.61% round trip; stake 1.26x the equal share"
    }
   ],
   "equity_curve": [
@@ -212099,14 +212306,18 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 211803.27
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 211465.03
    }
   ],
   "memo": {
-   "snake_entry": "2026-10-01",
+   "snake_entry": "2026-11-09",
    "sold_today": {
-    "day": "2026-10-09",
+    "day": "2026-11-09",
     "names": [
-     "BHAGYANGR.NS"
+     "RUBYMILLS.NS"
     ]
    },
    "corrections": [
@@ -212115,6 +212326,14 @@
      "what": "reversed BHAGYANGR.NS disaster-stop sale: a demerger (record date 2026-10-08), not a crash; demerger entitlement booked at 415.55/share",
      "sale_value": 3232.14,
      "sale_costs": 18.69
+    }
+   ],
+   "blocked_fills": [
+    {
+     "time": "2026-11-09T09:31:59.026662+05:30",
+     "symbol": "BHAGYANGR.NS",
+     "side": "BUY",
+     "why": "upper circuit"
     }
    ]
   }
@@ -212133,7 +212352,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073752,
-     "last_price": 259.62,
+     "last_price": 258.92,
      "prev_close": 251.47999572753906
     }
    },
@@ -212146,7 +212365,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073559,
-     "last_price": 1337.0,
+     "last_price": 1340.0,
      "prev_close": 1327.9000244140625
     }
    },
@@ -212159,7 +212378,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073366,
-     "last_price": 161.01,
+     "last_price": 160.4,
      "prev_close": 156.1199951171875
     }
    },
@@ -212172,7 +212391,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073462,
-     "last_price": 267.2,
+     "last_price": 268.0,
      "prev_close": 260.9100036621094
     }
    },
@@ -212212,7 +212431,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073752,
-     "last_price": 143.75,
+     "last_price": 144.89,
      "prev_close": 143.67999267578125
     }
    }
@@ -222286,6 +222505,10 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 198871.44
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 198923.43
    }
   ],
   "memo": {
@@ -222383,46 +222606,43 @@
  },
  "snake_viper_wild": {
   "name": "snake_viper_wild",
-  "cash": 26.75887099964166,
+  "cash": 179.1574332407472,
   "start_cash": 200000.0,
   "positions": {
-   "QPOWER.NS": {
-    "symbol": "QPOWER.NS",
-    "qty": 52,
-    "avg_price": 1274.40875,
-    "opened": "2026-10-26T09:31:54.957250+05:30",
+   "SOLARWORLD.NS": {
+    "symbol": "SOLARWORLD.NS",
+    "qty": 603,
+    "avg_price": 110.83600500000001,
+    "opened": "2026-11-09T09:31:59.026662+05:30",
     "product": "delivery",
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073656,
-     "last_price": 1439.2,
-     "prev_close": 1363.5
+     "last_price": 110.67
     }
    },
-   "BHAGYANGR.NS": {
-    "symbol": "BHAGYANGR.NS",
-    "qty": 948,
-    "avg_price": 70.55567500000001,
-    "opened": "2026-10-27T10:13:10.079751+05:30",
+   "DIFFNKG.NS": {
+    "symbol": "DIFFNKG.NS",
+    "qty": 156,
+    "avg_price": 423.784725,
+    "opened": "2026-11-09T09:31:59.026662+05:30",
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "entry_exp": 0.073752,
-     "last_price": 72.96,
-     "prev_close": 73.13999938964844
+     "entry_exp": 0.073462,
+     "last_price": 423.15
     }
    },
-   "CNL.NS": {
-    "symbol": "CNL.NS",
-    "qty": 42,
-    "avg_price": 1326.8873500000002,
-    "opened": "2026-11-06T14:26:41.382178+05:30",
+   "GLOBAL.NS": {
+    "symbol": "GLOBAL.NS",
+    "qty": 457,
+    "avg_price": 145.107335,
+    "opened": "2026-11-09T09:31:59.026662+05:30",
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "entry_exp": 0.073656,
-     "last_price": 1337.0,
-     "prev_close": 1327.9000244140625
+     "entry_exp": 0.073365,
+     "last_price": 144.89
     }
    }
   },
@@ -222551,6 +222771,75 @@
     "costs": 66.17,
     "product": "delivery",
     "reason": "SNAKE expects +7.37% over 63 sessions against a 0.55% round trip; stake 1.00x the equal share"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "SELL",
+    "symbol": "QPOWER.NS",
+    "qty": 52,
+    "price": 1435.4436,
+    "value": 74643.07,
+    "costs": 92.78,
+    "product": "delivery",
+    "pnl": 8281.04,
+    "reason": "SNAKE exit model: switching expected to beat holding by 1.20% over 10 sessions (held 10 sessions)"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "SELL",
+    "symbol": "BHAGYANGR.NS",
+    "qty": 948,
+    "price": 72.8506,
+    "value": 69062.33,
+    "costs": 86.99,
+    "product": "delivery",
+    "pnl": 2088.57,
+    "reason": "SNAKE exit model: switching expected to beat holding by 1.32% over 10 sessions (held 9 sessions)"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "SELL",
+    "symbol": "CNL.NS",
+    "qty": 42,
+    "price": 1337.99,
+    "value": 56195.58,
+    "costs": 73.64,
+    "product": "delivery",
+    "pnl": 392.67,
+    "reason": "SNAKE exit model: switching expected to beat holding by 0.96% over 10 sessions (held 1 sessions)"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "BUY",
+    "symbol": "SOLARWORLD.NS",
+    "qty": 603,
+    "price": 110.836,
+    "value": 66834.11,
+    "costs": 79.36,
+    "product": "delivery",
+    "reason": "SNAKE expects +7.37% over 63 sessions against a 0.55% round trip; stake 1.00x the equal share"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "BUY",
+    "symbol": "DIFFNKG.NS",
+    "qty": 156,
+    "price": 423.7847,
+    "value": 66110.42,
+    "costs": 78.5,
+    "product": "delivery",
+    "reason": "SNAKE expects +7.35% over 63 sessions against a 0.55% round trip; stake 1.00x the equal share"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "BUY",
+    "symbol": "GLOBAL.NS",
+    "qty": 457,
+    "price": 145.1073,
+    "value": 66314.05,
+    "costs": 78.74,
+    "product": "delivery",
+    "reason": "SNAKE expects +7.34% over 63 sessions against a 0.55% round trip; stake 1.00x the equal share"
    }
   ],
   "equity_curve": [
@@ -231713,16 +232002,21 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 200185.24
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 199139.3
    }
   ],
   "memo": {
-   "snake_entry": "2026-11-06",
-   "ticks": 1284,
+   "snake_entry": "2026-11-09",
+   "ticks": 1285,
    "sold_today": {
-    "day": "2026-11-06",
+    "day": "2026-11-09",
     "names": [
+     "QPOWER.NS",
      "BHAGYANGR.NS",
-     "GLOBAL.NS"
+     "CNL.NS"
     ]
    },
    "blocked_fills": [
@@ -232607,46 +232901,43 @@
  },
  "snake_viper_tick": {
   "name": "snake_viper_tick",
-  "cash": 37.566533816745505,
+  "cash": 22.542740601464175,
   "start_cash": 200000.0,
   "positions": {
-   "QPOWER.NS": {
-    "symbol": "QPOWER.NS",
-    "qty": 51,
-    "avg_price": 1274.40875,
-    "opened": "2026-10-26T09:31:54.957250+05:30",
+   "SOLARWORLD.NS": {
+    "symbol": "SOLARWORLD.NS",
+    "qty": 592,
+    "avg_price": 110.83600500000001,
+    "opened": "2026-11-09T09:31:59.026662+05:30",
     "product": "delivery",
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073656,
-     "last_price": 1439.2,
-     "prev_close": 1363.5
+     "last_price": 110.67
     }
    },
-   "BHAGYANGR.NS": {
-    "symbol": "BHAGYANGR.NS",
-    "qty": 921,
-    "avg_price": 70.55567500000001,
-    "opened": "2026-10-27T10:13:10.079751+05:30",
+   "DIFFNKG.NS": {
+    "symbol": "DIFFNKG.NS",
+    "qty": 154,
+    "avg_price": 423.784725,
+    "opened": "2026-11-09T09:31:59.026662+05:30",
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "entry_exp": 0.073752,
-     "last_price": 72.96,
-     "prev_close": 73.13999938964844
+     "entry_exp": 0.073462,
+     "last_price": 423.15
     }
    },
-   "CNL.NS": {
-    "symbol": "CNL.NS",
-    "qty": 42,
-    "avg_price": 1326.8873500000002,
-    "opened": "2026-11-06T14:26:41.382178+05:30",
+   "GLOBAL.NS": {
+    "symbol": "GLOBAL.NS",
+    "qty": 449,
+    "avg_price": 145.107335,
+    "opened": "2026-11-09T09:31:59.026662+05:30",
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "entry_exp": 0.073656,
-     "last_price": 1337.0,
-     "prev_close": 1327.9000244140625
+     "entry_exp": 0.073365,
+     "last_price": 144.89
     }
    }
   },
@@ -232752,6 +233043,75 @@
     "costs": 66.17,
     "product": "delivery",
     "reason": "SNAKE expects +7.37% over 63 sessions against a 0.55% round trip; stake 1.00x the equal share"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "SELL",
+    "symbol": "QPOWER.NS",
+    "qty": 51,
+    "price": 1435.4436,
+    "value": 73207.62,
+    "costs": 91.29,
+    "product": "delivery",
+    "pnl": 8121.49,
+    "reason": "SNAKE exit model: switching expected to beat holding by 1.20% over 10 sessions (held 10 sessions)"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "SELL",
+    "symbol": "BHAGYANGR.NS",
+    "qty": 921,
+    "price": 72.8506,
+    "value": 67095.37,
+    "costs": 84.95,
+    "product": "delivery",
+    "pnl": 2028.64,
+    "reason": "SNAKE exit model: switching expected to beat holding by 1.32% over 10 sessions (held 9 sessions)"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "SELL",
+    "symbol": "CNL.NS",
+    "qty": 42,
+    "price": 1337.99,
+    "value": 56195.58,
+    "costs": 73.64,
+    "product": "delivery",
+    "pnl": 392.67,
+    "reason": "SNAKE exit model: switching expected to beat holding by 0.96% over 10 sessions (held 1 sessions)"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "BUY",
+    "symbol": "SOLARWORLD.NS",
+    "qty": 592,
+    "price": 110.836,
+    "value": 65614.91,
+    "costs": 77.91,
+    "product": "delivery",
+    "reason": "SNAKE expects +7.37% over 63 sessions against a 0.55% round trip; stake 1.00x the equal share"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "BUY",
+    "symbol": "DIFFNKG.NS",
+    "qty": 154,
+    "price": 423.7847,
+    "value": 65262.85,
+    "costs": 77.49,
+    "product": "delivery",
+    "reason": "SNAKE expects +7.35% over 63 sessions against a 0.55% round trip; stake 1.00x the equal share"
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "side": "BUY",
+    "symbol": "GLOBAL.NS",
+    "qty": 449,
+    "price": 145.1073,
+    "value": 65153.19,
+    "costs": 77.36,
+    "product": "delivery",
+    "reason": "SNAKE expects +7.34% over 63 sessions against a 0.55% round trip; stake 1.00x the equal share"
    }
   ],
   "equity_curve": [
@@ -240862,10 +241222,14 @@
    {
     "time": "2026-11-09T09:28:29.589141+05:30",
     "equity": 196786.93
+   },
+   {
+    "time": "2026-11-09T09:31:59.026662+05:30",
+    "equity": 195759.89
    }
   ],
   "memo": {
-   "ticks": 2077,
+   "ticks": 2078,
    "blocked_fills": [
     {
      "time": "2026-10-13T11:43:07.860247+05:30",
@@ -246766,7 +247130,7 @@
      "why": "lower circuit"
     }
    ],
-   "snake_entry": "2026-11-06",
+   "snake_entry": "2026-11-09",
    "corrections": [
     {
      "day": "2026-10-21",
@@ -246777,10 +247141,11 @@
     }
    ],
    "sold_today": {
-    "day": "2026-11-06",
+    "day": "2026-11-09",
     "names": [
+     "QPOWER.NS",
      "BHAGYANGR.NS",
-     "GLOBAL.NS"
+     "CNL.NS"
     ]
    }
   }
