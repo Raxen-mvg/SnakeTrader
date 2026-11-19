@@ -1,59 +1,59 @@
 # Paper trading report
 
-Updated 2026-11-19 12:47 IST. Model picks as of 2026-10-22. Each strategy started with Rs 200,000 of fake money. Costs are Zerodha's published charges. Goal: +10% by 2026-10-31 (tracked, not traded on).
+Updated 2026-11-19 12:50 IST. Model picks as of 2026-10-22. Each strategy started with Rs 200,000 of fake money. Costs are Zerodha's published charges. Goal: +10% by 2026-10-31 (tracked, not traded on).
 
 | Strategy | Equity (Rs) | Return | Closed trades | Win rate | Costs paid (Rs) |
 |:---|---:|---:|---:|---:|---:|
-| unified | 223,825 | +11.91% | 0 | - | 236 |
-| benchmark | 221,511 | +10.76% | 0 | - | 237 |
-| intramonth | 213,488 | +6.74% | 0 | - | 235 |
-| snake_abs_exit | 213,042 | +6.52% | 2 | 50% | 345 |
-| intraweek | 211,755 | +5.88% | 35 | 54% | 3,851 |
-| snake_abs_exit_conv | 211,129 | +5.57% | 2 | 50% | 345 |
-| oracle | 211,012 | +5.51% | 0 | - | 233 |
-| snake_abs | 208,664 | +4.33% | 1 | 100% | 255 |
-| snake_abs_conv | 208,538 | +4.27% | 1 | 100% | 255 |
-| random_hold | 207,727 | +3.86% | 10 | 70% | 733 |
-| snake_viper_wild | 207,480 | +3.74% | 16 | 50% | 2,827 |
-| snake_viper_tick | 203,935 | +1.97% | 15 | 47% | 2,625 |
-| snake_anaconda | 203,034 | +1.52% | 3 | 33% | 374 |
+| unified | 223,849 | +11.93% | 0 | - | 236 |
+| benchmark | 221,534 | +10.77% | 0 | - | 237 |
+| intramonth | 213,514 | +6.76% | 0 | - | 235 |
+| snake_abs_exit | 212,891 | +6.45% | 2 | 50% | 345 |
+| intraweek | 211,855 | +5.93% | 35 | 54% | 3,851 |
+| oracle | 211,081 | +5.54% | 0 | - | 233 |
+| snake_abs_exit_conv | 210,995 | +5.50% | 2 | 50% | 345 |
+| snake_abs | 208,495 | +4.25% | 1 | 100% | 255 |
+| snake_abs_conv | 208,366 | +4.18% | 1 | 100% | 255 |
+| random_hold | 207,800 | +3.90% | 10 | 70% | 733 |
+| snake_viper_wild | 207,484 | +3.74% | 16 | 50% | 2,827 |
+| snake_viper_tick | 203,939 | +1.97% | 15 | 47% | 2,625 |
+| snake_anaconda | 202,875 | +1.44% | 3 | 33% | 374 |
 | nifty_calls | 201,836 | +0.92% | 3 | 33% | 202 |
-| benchmark_smallcap | 200,728 | +0.36% | 0 | - | 237 |
+| benchmark_smallcap | 200,571 | +0.29% | 0 | - | 237 |
 | intraday | 200,000 | +0.00% | 0 | - | 0 |
 | gold_trend | 200,000 | +0.00% | 0 | - | 0 |
 | statarb | 200,000 | +0.00% | 0 | - | 0 |
 | snake_nonews | 188,910 | -5.54% | 6 | 17% | 515 |
 | snake | 187,855 | -6.07% | 6 | 17% | 518 |
-| gold | 174,987 | -12.51% | 0 | - | 237 |
+| gold | 175,003 | -12.50% | 0 | - | 237 |
 
-Combined allocator (virtual): Rs 191,248 (-4.38%).
+Combined allocator (virtual): Rs 191,278 (-4.36%).
 
 Profit on 2026-11-19:
 
 | Strategy | Rs | % |
 |:---|---:|---:|
-| benchmark_smallcap | +1,401 | +0.70% |
-| benchmark | +1,216 | +0.55% |
-| intramonth | +1,214 | +0.57% |
-| unified | +1,214 | +0.55% |
-| random_hold | +795 | +0.38% |
-| snake_viper_wild | +440 | +0.21% |
-| snake_viper_tick | +431 | +0.21% |
-| oracle | +216 | +0.10% |
+| benchmark_smallcap | +1,244 | +0.62% |
+| intramonth | +1,240 | +0.58% |
+| benchmark | +1,239 | +0.56% |
+| unified | +1,238 | +0.56% |
+| random_hold | +867 | +0.42% |
+| snake_viper_wild | +445 | +0.21% |
+| snake_viper_tick | +436 | +0.21% |
+| oracle | +285 | +0.14% |
+| intraweek | +16 | +0.01% |
 | intraday | +0 | +0.00% |
-| snake_nonews | +0 | +0.00% |
 | nifty_calls | +0 | +0.00% |
 | statarb | +0 | +0.00% |
 | gold_trend | +0 | +0.00% |
+| snake_nonews | +0 | +0.00% |
 | snake | +0 | +0.00% |
-| intraweek | -84 | -0.04% |
-| snake_abs | -773 | -0.37% |
-| snake_abs_conv | -787 | -0.38% |
-| snake_abs_exit | -990 | -0.46% |
-| snake_abs_exit_conv | -1,254 | -0.59% |
-| snake_anaconda | -1,367 | -0.67% |
-| gold | -2,334 | -1.32% |
+| snake_abs | -942 | -0.45% |
+| snake_abs_conv | -959 | -0.46% |
+| snake_abs_exit | -1,140 | -0.53% |
+| snake_abs_exit_conv | -1,388 | -0.65% |
+| snake_anaconda | -1,526 | -0.75% |
+| gold | -2,318 | -1.31% |
 
-Average per day so far: unified Rs +644, benchmark Rs +581, snake_abs_exit Rs +384, intramonth Rs +365, snake_abs_exit_conv Rs +327, intraweek Rs +318, oracle Rs +298, snake_viper_wild Rs +258, snake_abs_conv Rs +251, snake_abs Rs +248, random_hold Rs +209, snake_viper_tick Rs +151, snake_anaconda Rs +95, nifty_calls Rs +50, benchmark_smallcap Rs +22, gold_trend Rs +0, intraday Rs +0, statarb Rs +0, snake_nonews Rs -317, snake Rs -337, gold Rs -676
+Average per day so far: unified Rs +645, benchmark Rs +582, snake_abs_exit Rs +379, intramonth Rs +365, snake_abs_exit_conv Rs +323, intraweek Rs +320, oracle Rs +299, snake_viper_wild Rs +258, snake_abs_conv Rs +246, snake_abs Rs +243, random_hold Rs +211, snake_viper_tick Rs +152, snake_anaconda Rs +90, nifty_calls Rs +50, benchmark_smallcap Rs +17, gold_trend Rs +0, intraday Rs +0, statarb Rs +0, snake_nonews Rs -317, snake Rs -337, gold Rs -676
 
 Option results are SIMULATED (Black-Scholes on the real Nifty level), not real option prices.
