@@ -12,7 +12,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 172.7,
+     "last_price": 172.47,
      "prev_close": 171.85000610351562
     }
    },
@@ -24,7 +24,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 738.2,
+     "last_price": 737.8,
      "prev_close": 744.3499755859375
     }
    },
@@ -36,7 +36,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 692.8,
+     "last_price": 688.7,
      "prev_close": 704.7000122070312
     }
    },
@@ -48,7 +48,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1837.4,
+     "last_price": 1836.8,
      "prev_close": 1843.800048828125
     }
    },
@@ -60,7 +60,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 362.9,
+     "last_price": 366.3,
      "prev_close": 380.3500061035156
     }
    },
@@ -72,7 +72,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1572.9,
+     "last_price": 1588.8,
      "prev_close": 1572.300048828125
     }
    },
@@ -84,7 +84,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 234.78,
+     "last_price": 234.26,
      "prev_close": 233.52999877929688
     }
    },
@@ -96,7 +96,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 338.55,
+     "last_price": 338.6,
      "prev_close": 342.70001220703125
     }
    }
@@ -16207,6 +16207,10 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 224801.71
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 224515.42
    }
   ],
   "memo": {}
@@ -32233,73 +32237,72 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 200000.0
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 200000.0
    }
   ],
   "memo": {}
  },
  "intraweek": {
   "name": "intraweek",
-  "cash": 2461.421743338775,
+  "cash": 958.2932217668567,
   "start_cash": 200000.0,
   "positions": {
-   "LAURUSLABS.NS": {
-    "symbol": "LAURUSLABS.NS",
-    "qty": 17,
-    "avg_price": 2425.6330000000003,
-    "opened": "2026-11-16T09:32:01.373461+05:30",
-    "product": "delivery",
-    "exit_on": "2026-11-23",
-    "meta": {
-     "last_price": 2302.4,
-     "prev_close": 2294.60009765625
-    }
-   },
    "MBAPL.NS": {
     "symbol": "MBAPL.NS",
-    "qty": 215,
-    "avg_price": 199.51883,
-    "opened": "2026-11-16T09:32:01.373461+05:30",
+    "qty": 217,
+    "avg_price": 196.81478,
+    "opened": "2026-11-23T09:31:51.992362+05:30",
     "product": "delivery",
-    "exit_on": "2026-11-23",
+    "exit_on": "2026-11-30",
     "meta": {
-     "last_price": 196.76,
-     "prev_close": 195.13999938964844
+     "last_price": 196.52
     }
    },
-   "NITINSPIN.NS": {
-    "symbol": "NITINSPIN.NS",
-    "qty": 63,
-    "avg_price": 677.51475,
-    "opened": "2026-11-16T09:32:01.373461+05:30",
+   "SHREEJISPG.NS": {
+    "symbol": "SHREEJISPG.NS",
+    "qty": 46,
+    "avg_price": 912.3665000000001,
+    "opened": "2026-11-23T09:31:51.992362+05:30",
     "product": "delivery",
-    "exit_on": "2026-11-23",
+    "exit_on": "2026-11-30",
     "meta": {
-     "last_price": 692.8,
-     "prev_close": 704.7000122070312
+     "last_price": 911.0
     }
    },
-   "KRISHANA.NS": {
-    "symbol": "KRISHANA.NS",
-    "qty": 178,
-    "avg_price": 241.95238500000002,
-    "opened": "2026-11-16T09:32:01.373461+05:30",
+   "ALGOQUANT.NS": {
+    "symbol": "ALGOQUANT.NS",
+    "qty": 511,
+    "avg_price": 83.69535499999999,
+    "opened": "2026-11-23T09:31:51.992362+05:30",
     "product": "delivery",
-    "exit_on": "2026-11-23",
+    "exit_on": "2026-11-30",
     "meta": {
-     "last_price": 249.56,
-     "prev_close": 246.1699981689453
+     "last_price": 83.57
     }
    },
-   "FEDERALBNK.NS": {
-    "symbol": "FEDERALBNK.NS",
-    "qty": 118,
-    "avg_price": 362.24255,
-    "opened": "2026-11-16T09:32:01.373461+05:30",
+   "SBC.NS": {
+    "symbol": "SBC.NS",
+    "qty": 621,
+    "avg_price": 68.83309500000001,
+    "opened": "2026-11-23T09:31:51.992362+05:30",
     "product": "delivery",
-    "exit_on": "2026-11-23",
+    "exit_on": "2026-11-30",
     "meta": {
-     "last_price": 365.55,
-     "prev_close": 373.5
+     "last_price": 68.73
+    }
+   },
+   "NAZARA.NS": {
+    "symbol": "NAZARA.NS",
+    "qty": 103,
+    "avg_price": 412.61800000000005,
+    "opened": "2026-11-23T09:31:51.992362+05:30",
+    "product": "delivery",
+    "exit_on": "2026-11-30",
+    "meta": {
+     "last_price": 412.0
     }
    }
   },
@@ -33163,6 +33166,121 @@
     "costs": 50.76,
     "product": "delivery",
     "reason": "model rank 0.999"
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "side": "SELL",
+    "symbol": "LAURUSLABS.NS",
+    "qty": 17,
+    "price": 2295.6514,
+    "value": 39026.07,
+    "costs": 55.83,
+    "product": "delivery",
+    "pnl": -2265.51,
+    "reason": "5 trading days elapsed"
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "side": "SELL",
+    "symbol": "MBAPL.NS",
+    "qty": 215,
+    "price": 196.2252,
+    "value": 42188.42,
+    "costs": 59.11,
+    "product": "delivery",
+    "pnl": -767.23,
+    "reason": "5 trading days elapsed"
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "side": "SELL",
+    "symbol": "NITINSPIN.NS",
+    "qty": 63,
+    "price": 687.667,
+    "value": 43323.02,
+    "costs": 60.28,
+    "product": "delivery",
+    "pnl": 579.31,
+    "reason": "5 trading days elapsed"
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "side": "SELL",
+    "symbol": "KRISHANA.NS",
+    "qty": 178,
+    "price": 248.2471,
+    "value": 44187.98,
+    "costs": 61.18,
+    "product": "delivery",
+    "pnl": 1059.27,
+    "reason": "5 trading days elapsed"
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "side": "SELL",
+    "symbol": "FEDERALBNK.NS",
+    "qty": 118,
+    "price": 364.5024,
+    "value": 43011.29,
+    "costs": 59.96,
+    "product": "delivery",
+    "pnl": 206.71,
+    "reason": "5 trading days elapsed"
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "side": "BUY",
+    "symbol": "MBAPL.NS",
+    "qty": 217,
+    "price": 196.8148,
+    "value": 42708.81,
+    "costs": 50.71,
+    "product": "delivery",
+    "reason": "model rank 1.000"
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "side": "BUY",
+    "symbol": "SHREEJISPG.NS",
+    "qty": 46,
+    "price": 912.3665,
+    "value": 41968.86,
+    "costs": 49.83,
+    "product": "delivery",
+    "reason": "model rank 0.999"
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "side": "BUY",
+    "symbol": "ALGOQUANT.NS",
+    "qty": 511,
+    "price": 83.6954,
+    "value": 42768.33,
+    "costs": 50.78,
+    "product": "delivery",
+    "reason": "model rank 0.999"
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "side": "BUY",
+    "symbol": "SBC.NS",
+    "qty": 621,
+    "price": 68.8331,
+    "value": 42745.35,
+    "costs": 50.76,
+    "product": "delivery",
+    "reason": "model rank 0.998"
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "side": "BUY",
+    "symbol": "NAZARA.NS",
+    "qty": 103,
+    "price": 412.618,
+    "value": 42499.65,
+    "costs": 50.46,
+    "product": "delivery",
+    "reason": "model rank 0.998"
    }
   ],
   "equity_curve": [
@@ -49173,6 +49291,10 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 215108.6
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 213330.73
    }
   ],
   "memo": {
@@ -49200,7 +49322,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 172.7,
+     "last_price": 172.47,
      "prev_close": 171.85000610351562
     }
    },
@@ -49212,7 +49334,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 738.2,
+     "last_price": 737.8,
      "prev_close": 744.3499755859375
     }
    },
@@ -49224,7 +49346,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 692.8,
+     "last_price": 688.7,
      "prev_close": 704.7000122070312
     }
    },
@@ -49236,7 +49358,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1837.4,
+     "last_price": 1836.8,
      "prev_close": 1843.800048828125
     }
    },
@@ -49248,7 +49370,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 362.9,
+     "last_price": 366.3,
      "prev_close": 380.3500061035156
     }
    }
@@ -65326,13 +65448,17 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 212283.31
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 212245.06
    }
   ],
   "memo": {}
  },
  "random_hold": {
   "name": "random_hold",
-  "cash": 630.2923460820748,
+  "cash": 14905.82071752374,
   "start_cash": 200000.0,
   "positions": {
    "KTKBANK.NS": {
@@ -65343,20 +65469,8 @@
     "product": "delivery",
     "exit_on": "2026-12-10",
     "meta": {
-     "last_price": 338.55,
+     "last_price": 338.6,
      "prev_close": 342.70001220703125
-    }
-   },
-   "SONACOMS.NS": {
-    "symbol": "SONACOMS.NS",
-    "qty": 16,
-    "avg_price": 793.538525,
-    "opened": "2026-10-21T09:31:49.357338+05:30",
-    "product": "delivery",
-    "exit_on": "2026-11-23",
-    "meta": {
-     "last_price": 896.05,
-     "prev_close": 892.5
     }
    },
    "FEDERALBNK.NS": {
@@ -65367,7 +65481,7 @@
     "product": "delivery",
     "exit_on": "2026-12-01",
     "meta": {
-     "last_price": 365.55,
+     "last_price": 365.05,
      "prev_close": 373.5
     }
    },
@@ -65379,7 +65493,7 @@
     "product": "delivery",
     "exit_on": "2026-11-26",
     "meta": {
-     "last_price": 548.5,
+     "last_price": 548.0,
      "prev_close": 551.7999877929688
     }
    },
@@ -65391,7 +65505,7 @@
     "product": "delivery",
     "exit_on": "2026-11-30",
     "meta": {
-     "last_price": 196.76,
+     "last_price": 196.52,
      "prev_close": 195.13999938964844
     }
    },
@@ -65403,7 +65517,7 @@
     "product": "delivery",
     "exit_on": "2026-12-16",
     "meta": {
-     "last_price": 68.76,
+     "last_price": 68.73,
      "prev_close": 68.5999984741211
     }
    },
@@ -65415,7 +65529,7 @@
     "product": "delivery",
     "exit_on": "2027-01-06",
     "meta": {
-     "last_price": 249.56,
+     "last_price": 248.62,
      "prev_close": 246.1699981689453
     }
    },
@@ -65427,7 +65541,7 @@
     "product": "delivery",
     "exit_on": "2027-01-06",
     "meta": {
-     "last_price": 917.1,
+     "last_price": 911.0,
      "prev_close": 913.7999877929688
     }
    }
@@ -65773,6 +65887,18 @@
     "costs": 45.14,
     "product": "delivery",
     "reason": "model rank 0.999"
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "side": "SELL",
+    "symbol": "SONACOMS.NS",
+    "qty": 16,
+    "price": 894.1068,
+    "value": 14305.71,
+    "costs": 30.18,
+    "product": "delivery",
+    "pnl": 1578.91,
+    "reason": "random holding period elapsed"
    }
   ],
   "equity_curve": [
@@ -81783,6 +81909,10 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 211362.33
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 210802.65
    }
   ],
   "memo": {
@@ -97844,6 +97974,10 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 169232.56
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 169232.56
    }
   ],
   "memo": {}
@@ -113870,10 +114004,14 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 200000.0
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 200000.0
    }
   ],
   "memo": {
-   "last_entry": "2026-11-20"
+   "last_entry": "2026-11-23"
   }
  },
  "nifty_calls": {
@@ -129968,6 +130106,10 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 201835.92
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 201835.92
    }
   ],
   "memo": {
@@ -129987,7 +130129,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 292.89,
+     "last_price": 292.72,
      "prev_close": 294.2200012207031
     }
    }
@@ -146021,6 +146163,10 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 224120.12
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 223990.07
    }
   ],
   "memo": {}
@@ -146038,7 +146184,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 178.26,
+     "last_price": 178.16,
      "prev_close": 179.11000061035156
     }
    }
@@ -160748,6 +160894,10 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 199954.64
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 199842.54
    }
   ],
   "memo": {}
@@ -160765,7 +160915,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 172.7,
+     "last_price": 172.47,
      "prev_close": 171.85000610351562
     }
    },
@@ -160777,7 +160927,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 738.2,
+     "last_price": 737.8,
      "prev_close": 744.3499755859375
     }
    },
@@ -160789,7 +160939,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 692.8,
+     "last_price": 688.7,
      "prev_close": 704.7000122070312
     }
    },
@@ -160801,7 +160951,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1837.4,
+     "last_price": 1836.8,
      "prev_close": 1843.800048828125
     }
    },
@@ -160813,7 +160963,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 362.9,
+     "last_price": 366.3,
      "prev_close": 380.3500061035156
     }
    },
@@ -160825,7 +160975,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1572.9,
+     "last_price": 1588.8,
      "prev_close": 1572.300048828125
     }
    },
@@ -160837,7 +160987,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 234.78,
+     "last_price": 234.26,
      "prev_close": 233.52999877929688
     }
    },
@@ -160849,7 +160999,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 338.55,
+     "last_price": 338.6,
      "prev_close": 342.70001220703125
     }
    },
@@ -160861,7 +161011,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1806.9,
+     "last_price": 1802.6,
      "prev_close": 1800.699951171875
     }
    },
@@ -160873,7 +161023,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 148.28,
+     "last_price": 147.09,
      "prev_close": 149.27999877929688
     }
    },
@@ -160897,7 +161047,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 2302.4,
+     "last_price": 2299.1,
      "prev_close": 2294.60009765625
     }
    }
@@ -177052,6 +177202,10 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 211130.75
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 211068.71
    }
   ],
   "memo": {}
@@ -193078,6 +193232,10 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 200000.0
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 200000.0
    }
   ],
   "memo": {
@@ -193177,7 +193335,9 @@
      "VIJAYA.NS": 1576.0,
      "VSSL.NS": 378.25,
      "WIPRO.NS": 187.99,
-     "^NSEI": 25891.5
+     "^NSEI": 25891.5,
+     "BHAGYANGR.NS": 84.74,
+     "CUBEXTUB.NS": 215.6
     }
    }
   }
@@ -208891,6 +209051,10 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 187854.89
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 187854.89
    }
   ],
   "memo": {
@@ -224512,6 +224676,10 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 188910.33
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 188910.33
    }
   ],
   "memo": {
@@ -224553,7 +224721,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 247.35,
+     "last_price": 247.7,
      "prev_close": 250.8699951171875
     }
    },
@@ -224565,7 +224733,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 156.5,
+     "last_price": 157.52,
      "prev_close": 157.47000122070312
     }
    },
@@ -224589,7 +224757,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 461.5,
+     "last_price": 448.4,
      "prev_close": 451.3999938964844
     }
    },
@@ -224601,7 +224769,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1360.6,
+     "last_price": 1359.1,
      "prev_close": 1348.0999755859375
     }
    },
@@ -239756,6 +239924,10 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 206130.51
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 205495.12
    }
   ],
   "memo": {
@@ -239789,7 +239961,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 247.35,
+     "last_price": 247.7,
      "prev_close": 250.8699951171875
     }
    },
@@ -239801,7 +239973,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 156.5,
+     "last_price": 157.52,
      "prev_close": 157.47000122070312
     }
    },
@@ -239825,7 +239997,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 461.5,
+     "last_price": 448.4,
      "prev_close": 451.3999938964844
     }
    },
@@ -239837,7 +240009,7 @@
     "product": "delivery",
     "exit_on": null,
     "meta": {
-     "last_price": 1360.6,
+     "last_price": 1359.1,
      "prev_close": 1348.0999755859375
     }
    },
@@ -254692,6 +254864,10 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 205976.54
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 205356.29
    }
   ],
   "memo": {
@@ -254726,7 +254902,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073752,
-     "last_price": 247.35,
+     "last_price": 247.7,
      "prev_close": 250.8699951171875
     }
    },
@@ -254739,7 +254915,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073656,
-     "last_price": 156.5,
+     "last_price": 157.52,
      "prev_close": 157.47000122070312
     }
    },
@@ -254765,7 +254941,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073269,
-     "last_price": 1360.6,
+     "last_price": 1359.1,
      "prev_close": 1348.0999755859375
     }
    },
@@ -254792,7 +254968,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073462,
-     "last_price": 421.45,
+     "last_price": 422.15,
      "prev_close": 422.75
     }
    },
@@ -254805,7 +254981,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073656,
-     "last_price": 1216.1,
+     "last_price": 1218.3,
      "prev_close": 1212.800048828125
     }
    }
@@ -269520,6 +269696,10 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 208157.65
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 208452.14
    }
   ],
   "memo": {
@@ -269563,7 +269743,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073752,
-     "last_price": 247.35,
+     "last_price": 247.7,
      "prev_close": 250.8699951171875
     }
    },
@@ -269576,7 +269756,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073656,
-     "last_price": 156.5,
+     "last_price": 157.52,
      "prev_close": 157.47000122070312
     }
    },
@@ -269602,7 +269782,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073269,
-     "last_price": 1360.6,
+     "last_price": 1359.1,
      "prev_close": 1348.0999755859375
     }
    },
@@ -269629,7 +269809,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073656,
-     "last_price": 98.5,
+     "last_price": 97.85,
      "prev_close": 95.9800033569336
     }
    },
@@ -269642,7 +269822,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073656,
-     "last_price": 1216.1,
+     "last_price": 1218.3,
      "prev_close": 1212.800048828125
     }
    }
@@ -284357,6 +284537,10 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 206695.93
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 206818.69
    }
   ],
   "memo": {
@@ -284399,7 +284583,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073752,
-     "last_price": 247.35,
+     "last_price": 247.7,
      "prev_close": 250.8699951171875
     }
    },
@@ -284412,7 +284596,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073559,
-     "last_price": 1360.6,
+     "last_price": 1359.1,
      "prev_close": 1348.0999755859375
     }
    },
@@ -284425,7 +284609,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073366,
-     "last_price": 156.5,
+     "last_price": 157.52,
      "prev_close": 157.47000122070312
     }
    },
@@ -284465,7 +284649,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073752,
-     "last_price": 84.73999786376953,
+     "last_price": 84.74,
      "prev_close": 84.73999786376953
     }
    },
@@ -298544,6 +298728,10 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 199373.52
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 199595.78
    }
   ],
   "memo": {
@@ -298653,7 +298841,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073656,
-     "last_price": 215.60000610351562,
+     "last_price": 215.6,
      "prev_close": 215.60000610351562
     }
    },
@@ -298666,7 +298854,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073752,
-     "last_price": 84.73999786376953,
+     "last_price": 84.74,
      "prev_close": 84.73999786376953
     }
    },
@@ -298679,7 +298867,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073559,
-     "last_price": 1360.6,
+     "last_price": 1359.1,
      "prev_close": 1348.0999755859375
     }
    }
@@ -312239,11 +312427,15 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 203429.16
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 203357.16
    }
   ],
   "memo": {
    "snake_entry": "2026-11-18",
-   "ticks": 2236,
+   "ticks": 2237,
    "sold_today": {
     "day": "2026-11-18",
     "names": [
@@ -313253,7 +313445,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073656,
-     "last_price": 215.60000610351562,
+     "last_price": 215.6,
      "prev_close": 215.60000610351562
     }
    },
@@ -313266,7 +313458,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073752,
-     "last_price": 84.73999786376953,
+     "last_price": 84.74,
      "prev_close": 84.73999786376953
     }
    },
@@ -313279,7 +313471,7 @@
     "exit_on": null,
     "meta": {
      "entry_exp": 0.073559,
-     "last_price": 1360.6,
+     "last_price": 1359.1,
      "prev_close": 1348.0999755859375
     }
    }
@@ -325764,10 +325956,14 @@
    {
     "time": "2026-11-23T09:28:20.927863+05:30",
     "equity": 199959.15
+   },
+   {
+    "time": "2026-11-23T09:31:51.992362+05:30",
+    "equity": 199888.65
    }
   ],
   "memo": {
-   "ticks": 3029,
+   "ticks": 3030,
    "blocked_fills": [
     {
      "time": "2026-10-13T11:43:07.860247+05:30",
